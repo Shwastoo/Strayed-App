@@ -5,14 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-
   <body>
-    {% if strayed_animals %}
-    <ul>
-      {%for a in strayed_animals %}
-      <li><a href="{% url 'main:details' a.slug %}">{{a.title}}</a></li>
-      {% endfor %}
-    </ul>
-    {% endif %}
+    <h1>{{animal.title}}</h1>
+    <p>{{animal.desc}}</p>
+    <img src="placeholder" />
+    <p>Właściciel: {{animal.owner.first_name}} {{animal.owner.last_name}}</p>
   </body>
 </html>
