@@ -9,9 +9,9 @@ from django.utils.text import slugify
 
 class Animal(models.Model):
     class Ages(models.TextChoices):
-        PUPPY = "PP",_("Szczenię")
-        ADULT = "AD",_("Dorosły")
-        ELDER = "EL",_("Staruszek")
+        PUPPY = "Szczenię",_("PP")
+        ADULT = "Dorosły",_("AD")
+        ELDER = "Staruszek",_("EL")
 
     title = models.CharField(max_length=50)
     desc = models.CharField(max_length=1000)
@@ -34,5 +34,6 @@ class Animal(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title+" "+str(self.pk))
         self.static_url = self.photo.url.removeprefix("/main/static")
+        self.age
         super(Animal, self).save(*args, **kwargs)
     
