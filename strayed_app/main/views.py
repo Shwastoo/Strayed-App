@@ -24,7 +24,6 @@ class DetailsView(generic.DetailView):
     model = Animal
     template_name = "main/details.html"
     extra_context = {
-        #'img_path': os.path.abspath(os.path.join(os.path.dirname(__file__),'..',Animal.photo.url))
         'img_path': settings.IMG_ROOT
     }
 

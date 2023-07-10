@@ -17,6 +17,7 @@ class Animal(models.Model):
     desc = models.CharField(max_length=1000)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to="main/static/images/uploads")
+    static_url = models.CharField(max_length=500, blank=True)
     species = models.CharField(max_length=50)
     breed = models.CharField(max_length=50)
     color = models.CharField(max_length=50)
@@ -32,5 +33,6 @@ class Animal(models.Model):
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title+" "+str(self.pk))
+        self.static_url = self.photo.url.removeprefix("/main/static")
         super(Animal, self).save(*args, **kwargs)
     
