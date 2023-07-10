@@ -16,7 +16,7 @@ class Animal(models.Model):
     title = models.CharField(max_length=50)
     desc = models.CharField(max_length=1000)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to="main\imgs")
+    photo = models.ImageField(upload_to="main/static/images/uploads")
     species = models.CharField(max_length=50)
     breed = models.CharField(max_length=50)
     color = models.CharField(max_length=50)

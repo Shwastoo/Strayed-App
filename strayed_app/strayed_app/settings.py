@@ -71,6 +71,8 @@ TEMPLATES = [
     },
 ]
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'main\static'),]
+
 WSGI_APPLICATION = 'strayed_app.wsgi.application'
 
 
