@@ -11,8 +11,12 @@
     <p>{{animal.desc}}</p>
     <p>Gatunek: {{animal.species}}</p>
     <p>Rasa: {{animal.breed}}</p>
-    <p>Kolor: {{animal.color}}</p>
-    <p>Wiek: {{animal.age}}</p>
+    <p>Kolory: 
+      {% for c in animal.colors %}
+      <ul>{{ c }}</ul>
+      {% endfor %}
+    </p>
+    <p>Wiek: {{animal.get_age_display}}</p>
     <img src="{% static animal.static_url %}" />
     <p>Właściciel: {{animal.owner.first_name}} {{animal.owner.last_name}}</p>
   </body>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <form
+      action="{% url 'main:addAnimal' %}"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      {% csrf_token %} {{ form.as_p }}
+      <!--
+      <label>Tytuł ogłoszenia:</label>
+      <input type="text" name="title" id="title" /><br />
+      <label>Opis:</label>
+      <input type="text" name="desc" id="desc" /><br />
+      <label>Zdjęcie:</label>
+      <input type="file" name="photo" id="photo" /><br />
+      <label>Gatunek:</label>
+      <input type="text" name="species" id="species" /><br />
+      <label>Rasa:</label>
+      <input type="text" name="breed" id="breed" /><br />
+      <label>Kolory:</label>
+      <input type="text" name="colors" id="colors" /><br />
+      <label>Miejscowość:</label>
+      <input type="text" name="location" id="location" /><br />
+      <label>Wiek:</label>
+      {% for c in Animal.age.choices %} AAAA {% endfor %}
+    -->
+      <input type="submit" value="Wyślij" />
+    </form>
+  </body>
+</html>

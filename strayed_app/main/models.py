@@ -3,15 +3,22 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.utils.text import slugify
+from django.contrib.postgres.fields import ArrayField
 # Create your models here.
 
 
 
 class Animal(models.Model):
     class Ages(models.TextChoices):
-        PUPPY = "Szczenię",_("PP")
-        ADULT = "Dorosły",_("AD")
-        ELDER = "Staruszek",_("EL")
+        PUPPY = "PP","Szczenię",
+        ADULT = "AD","Dorosły",
+        ELDER = "EL","Staruszek",
+    
+    AGE = {
+        ("PP","Szczenię"),
+        ("AD","Dorosły"),
+        ("EL","Staruszek")
+    }
 
     title = models.CharField(max_length=50)
     desc = models.CharField(max_length=1000)
@@ -20,9 +27,9 @@ class Animal(models.Model):
     static_url = models.CharField(max_length=500, blank=True)
     species = models.CharField(max_length=50)
     breed = models.CharField(max_length=50)
-    color = models.CharField(max_length=50)
+    colors = ArrayField(models.CharField(max_length=50), default=list)
     location = models.CharField(max_length=50)
-    age = models.CharField(max_length=20, choices=Ages.choices)
+    age = models.CharField(max_length=20, choices=AGE)
     slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
@@ -34,6 +41,5 @@ class Animal(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title+" "+str(self.pk))
         self.static_url = self.photo.url.removeprefix("/main/static")
-        self.age
         super(Animal, self).save(*args, **kwargs)
     

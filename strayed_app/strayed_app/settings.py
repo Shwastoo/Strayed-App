@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_unused_media',
     'main.apps.MainConfig'
 ]
 
@@ -52,8 +53,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'strayed_app.urls'
-
-IMG_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),'..'))
 
 TEMPLATES = [
     {
@@ -72,6 +71,12 @@ TEMPLATES = [
 ]
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'main\static'),]
+
+# Base url to serve media files  
+#MEDIA_URL = 'images/uploads/'  
+  
+# Path where media is stored  
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'images/uploads/')  
 
 WSGI_APPLICATION = 'strayed_app.wsgi.application'
 
