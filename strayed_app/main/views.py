@@ -55,7 +55,8 @@ def addAnimal(request, ownerID=None):
             breed=request.POST["breed"],
             colors=request.POST["colors"].split(","),
             location=request.POST["location"],
-            age=request.POST["age"],
+            #age=request.POST["age"],
+            gender=request.POST["gender"],
             owner=User.objects.get(pk=ownerID)
         )
         an.save()

@@ -9,8 +9,11 @@ class newAnimalForm(forms.Form):
     breed = forms.CharField(max_length=50)
     colors = forms.CharField(max_length=50)
     location = forms.CharField(max_length=50)
-    age = forms.ChoiceField(
+    '''age = forms.ChoiceField(
         widget=forms.Select,
         choices=Animal.Ages.choices, 
-    )
-    
+    )'''
+    gender = forms.ChoiceField(
+        widget=forms.Select,
+        choices=Animal.Genders.choices, 
+    )   

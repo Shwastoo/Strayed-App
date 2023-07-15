@@ -10,7 +10,7 @@
     {% if strayed_animals %}
     <ul>
       {%for a in strayed_animals %}
-      <li><a href="{% url 'main:details' a.slug %}">{{a.title}}</a></li>
+      <li><a href="{% url 'main:details' a.slug %}">{{a.title}}</a>
       {% endfor %}
     </ul>
     {% endif %}

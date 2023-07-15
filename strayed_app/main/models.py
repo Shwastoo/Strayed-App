@@ -9,7 +9,16 @@ from django.contrib.postgres.fields import ArrayField
 
 
 class Animal(models.Model):
-    class Ages(models.TextChoices):
+    class Genders(models.TextChoices):
+        FEMALE = "F", "Suka",
+        MALE = "M", "Pies",
+    
+    GENDER = {
+        ("F","Suka"),
+        ("M","Pies")
+    }
+
+    '''class Ages(models.TextChoices):
         PUPPY = "PP","Szczenię",
         ADULT = "AD","Dorosły",
         ELDER = "EL","Staruszek",
@@ -18,7 +27,7 @@ class Animal(models.Model):
         ("PP","Szczenię"),
         ("AD","Dorosły"),
         ("EL","Staruszek")
-    }
+    }'''
 
     title = models.CharField(max_length=50)
     desc = models.CharField(max_length=1000)
@@ -29,7 +38,8 @@ class Animal(models.Model):
     breed = models.CharField(max_length=50)
     colors = ArrayField(models.CharField(max_length=50), default=list)
     location = models.CharField(max_length=50)
-    age = models.CharField(max_length=20, choices=AGE)
+    #age = models.CharField(max_length=20, choices=AGE)
+    gender = models.CharField(max_length=20, choices=GENDER)
     slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
