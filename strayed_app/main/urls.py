@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 
 app_name="main"
 urlpatterns = [
-    path('', views.IndexView.as_view(), name='animals'),
+    #path('', views.IndexView.as_view(), name='animals'),
+    path('', views.index, name='animals'),
     path('new/', views.newAnimal, name="new"),
     path('add/', views.addAnimal, name="addAnimal"),
     path('<slug:slug>/', views.DetailsView.as_view(), name="details"),

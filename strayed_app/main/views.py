@@ -38,7 +38,10 @@ class DetailsView(generic.DetailView):
     '''
     def get_img_path(self):
         return os.path.dirname(__file__)+str(Animal.photo)
-    
+
+def index(request):
+    return render(request, 'index.html')
+
 def newAnimal(request):
     form = newAnimalForm()
     return render(request, "main/new.html", {"form":form})
