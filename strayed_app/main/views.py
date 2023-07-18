@@ -51,11 +51,12 @@ def addAnimal(request, ownerID=None):
             title=request.POST["title"],
             desc=request.POST["desc"],
             photo=request.FILES["photo"],
+            photo2=request.FILES["photo2"],
+            photo3=request.FILES["photo3"],
             species=request.POST["species"],
             breed=request.POST["breed"],
-            colors=request.POST["colors"].split(","),
+            colors=request.POST["colors"].split("\n"),
             location=request.POST["location"],
-            #age=request.POST["age"],
             gender=request.POST["gender"],
             owner=User.objects.get(pk=ownerID)
         )

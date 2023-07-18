@@ -3,42 +3,33 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.utils.text import slugify
-from django.contrib.postgres.fields import ArrayField
+from django_jsonform.models.fields import ArrayField
 # Create your models here.
 
 
 
 class Animal(models.Model):
     class Genders(models.TextChoices):
-        FEMALE = "F", "Suka",
-        MALE = "M", "Pies",
+        FEMALE = "F", "Samica",
+        MALE = "M", "Samiec",
     
     GENDER = {
-        ("F","Suka"),
-        ("M","Pies")
+        ("F","Samica"),
+        ("M","Samiec")
     }
-
-    '''class Ages(models.TextChoices):
-        PUPPY = "PP","Szczenię",
-        ADULT = "AD","Dorosły",
-        ELDER = "EL","Staruszek",
-    
-    AGE = {
-        ("PP","Szczenię"),
-        ("AD","Dorosły"),
-        ("EL","Staruszek")
-    }'''
 
     title = models.CharField(max_length=50)
     desc = models.CharField(max_length=1000)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to="main/static/images/uploads")
-    static_url = models.CharField(max_length=500, blank=True)
+    photo2 = models.ImageField(upload_to="main/static/images/uploads", blank=True)
+    photo3 = models.ImageField(upload_to="main/static/images/uploads", blank=True)
+    #static_url = models.CharField(max_length=500, blank=True)
+    static_urls = ArrayField(models.CharField(max_length=500, blank=True), default=list, blank=True)
     species = models.CharField(max_length=50)
     breed = models.CharField(max_length=50)
     colors = ArrayField(models.CharField(max_length=50), default=list)
     location = models.CharField(max_length=50)
-    #age = models.CharField(max_length=20, choices=AGE)
     gender = models.CharField(max_length=20, choices=GENDER)
     slug = models.SlugField(unique=True, blank=True)
 
@@ -50,6 +41,18 @@ class Animal(models.Model):
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title+" "+str(self.pk))
-        self.static_url = self.photo.url.removeprefix("/main/static")
+        #self.static_url = self.photo.url.removeprefix("/main/static")
+        
+        print(self.photo2)
+        
+        static_urls = ["","",""]
+        if self.photo != "":
+            static_urls[0] = self.photo.url.removeprefix("/main/static")
+            if self.photo2 != "":
+                static_urls[1] = self.photo2.url.removeprefix("/main/static")
+                if self.photo3 != "":
+                    static_urls[2] = self.photo3.url.removeprefix("/main/static")
+
+        self.static_urls = static_urls
         super(Animal, self).save(*args, **kwargs)
     

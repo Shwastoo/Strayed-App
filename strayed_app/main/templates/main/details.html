@@ -16,9 +16,10 @@
       <ul>{{ c }}</ul>
       {% endfor %}
     </p>
-    <!-- <p>Wiek: {{animal.get_age_display}}</p> --> 
     <p>Płeć: {{animal.get_gender_display}}</p>
-    <img src="{% static animal.static_url %}" />
+    {% for u in animal.static_urls %}
+      {% if u != "" %} <img src="{% static u %}" /> {% endif %}
+    {% endfor %}
     <p>Właściciel: {{animal.owner.first_name}} {{animal.owner.last_name}}</p>
   </body>
 </html>
