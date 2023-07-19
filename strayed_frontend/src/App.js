@@ -1,28 +1,21 @@
 import React, { Component } from "react";
-/*import Modal from "./components/Modal";*/
-
-import logo from "./logo.svg";
+import axios from "axios";
 import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {Logo} from './components/Logo/Logo';
+import {Heading} from './components/Heading/Heading';
+import {Footer} from './components/Footer/Footer';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <Logo variant="secondary"/><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+        <Heading title="STRAYED" variant="secondary"/>
+        <Footer title="© Strayed_App by Jakub Szwast & Julia Politowska | 2023/2024" variant="secondary"/>
+      </div>
+      );
+  }
 }
 
 export default App;
