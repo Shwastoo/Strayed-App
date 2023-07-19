@@ -1,5 +1,5 @@
-/*import React, { Component } from "react";
-import Modal from "./components/Modal";*/
+import React, { Component } from "react";
+/*import Modal from "./components/Modal";*/
 
 import logo from "./logo.svg";
 import "./App.css";
