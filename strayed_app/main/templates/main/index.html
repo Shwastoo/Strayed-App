@@ -10,11 +10,19 @@
     {% if strayed_animals %}
     <ul>
       {%for a in strayed_animals %}
-      <li><a href="{% url 'main:details' a.slug %}">{{a.title}}</a>
-      {% endfor %}
+      <li>
+        <a href="{% url 'main:details' a.slug %}">{{a.title}}</a>
+        {% endfor %}
+      </li>
     </ul>
-    {% endif %}
-    <br />
+
+    {% endif %} {% if request.session.user %}
+    <p>Witaj {{request.session.user}}</p>
     <a href="{% url 'main:new' %}">Dodaj ogłoszenie</a>
+    <br />
+    <a href="{% url 'main:logout' %}">Wyloguj się</a>
+    {% else %}
+    <a href="{% url 'main:login' %}">Zaloguj się</a>
+    {% endif %}
   </body>
 </html>
