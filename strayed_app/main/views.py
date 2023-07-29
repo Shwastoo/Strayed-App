@@ -7,8 +7,9 @@ from django.urls import reverse
 from django.views import generic
 from .models import Animal
 from django.conf import settings
-from .forms import newAnimalForm, loginForm
+from .forms import newAnimalForm, loginForm, registerForm
 from django.contrib.auth.models import User
+from django.utils import timezone
 import os
 
 # Create your views here.
@@ -36,8 +37,6 @@ class DetailsView(generic.DetailView):
         return context
 
     '''
-    def get_img_path(self):
-        return os.path.dirname(__file__)+str(Animal.photo)
     
 def newAnimal(request):
     form = newAnimalForm()
@@ -68,7 +67,8 @@ def addAnimal(request, ownerID=None):
             colors=request.POST["colors"].split("\n"),
             location=request.POST["location"],
             gender=request.POST["gender"],
-            owner=User.objects.get(username = request.session.get("user"))
+            owner=User.objects.get(username = request.session.get("user")),
+            date_created=timezone.now()
         )
         an.save()
         an.save(update_fields=["static_urls","slug"])
@@ -77,6 +77,10 @@ def addAnimal(request, ownerID=None):
 def login(request):
     form = loginForm()
     return render(request, "main/login.html", {"form":form})
+
+def register(request):
+    formReg = registerForm()
+    return render(request, "main/register.html", {"formReg":formReg})
 
 def userAuth(request):
     if request.method == 'POST':
@@ -93,8 +97,37 @@ def userAuth(request):
                 error_msg = "Nieprawidłowe hasło"
         else:
             error_msg = "Użytkownik o takim loginie nie istnieje."
-        return render(request, "main/login.html", {"form":loginForm(), "error":error_msg})
+        return render(request, "main/login.html", {"form":loginForm(), "errorLog":error_msg})
     
+def userRegister(request):
+    if request.method == 'POST':
+        uname = request.POST.get("un")
+        password = request.POST.get("pw")
+        pass_conf = request.POST.get("pw_conf")
+        fname = request.POST.get("fn")
+        lname = request.POST.get("ln")
+        email = request.POST.get("email")
+        error_msg = ""
+        user = User.objects.filter(username=uname)
+        if not user:
+            if password == pass_conf:
+                newUser = User(
+                    username=uname,
+                    email=email,
+                    first_name=fname,
+                    last_name=lname,
+                )
+                newUser.set_password(password)
+                newUser.save()
+                error_msg = "Konto utworzone, możesz się zalogować"
+                return render(request, "main/login.html", {"form":loginForm(), "errorLog":error_msg})
+            else:
+                error_msg = "Hasła nie są takie same"
+        else:
+            error_msg = "Ten login jest już zajęty przez innego użytkownika"
+        return render(request, "main/register.html", {"formReg":registerForm(), "errorReg":error_msg})
+        
+
 def logout(request):
     try:
         del request.session["user"]

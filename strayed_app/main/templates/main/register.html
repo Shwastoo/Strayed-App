@@ -7,11 +7,11 @@
   </head>
   <body>
     <fieldset>
-      <form action="{% url 'main:userAuth' %}" method="POST">
-        {% if errorLog %}
-        <p>{{errorLog}}</p>
-        {% endif %} {% csrf_token %} {{ form.as_p }}
-        <input type="submit" value="Zaloguj" />
+      <form action="{% url 'main:userRegister' %}" method="POST">
+        {% if errorReg %}
+        <p>{{errorReg}}</p>
+        {% endif %} {% csrf_token %} {{ formReg.as_p }}
+        <input type="submit" value="Zarejestruj" />
       </form>
     </fieldset>
   </body>

@@ -4,6 +4,8 @@ from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.utils.text import slugify
 from django_jsonform.models.fields import ArrayField
+from django.utils import timezone
+
 # Create your models here.
 
 
@@ -32,6 +34,7 @@ class Animal(models.Model):
     location = models.CharField(max_length=50)
     gender = models.CharField(max_length=20, choices=GENDER)
     slug = models.SlugField(unique=True, blank=True)
+    date_created = models.DateTimeField(blank=True)
 
     def __str__(self):
         return self.title
@@ -42,8 +45,6 @@ class Animal(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title+" "+str(self.pk))
         #self.static_url = self.photo.url.removeprefix("/main/static")
-        
-        print(self.photo2)
         
         static_urls = ["","",""]
         if self.photo != "":

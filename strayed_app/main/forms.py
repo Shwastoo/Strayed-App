@@ -19,3 +19,11 @@ class newAnimalForm(forms.Form):
 class loginForm(forms.Form):
     un = forms.CharField(label="Login")
     pw = forms.CharField(label="Hasło", widget=forms.PasswordInput)
+
+class registerForm(forms.Form):
+    fn = forms.CharField(label="Imię")
+    ln = forms.CharField(label="Nazwisko")
+    email = forms.EmailField(label="Adres email")
+    un = forms.CharField(label="Login")
+    pw = forms.CharField(label="Hasło", widget=forms.PasswordInput)
+    pw_conf = forms.CharField(label="Powtórz hasło", widget=forms.PasswordInput)

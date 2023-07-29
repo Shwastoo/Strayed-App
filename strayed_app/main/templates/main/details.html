@@ -7,6 +7,7 @@
   </head>
   <body>
     {% load static %}
+    {% load tz %}
     <h1>{{animal.title}}</h1>
     <p>{{animal.desc}}</p>
     <p>Gatunek: {{animal.species}}</p>
@@ -21,5 +22,8 @@
       {% if u != "" %} <img src="{% static u %}" /> {% endif %}
     {% endfor %}
     <p>Właściciel: {{animal.owner.first_name}} {{animal.owner.last_name}}</p>
+    {% timezone "Europe/Warsaw" %}
+    <p>Data dodania: {{animal.date_created}}</p>
+    {% endtimezone %}
   </body>
 </html>
