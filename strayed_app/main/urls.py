@@ -1,7 +1,12 @@
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static 
+from django.contrib import admin
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'animals', views.AnimalView, 'animal')
 
 app_name="main"
 urlpatterns = [
@@ -14,5 +19,6 @@ urlpatterns = [
     path('login/', views.login, name="login"),
     path('register/', views.register, name="register"),
     path('<slug:slug>/', views.DetailsView.as_view(), name="details"),
+    path('api/', include(router.urls)),
 ] 
 #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

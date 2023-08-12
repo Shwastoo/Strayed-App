@@ -11,8 +11,15 @@ from .forms import newAnimalForm, loginForm, registerForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 import os
+from rest_framework import viewsets
+from .serializers import AnimalSerializer
+from .models import Animal
 
 # Create your views here.
+
+class AnimalView(viewsets.ModelViewSet):
+    serializer_class = AnimalSerializer
+    queryset = Animal.objects.all()
 
 class IndexView(generic.ListView):
     template_name = "main/index.html"
