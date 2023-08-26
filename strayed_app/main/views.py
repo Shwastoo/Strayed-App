@@ -14,6 +14,7 @@ import os
 from rest_framework import viewsets
 from .serializers import AnimalSerializer
 from .models import Animal
+from django.http import JsonResponse
 
 # Create your views here.
 
