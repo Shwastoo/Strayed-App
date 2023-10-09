@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { Heading } from './components/Heading/Heading';
 import { Footer } from './components/Footer/Footer';
 import Login from './Login';
+import Register from './Register';
+import Details from './Details'; 
 
 class App extends Component {
   state = {
@@ -63,7 +65,9 @@ class App extends Component {
 
           <Routes>
             <Route path="/" element={<Index sessionUser={sessionUser} />} />
-            <Route path="./Login" element={<Login handleLogin={this.handleLogin} />} />
+            <Route path="/login" element={<Login handleLogin={this.handleLogin} />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/details/:slug" element={<Details />} /> 
           </Routes>
 
           <Footer title="© Strayed_App by Jakub Szwast & Julia Politowska | 2023" variant="secondary" />
@@ -106,7 +110,7 @@ class Index extends Component {
           <ul>
             {strayedAnimals.map((a) => (
               <li key={a.slug}>
-                <Link to={`/main/details/${a.slug}`}>{a.title}</Link>
+                <Link to={`/details/${a.slug}`}>{a.title}</Link>
               </li>
             ))}
           </ul>
@@ -123,9 +127,9 @@ class Index extends Component {
           </div>
         ) : (
           <div className="guest-section">
-            <Link to="./Login">Zaloguj się</Link>
+            <Link to="/login">Zaloguj się</Link>
             <br />
-            <Link to="/main/register">Nie masz konta? Zarejestruj się</Link>
+            <Link to="/register">Nie masz konta? Zarejestruj się</Link>
           </div>
         )}
       </div>
