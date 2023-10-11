@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-//import { Link } from "react-router-dom";
 import axios from "axios";
 
 class Login extends Component {
@@ -34,13 +33,33 @@ class Login extends Component {
     const { username, password, errorLog } = this.state;
 
     return (
-      <div>
+      <div className="registration-form">
         <h2>Zaloguj się</h2>
         <form onSubmit={this.handleFormSubmit}>
-          {errorLog && <p>{errorLog}</p>}
-          <input type="text" name="username" value={username} onChange={this.handleInputChange} placeholder="Nazwa użytkownika" />
-          <input type="password" name="password" value={password} onChange={this.handleInputChange} placeholder="Hasło" />
-          <button type="submit">Zaloguj</button>
+          {errorLog && <p className="error-message">{errorLog}</p>}
+          <div className="form-group">
+            <input
+              type="text"
+              name="username"
+              value={username}
+              onChange={this.handleInputChange}
+              placeholder="Nazwa użytkownika"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={this.handleInputChange}
+              placeholder="Hasło"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <button type="submit" className="login-button">Zaloguj</button>
+          </div>
         </form>
       </div>
     );

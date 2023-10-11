@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-import { Heading } from './components/Heading/Heading';
-import { Footer } from './components/Footer/Footer';
+//import { Heading } from './components/Heading/Heading';
+//import { Footer } from './components/Footer/Footer';
 import Login from './Login';
 import Register from './Register';
-import Details from './Details'; 
+import Details from './Details';
+import NewAnimal from './NewAnimal';
 
 class App extends Component {
   state = {
@@ -59,19 +59,19 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <div className="header">
-            <Heading title="STRAYED" variant="secondary" />
-          </div>
+          <div className="header">STRAYED</div>
 
           <Routes>
             <Route path="/" element={<Index sessionUser={sessionUser} />} />
             <Route path="/login" element={<Login handleLogin={this.handleLogin} />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/details/:slug" element={<Details />} /> 
+            <Route path="/details/:slug" element={<Details />} />
+            {sessionUser && ( 
+              <Route path="/newanimal" element={<NewAnimal />} />
+            )}
           </Routes>
 
-          <Footer title="© Strayed_App by Jakub Szwast & Julia Politowska | 2023" variant="secondary" />
-          
+          <div className="footer">© Strayed_App by Jakub Szwast & Julia Politowska | 2023</div>
         </div>
       </Router>
     );
@@ -107,10 +107,10 @@ class Index extends Component {
     return (
       <div className="index-content">
         {strayedAnimals && strayedAnimals.length > 0 ? (
-          <ul>
+          <ul className="animal-list">
             {strayedAnimals.map((a) => (
-              <li key={a.slug}>
-                <Link to={`/details/${a.slug}`}>{a.title}</Link>
+              <li key={a.slug} className="animal-item">
+                <Link to={`/details/${a.slug}`} className="animal-link">{a.title}</Link>
               </li>
             ))}
           </ul>
@@ -121,7 +121,7 @@ class Index extends Component {
         {sessionUser ? (
           <div className="user-section">
             <p>Witaj {sessionUser}</p>
-            <Link to="/main/new">Dodaj ogłoszenie</Link>
+            <Link to="/new">Dodaj ogłoszenie</Link>
             <br />
             <Link to="/main/logout">Wyloguj się</Link>
           </div>
@@ -136,111 +136,5 @@ class Index extends Component {
     );
   }
 }
-
-/*
-const Index = ({ strayedAnimals, sessionUser }) => {
-  return (
-    <body>
-      {strayedAnimals.length  0 && (
-        <ul>
-          {strayedAnimals.map((a) => (
-            <li key={a.slug}>
-              <a href={`/main/details/${a.slug}`}>{a.title}</a>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {sessionUser ? (
-        <>
-          <p>Witaj {sessionUser}</p>
-          <a href="/main/new">Dodaj ogłoszenie</a>
-          <br />
-          <a href="/main/logout">Wyloguj się</a>
-        </>
-      ) : (
-        <>
-          <a href="/main/login">Zaloguj się</a><br />
-          <a href="/main/register">Nie masz konta? Zarejestruj się</a>
-        </>
-      )}
-    </body>
-  );
-};
-
-const AnimalDetails = ({ animal }) => {
-  return (
-    <body>
-      <h1>{animal.title}</h1>
-      <p>{animal.desc}</p>
-      <p>Gatunek: {animal.species}</p>
-      <p>Rasa: {animal.breed}</p>
-      <p>Kolory:</p>
-      <ul>
-        {animal.colors.map((c, index) => (
-          <li key={index}>{c}</li>
-        ))}
-      </ul>
-      <p>Płeć: {animal.gender}</p>
-      {animal.static_urls.map((u, index) => (
-        u !== "" && <img key={index} src={u} alt={`Animal ${index}`} />
-      ))}
-      <p>Właściciel: {animal.owner.first_name} {animal.owner.last_name}</p>
-      <p>Data dodania: {animal.date_created}</p>
-    </body>
-  );
-};
-
-const LoginForm = ({ errorLog, formAction, csrfToken }) => {
-  return (
-    <body>
-      <fieldset>
-        <form action={formAction} method="POST">
-          {errorLog && <p>{errorLog}</p>}
-          <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
-          <input type="text" name="username" placeholder="Nazwa użytkownika" />
-          <input type="password" name="password" placeholder="Hasło" />
-          <input type="submit" value="Zaloguj" />
-        </form>
-      </fieldset>
-    </body>
-  );
-};
-
-const AddAnimalForm = ({ formAction, csrfToken }) => {
-  return (
-    <body>
-      <form action={formAction} method="POST" encType="multipart/form-data">
-        <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
-        <label htmlFor="title">Tytuł ogłoszenia:</label>
-        <input type="text" name="title" id="title" /><br />
-        <label htmlFor="desc">Opis:</label>
-        <input type="text" name="desc" id="desc" /><br />
-        <label htmlFor="photo">Zdjęcie:</label>
-        <input type="file" name="photo" id="photo" /><br />
-        <input type="submit" value="Wyślij" />
-      </form>
-    </body>
-  );
-};
-
-const RegistrationForm = ({ formAction, csrfToken, errorReg }) => {
-  return (
-    <body>
-      <fieldset>
-        <form action={formAction} method="POST">
-          {errorReg && <p>{errorReg}</p>}
-          <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
-          <label htmlFor="username">Nazwa użytkownika:</label>
-          <input type="text" name="username" id="username" /><br />
-          <label htmlFor="password">Hasło:</label>
-          <input type="password" name="password" id="password" /><br />
-          <input type="submit" value="Zarejestruj" />
-        </form>
-      </fieldset>
-    </body>
-  );
-};
-*/
 
 export default App;

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 function Register() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,6 +26,7 @@ function Register() {
         pw: password,
         first_name: firstName,
         last_name: lastName,
+        login: login, // Dodane pole login
         email: email,
       });
 
@@ -39,46 +41,71 @@ function Register() {
   };
 
   return (
-    <div>
-      <h2>Zarejestruj się</h2>
+    <div className="registration-form">
+      <h2>Rejestracja</h2>
       <form onSubmit={handleFormSubmit}>
-        {errorReg && <p>{errorReg}</p>}
-        <input
-          type="text"
-          name="firstName"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          placeholder="Imię"
-        />
-        <input
-          type="text"
-          name="lastName"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          placeholder="Nazwisko"
-        />
-        <input
-          type="text"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Adres email"
-        />
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Hasło"
-        />
-        <input
-          type="password"
-          name="confirmPassword"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="Powtórz hasło"
-        />
-        <button type="submit">Zarejestruj</button>
+        {errorReg && <p className="error-message">{errorReg}</p>}
+        <div className="form-group">
+          <input
+            type="text"
+            name="firstName"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            placeholder="Imię"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="text"
+            name="lastName"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            placeholder="Nazwisko"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="text" // Zmieniono na pole tekstowe dla loginu
+            name="login"
+            value={login}
+            onChange={(e) => setLogin(e.target.value)}
+            placeholder="Login"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Adres email"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Hasło"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="password"
+            name="confirmPassword"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Powtórz hasło"
+            required
+          />
+        </div>
+        <button type="submit" className="login-button">Zarejestruj</button>
       </form>
     </div>
   );

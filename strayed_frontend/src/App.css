@@ -1,29 +1,59 @@
+/* Ogólny styl aplikacji */
+body {
+  font-family: 'Century Gothic';
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+/* Nagłówek aplikacji */
 .header {
+  padding: 20px;
+  background-color: #EFDBCE;
+  color: white;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(20px + 2vmin);
+  font-weight: bold;
+  font-family: 'Century Gothic';
+  color: #175C4C;
   margin-bottom: 20px;
 }
 
-.index-content {
-  margin-top: 300px;
+/* Stopka */
+.footer {
+  padding: 20px;
+  background-color: #EFDBCE;
+  color: white;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(2px + 2vmin);
+  font-family: 'Century Gothic';
+  color: #175C4C;
+  margin-top: 20px;
 }
 
+/* Treść strony głównej */
+.index-content {
+  padding: 20px;
+}
+
+/* Kontener główny */
 .App {
   text-align: center;
-  padding: 20px;
   max-width: 920px;
   margin: 0 auto;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
+/* Nagłówek aplikacji */
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -35,15 +65,102 @@
   color: white;
 }
 
+/* Linki */
 .App-link {
-  color: #61dafb;
+  color: #64a0b0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.animal-list {
+  list-style: none;
+  padding: 0;
+}
+
+.animal-item {
+  margin-bottom: 10px;
+  background-color: #b2be9db4;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.animal-link {
+  text-decoration: none;
+  color: #333;
+}
+
+/* Styl dla całego formularza */
+.registration-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styl dla nagłówka formularza */
+.registration-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Styl dla grupy formularza (imię, nazwisko itd.) */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Styl dla inputów */
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+/* Styl dla przycisku Zaloguj */
+.login-button {
+  background-color: #b2be9d;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px;
+  width: 100%;
+}
+
+.login-button:hover {
+  background-color: #848e73;
+}
+
+/* Styl dla przycisku Zarejestruj */
+.form-group button {
+  width: 100%;
+  padding: 10px;
+  background-color: #b2be9d;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-group button:hover {
+  background-color: #848e73;
+}
+
+/* Styl dla komunikatu o błędzie */
+.error-message {
+  color: #ff0000;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Obramowanie pól wymaganych */
+.form-group input:required {
+  border-color: rgb(153, 12, 12);
 }
