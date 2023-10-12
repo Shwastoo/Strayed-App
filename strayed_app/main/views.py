@@ -21,6 +21,12 @@ from django.http import JsonResponse
 class AnimalView(viewsets.ModelViewSet):
     serializer_class = AnimalSerializer
     queryset = Animal.objects.all()
+    lookup_field = 'slug'
+
+class DetailView(viewsets.ModelViewSet):
+    serializer_class = AnimalSerializer
+    queryset = Animal.objects.all()
+    lookup_field = 'slug'
 
 class IndexView(generic.ListView):
     template_name = "main/index.html"
@@ -28,7 +34,7 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         return Animal.objects.all()
-    
+
 class DetailsView(generic.DetailView):
     model = Animal
     template_name = "main/details.html"

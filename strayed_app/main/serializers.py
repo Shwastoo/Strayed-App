@@ -6,3 +6,7 @@ class AnimalSerializer(serializers.ModelSerializer):
         model = Animal
         fields = ('id', 'title', 'desc', 'owner', 'photo', 'photo2', 'photo3', 'static_urls',
                   'species', 'breed', 'colors', 'location', 'gender', 'slug', 'date_created')
+        lookup_field = 'slug'
+        extra_kwargs = {
+            'url': {'lookup_field': 'slug'}
+        }

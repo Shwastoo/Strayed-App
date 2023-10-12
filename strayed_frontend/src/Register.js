@@ -26,7 +26,7 @@ function Register() {
         pw: password,
         first_name: firstName,
         last_name: lastName,
-        login: login, // Dodane pole login
+        login: login,
         email: email,
       });
 
@@ -67,7 +67,7 @@ function Register() {
         </div>
         <div className="form-group">
           <input
-            type="text" // Zmieniono na pole tekstowe dla loginu
+            type="text"
             name="login"
             value={login}
             onChange={(e) => setLogin(e.target.value)}
