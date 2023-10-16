@@ -18,9 +18,7 @@
       {% endfor %}
     </p>
     <p>Płeć: {{animal.get_gender_display}}</p>
-    {% for u in animal.static_urls %}
-      {% if u != "" %} <img src="{% static u %}" /> {% endif %}
-    {% endfor %}
+    <img src="{{animal.photo.url}}" />
     <p>Właściciel: {{animal.owner.first_name}} {{animal.owner.last_name}}</p>
     {% timezone "Europe/Warsaw" %}
     <p>Data dodania: {{animal.date_created}}</p>

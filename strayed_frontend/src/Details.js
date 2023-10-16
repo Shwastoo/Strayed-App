@@ -34,9 +34,8 @@ function Details() {
           {animal.static_urls && animal.static_urls.length > 0 && (
             <div>
               <p>Zdjęcia:</p>
-              {animal.static_urls.map((url, index) => (
-                <img key={index} src={url} alt={`Zdjęcie ${index + 1}`} />
-              ))}
+
+              <img key="0" src={animal.photo} alt={`Zdjęcie 1`} />
             </div>
           )}
         </div>

@@ -21,5 +21,4 @@ urlpatterns = [
     path('register/', views.register, name="register"),
     path('<slug:slug>/', views.DetailsView.as_view(), name="details"),
     path('api/', include(router.urls)),
-] 
-#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

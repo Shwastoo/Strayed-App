@@ -5,10 +5,10 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 //import { Heading } from './components/Heading/Heading';
 //import { Footer } from './components/Footer/Footer';
-import Login from './Login';
-import Register from './Register';
-import Details from './Details';
-import NewAnimal from './NewAnimal';
+import Login from "./Login";
+import Register from "./Register";
+import Details from "./Details";
+import NewAnimal from "./NewAnimal";
 
 class App extends Component {
   state = {
@@ -32,7 +32,10 @@ class App extends Component {
 
   handleLogin = async (username, password) => {
     try {
-      const response = await axios.post("/userAuth/", { un: username, pw: password });
+      const response = await axios.post("/userAuth/", {
+        un: username,
+        pw: password,
+      });
       if (response.data.success) {
         this.setState({ sessionUser: response.data.user });
       } else {
@@ -63,19 +66,22 @@ class App extends Component {
 
           <Routes>
             <Route path="/" element={<Index sessionUser={sessionUser} />} />
-            <Route path="/login" element={<Login handleLogin={this.handleLogin} />} />
+            <Route
+              path="/login"
+              element={<Login handleLogin={this.handleLogin} />}
+            />
             <Route path="/register" element={<Register />} />
             <Route path="/details/:slug" element={<Details />} />
-            {sessionUser && ( 
-              <Route path="/newanimal" element={<NewAnimal />} />
-            )}
+            {sessionUser && <Route path="/newanimal" element={<NewAnimal />} />}
           </Routes>
 
-          <div className="footer">© Strayed_App by Jakub Szwast & Julia Politowska | 2023</div>
+          <div className="footer">
+            © Strayed_App by Jakub Szwast & Julia Politowska | 2023
+          </div>
         </div>
       </Router>
     );
-  } 
+  }
 }
 
 class Index extends Component {
@@ -91,11 +97,12 @@ class Index extends Component {
   }
 
   fetchStrayedAnimals() {
-    axios.get("/api/animals")
-      .then(response => {
+    axios
+      .get("/api/animals")
+      .then((response) => {
         this.setState({ strayedAnimals: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Błąd pobierania danych zwierząt:", error);
       });
   }
@@ -110,7 +117,9 @@ class Index extends Component {
           <ul className="animal-list">
             {strayedAnimals.map((a) => (
               <li key={a.slug} className="animal-item">
-                <Link to={`/details/${a.slug}`} className="animal-link">{a.title}</Link>
+                <Link to={`/details/${a.slug}`} className="animal-link">
+                  {a.title}
+                </Link>
               </li>
             ))}
           </ul>
@@ -133,7 +142,8 @@ class Index extends Component {
           </div>
         )}
       </div>
-    );  }
+    );
+  }
 }
 
 export default App;
