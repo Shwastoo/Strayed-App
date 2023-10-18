@@ -1,49 +1,57 @@
-import React, { useState, useEffect } from "react";
+import React, { Component } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 
-function Details() {
-  const [animal, setAnimal] = useState(null);
-  const { slug } = useParams();
+class Details extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      animal: null,
+    };
+  }
 
-  useEffect(() => {
+  componentDidMount() {
+    const { slug } = this.props.match.params; // Dostęp do slug z parametrów URL
+
     axios
       .get(`/api/animals/${slug}`)
       .then((response) => {
-        setAnimal(response.data);
+        this.setState({ animal: response.data });
       })
       .catch((error) => {
         console.error("Błąd pobierania danych zwierzęcia:", error);
       });
-  }, [slug]);
+  }
 
-  return (
-    <div>
-      {animal ? (
-        <div>
-          <h1>{animal.title}</h1>
-          <p>{animal.desc}</p>
-          <p>Gatunek: {animal.species}</p>
-          <p>Rasa: {animal.breed}</p>
-          <p>Kolory: {animal.colors.join(", ")}</p>
-          <p>Płeć: {animal.gender}</p>
-          <p>
-            Właściciel: {animal.owner.first_name} {animal.owner.last_name}
-          </p>
-          <p>Data dodania: {animal.date_created}</p>
-          {animal.static_urls && animal.static_urls.length > 0 && (
-            <div>
-              <p>Zdjęcia:</p>
+  render() {
+    const { animal } = this.state;
 
-              <img key="0" src={animal.photo} alt={`Zdjęcie 1`} />
-            </div>
-          )}
-        </div>
-      ) : (
-        <p>Ładowanie danych...</p>
-      )}
-    </div>
-  );
+    return (
+      <div>
+        {animal ? (
+          <div>
+            <h1>{animal.title}</h1>
+            <p>{animal.desc}</p>
+            <p>Gatunek: {animal.species}</p>
+            <p>Rasa: {animal.breed}</p>
+            <p>Kolory: {animal.colors.join(", ")}</p>
+            <p>Płeć: {animal.gender}</p>
+            <p>
+              Właściciel: {animal.owner.first_name} {animal.owner.last_name}
+            </p>
+            <p>Data dodania: {animal.date_created}</p>
+            {animal.static_urls && animal.static_urls.length > 0 && (
+              <div>
+                <p>Zdjęcia:</p>
+                <img key="0" src={animal.photo} alt={`Zdjęcie 1`} />
+              </div>
+            )}
+          </div>
+        ) : (
+          <p>Ładowanie danych...</p>
+        )}
+      </div>
+    );
+  }
 }
 
 export default Details;

@@ -2,11 +2,14 @@ import React, { Component } from "react";
 import axios from "axios";
 
 class Login extends Component {
-  state = {
-    username: "",
-    password: "",
-    errorLog: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      password: "",
+      errorLog: "",
+    };
+  }
 
   handleInputChange = (event) => {
     const { name, value } = event.target;
