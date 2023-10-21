@@ -11,12 +11,17 @@ class Login extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log(this.props);
+  }
+
   handleInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   };
 
   handleFormSubmit = async (event) => {
+    /*
     event.preventDefault();
     const { username, password } = this.state;
 
@@ -30,6 +35,11 @@ class Login extends Component {
     } catch (error) {
       console.error("Błąd logowania:", error);
     }
+    */
+    event.preventDefault();
+    const { username, password } = this.state;
+    console.log(this.state);
+    this.props.handleLogin(username, password);
   };
 
   render() {
@@ -61,7 +71,9 @@ class Login extends Component {
             />
           </div>
           <div className="form-group">
-            <button type="submit" className="login-button">Zaloguj</button>
+            <button type="submit" className="login-button">
+              Zaloguj
+            </button>
           </div>
         </form>
       </div>

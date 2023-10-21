@@ -10,11 +10,18 @@ from django.conf import settings
 from .forms import newAnimalForm, loginForm, registerForm
 from django.contrib.auth.models import User
 from django.utils import timezone
-import os
+import os, json
 from rest_framework import viewsets
 from .serializers import AnimalSerializer
 from .models import Animal
 from django.http import JsonResponse
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_POST
+from django.middleware.csrf import get_token
 
 # Create your views here.
 
@@ -27,6 +34,24 @@ class DetailView(viewsets.ModelViewSet):
     serializer_class = AnimalSerializer
     queryset = Animal.objects.all()
     lookup_field = 'slug'
+
+
+class SessionView(APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def get(request, format=None):
+        return JsonResponse({'isAuthenticated': True})
+
+
+class WhoAmIView(APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def get(request, format=None):
+        return JsonResponse({'username': request.user.username})
 
 class IndexView(generic.ListView):
     template_name = "main/index.html"
@@ -52,6 +77,54 @@ class DetailsView(generic.DetailView):
 
     '''
     
+def get_csrf(request):
+    response = JsonResponse({'detail': 'CSRF cookie set'})
+    response['X-CSRFToken'] = get_token(request)
+    return response
+
+
+@require_POST
+def login_view(request):
+    data = json.loads(request.body)
+    username = data.get('username')
+    password = data.get('password')
+
+    print(data)
+
+    if username is None or password is None:
+        return JsonResponse({'detail': 'Please provide username and password.'}, status=400)
+
+    user = authenticate(username=username, password=password)
+
+    if user is None:
+        return JsonResponse({'detail': 'Invalid credentials.'}, status=400)
+
+    login(request, user)
+    return JsonResponse({'detail': 'Successfully logged in.'})
+
+
+def logout_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'detail': 'You\'re not logged in.'}, status=400)
+
+    logout(request)
+    return JsonResponse({'detail': 'Successfully logged out.'})
+
+
+@ensure_csrf_cookie
+def session_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'isAuthenticated': False})
+
+    return JsonResponse({'isAuthenticated': True})
+
+
+def whoami_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'isAuthenticated': False})
+
+    return JsonResponse({'username': request.user.username})
+
 def newAnimal(request):
     form = newAnimalForm()
     return render(request, "main/new.html", {"form":form})
@@ -88,11 +161,11 @@ def addAnimal(request, ownerID=None):
         an.save(update_fields=["static_urls","slug"])
     return HttpResponseRedirect(reverse("main:animals"))   
 
-def login(request):
+def login_form(request):
     form = loginForm()
     return render(request, "main/login.html", {"form":form})
 
-def register(request):
+def register_form(request):
     formReg = registerForm()
     return render(request, "main/register.html", {"formReg":formReg})
 
