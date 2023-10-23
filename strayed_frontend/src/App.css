@@ -8,17 +8,25 @@ body {
 
 /* Nagłówek aplikacji */
 .header {
+  display: flex;
   padding: 20px;
   background-color: #EFDBCE;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+#title {
   color: white;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
   font-size: calc(20px + 2vmin);
   font-weight: bold;
   font-family: 'Century Gothic';
   color: #175C4C;
-  margin-bottom: 20px;
+}
+
+.user-panel {
+  text-align: right;
 }
 
 /* Stopka */

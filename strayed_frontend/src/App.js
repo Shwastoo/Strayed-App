@@ -174,20 +174,19 @@ class App extends Component {
         {!loading ? (
           <div className="App">
             <div className="header">
-              <p>STRAYED</p>
+              <p id="title">STRAYED</p>
               {username != null ? (
-                <div className="user-section">
+                <div className="user-section user-panel">
                   <p>Witaj {username}</p>
-                  <br />
                   <Link to="" onClick={this.handleLogout}>
                     Wyloguj się
                   </Link>
                 </div>
               ) : (
-                <div className="guest-section">
-                  <Link to="/login">Zaloguj się</Link>
-                  <br />
-                  <Link to="/register">Nie masz konta? Zarejestruj się</Link>
+                <div className="guest-section user-panel">
+                  <span>Nie jesteś zalogowany. </span><Link to="/login">Zaloguj się</Link>
+                  <br/>
+                  <span>Nie masz konta? </span><Link to="/register">Zarejestruj się</Link>
                 </div>
               )}
             </div>
@@ -201,12 +200,6 @@ class App extends Component {
               <Route path="/register" element={<Register />} />
               <Route path="/details/:slug" element={<Details />} />
               {username && <Route path="/newanimal" element={<NewAnimal />} />}
-              {username && (
-                <Route
-                  path="/logout"
-                  element={<Logout handleLogout={this.handleLogout} />}
-                />
-              )}
             </Routes>
 
             <div className="footer">
@@ -275,19 +268,11 @@ class Index extends Component {
             )}
 
             {username != null ? (
-              <div className="user-section">
-                <p>Witaj {username}</p>
+              <div className="new-entry">
                 <Link to="/newAnimal">Dodaj ogłoszenie</Link>
-                <br />
-                <Link to="" onClick={this.handleLogout}>
-                  Wyloguj się
-                </Link>
               </div>
             ) : (
-              <div className="guest-section">
-                <Link to="/login">Zaloguj się</Link>
-                <br />
-                <Link to="/register">Nie masz konta? Zarejestruj się</Link>
+              <div>
               </div>
             )}
           </div>
