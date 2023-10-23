@@ -10,6 +10,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Details from "./Details";
 import NewAnimal from "./NewAnimal";
+import Logout from "./Logout";
 
 const cookies = new Cookies();
 class App extends Component {
@@ -172,7 +173,24 @@ class App extends Component {
       <Router>
         {!loading ? (
           <div className="App">
-            <div className="header">STRAYED</div>
+            <div className="header">
+              <p>STRAYED</p>
+              {username != null ? (
+                <div className="user-section">
+                  <p>Witaj {username}</p>
+                  <br />
+                  <Link to="" onClick={this.handleLogout}>
+                    Wyloguj się
+                  </Link>
+                </div>
+              ) : (
+                <div className="guest-section">
+                  <Link to="/login">Zaloguj się</Link>
+                  <br />
+                  <Link to="/register">Nie masz konta? Zarejestruj się</Link>
+                </div>
+              )}
+            </div>
 
             <Routes>
               <Route path="/" element={<Index data={this.state} />} />
@@ -183,6 +201,12 @@ class App extends Component {
               <Route path="/register" element={<Register />} />
               <Route path="/details/:slug" element={<Details />} />
               {username && <Route path="/newanimal" element={<NewAnimal />} />}
+              {username && (
+                <Route
+                  path="/logout"
+                  element={<Logout handleLogout={this.handleLogout} />}
+                />
+              )}
             </Routes>
 
             <div className="footer">
@@ -236,7 +260,7 @@ class Index extends Component {
       <div>
         {!loading ? (
           <div className="index-content">
-            {!loading && strayedAnimals && strayedAnimals.length > 0 ? (
+            {strayedAnimals && strayedAnimals.length > 0 ? (
               <ul className="animal-list">
                 {strayedAnimals.map((a) => (
                   <li key={a.slug} className="animal-item">
@@ -250,12 +274,14 @@ class Index extends Component {
               <p>Brak danych o zwierzętach</p>
             )}
 
-            {!loading && username != "" ? (
+            {username != null ? (
               <div className="user-section">
                 <p>Witaj {username}</p>
                 <Link to="/newAnimal">Dodaj ogłoszenie</Link>
                 <br />
-                <Link to="/logout">Wyloguj się</Link>
+                <Link to="" onClick={this.handleLogout}>
+                  Wyloguj się
+                </Link>
               </div>
             ) : (
               <div className="guest-section">
