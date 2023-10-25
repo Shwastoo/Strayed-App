@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 
 //import { Heading } from './components/Heading/Heading';
 //import { Footer } from './components/Footer/Footer';
@@ -13,29 +14,28 @@ import NewAnimal from "./NewAnimal";
 import Logout from "./Logout";
 
 const cookies = new Cookies();
-class App extends Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const [csrf, setCsrf] = useState("");
+  const [username, setUsername] = useState(null);
+  const [error, setError] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState("false");
+  const [loading, setLoading] = useState("true");
 
-    this.state = {
-      csrf: "",
-      username: null,
-      error: "",
-      isAuthenticated: false,
-      loading: true,
-    };
-  }
-  async componentDidMount() {
-    this.checkIfUserLoggedIn();
-  }
+  const navigate = useNavigate();
 
-  getCSRF = () => {
+  useEffect(() => {
+    console.log(username);
+    if (loading) checkIfUserLoggedIn();
+  });
+
+  const getCSRF = () => {
     fetch("http://localhost:8000/csrf/", {
       credentials: "include",
     })
       .then((res) => {
         let csrfToken = res.headers.get("X-CSRFToken");
-        this.setState({ csrf: csrfToken, loading: false });
+        setCsrf(csrfToken);
+        setLoading(false);
         console.log(csrfToken);
       })
       .catch((err) => {
@@ -43,15 +43,15 @@ class App extends Component {
       });
   };
 
-  isResponseOk(response) {
+  const isResponseOk = (response) => {
     if (response.status >= 200 && response.status <= 299) {
       return response.json();
     } else {
       throw Error(response.statusText);
     }
-  }
+  };
 
-  checkIfUserLoggedIn = async () => {
+  const checkIfUserLoggedIn = () => {
     /*
     try {
       const response = await axios.get("/userAuth/");
@@ -62,18 +62,17 @@ class App extends Component {
       console.error("Błąd sprawdzania stanu sesji:", error);
     }
     */
-    await fetch("http://localhost:8000/session/", {
+    fetch("http://localhost:8000/session/", {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         if (data.isAuthenticated) {
-          this.setState({ isAuthenticated: true });
-          this.whoami();
+          whoami();
         } else {
-          this.setState({ isAuthenticated: false });
-          this.getCSRF();
+          setIsAuthenticated(false);
+          getCSRF();
         }
       })
       .catch((err) => {
@@ -81,8 +80,8 @@ class App extends Component {
       });
   };
 
-  whoami = async () => {
-    await fetch("http://localhost:8000/whoami/", {
+  const whoami = () => {
+    fetch("http://localhost:8000/whoami/", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -91,7 +90,9 @@ class App extends Component {
       .then((res) => res.json())
       .then((data) => {
         console.log("You are logged in as: " + data.username);
-        this.setState({ username: data.username, loading: false });
+        setIsAuthenticated(true);
+        setUsername(data.username);
+        setLoading(false);
         console.log(this.state);
       })
       .catch((err) => {
@@ -99,7 +100,7 @@ class App extends Component {
       });
   };
 
-  handleLogin = async (username, password) => {
+  const handleLogin = (username, password) => {
     /*
     try {
       const response = await axios.post("/userAuth/", {
@@ -119,7 +120,7 @@ class App extends Component {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": this.state.csrf,
+        "X-CSRFToken": csrf,
       },
       credentials: "include",
       body: JSON.stringify({
@@ -127,21 +128,21 @@ class App extends Component {
         password: password,
       }),
     })
-      .then(this.isResponseOk)
+      .then(isResponseOk)
       .then((data) => {
         console.log(data);
-        this.setState({
-          isAuthenticated: true,
-          error: "",
-        });
+        setIsAuthenticated(true);
+        setUsername(username);
+        setError("");
+        navigate("/");
       })
       .catch((err) => {
         console.log(err);
-        this.setState({ error: "Wrong username or password." });
+        setError("Wrong username or password.");
       });
   };
 
-  handleLogout = async () => {
+  const handleLogout = () => {
     /*
     try {
       const response = await axios.post("/logout/");
@@ -151,139 +152,119 @@ class App extends Component {
       console.error("Błąd wylogowania:", error);
     }
     */
-    fetch("http://localhost:8000/logout", {
+    fetch("http://localhost:8000/logout/", {
       credentials: "include",
     })
-      .then(this.isResponseOk)
+      .then(isResponseOk)
       .then((data) => {
         console.log(data);
-        this.setState({ isAuthenticated: false });
-        this.getCSRF();
+        setIsAuthenticated(false);
+        setUsername(null);
+        getCSRF();
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  render() {
-    const { username } = this.state;
-    const { loading } = this.state;
-
-    return (
-      <Router>
-        {!loading ? (
-          <div className="App">
-            <div className="header">
-              <p id="title">STRAYED</p>
-              {username != null ? (
-                <div className="user-section user-panel">
-                  <p>Witaj {username}</p>
-                  <Link to="" onClick={this.handleLogout}>
-                    Wyloguj się
-                  </Link>
-                </div>
-              ) : (
-                <div className="guest-section user-panel">
-                  <span>Nie jesteś zalogowany. </span><Link to="/login">Zaloguj się</Link>
-                  <br/>
-                  <span>Nie masz konta? </span><Link to="/register">Zarejestruj się</Link>
-                </div>
-              )}
-            </div>
-
-            <Routes>
-              <Route path="/" element={<Index data={this.state} />} />
-              <Route
-                path="/login"
-                element={<Login handleLogin={this.handleLogin} />}
-              />
-              <Route path="/register" element={<Register />} />
-              <Route path="/details/:slug" element={<Details />} />
-              {username && <Route path="/newanimal" element={<NewAnimal />} />}
-            </Routes>
-
-            <div className="footer">
-              © Strayed_App by Jakub Szwast & Julia Politowska | 2023
-            </div>
+  return (
+    <div>
+      {!loading ? (
+        <div className="App">
+          <div className="header">
+            <p id="title">STRAYED</p>
+            {username != null ? (
+              <div className="user-section user-panel">
+                <p>Witaj {username}</p>
+                <Link to="" onClick={handleLogout}>
+                  Wyloguj się
+                </Link>
+              </div>
+            ) : (
+              <div className="guest-section user-panel">
+                <span>Nie jesteś zalogowany. </span>
+                <Link to="/login">Zaloguj się</Link>
+                <br />
+                <span>Nie masz konta? </span>
+                <Link to="/register">Zarejestruj się</Link>
+              </div>
+            )}
           </div>
-        ) : (
-          <div></div>
-        )}
-      </Router>
-    );
-  }
+
+          <Routes>
+            <Route path="/" element={<Index username={username} />} />
+            <Route
+              path="/login"
+              element={<Login handleLogin={handleLogin} />}
+            />
+            <Route path="/register" element={<Register />} />
+            <Route path="/details/:slug" element={<Details />} />
+            {username && <Route path="/newanimal" element={<NewAnimal />} />}
+          </Routes>
+
+          <div className="footer">
+            © Strayed_App by Jakub Szwast & Julia Politowska | 2023
+          </div>
+        </div>
+      ) : (
+        <div></div>
+      )}
+    </div>
+  );
 }
+export default App;
 
-class Index extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      strayedAnimals: [],
-      loading: true,
-      username: this.props.data.username,
-    };
-  }
+function Index({ username }) {
+  const [strayedAnimals, setStrayedAnimals] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  async componentDidMount() {
-    this.fetchStrayedAnimals();
-    console.log(this.props);
-  }
+  useEffect(() => {
+    if (!strayedAnimals) fetchStrayedAnimals();
+  });
 
-  async fetchStrayedAnimals() {
-    await axios
+  const fetchStrayedAnimals = () => {
+    axios
       .get("/api/animals")
       .then((response) => {
-        this.setState({
-          strayedAnimals: response.data,
-          loading: false,
-        });
-        console.log(this.state);
+        setStrayedAnimals(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Błąd pobierania danych zwierząt:", error);
       });
-  }
+  };
 
-  render() {
-    const { strayedAnimals } = this.state;
-    const { username } = this.state;
-    const { loading } = this.state;
+  return (
+    <div>
+      {!loading ? (
+        <div className="index-content">
+          {strayedAnimals && strayedAnimals.length > 0 ? (
+            <ul className="animal-list">
+              {strayedAnimals.map((a) => (
+                <li key={a.slug} className="animal-item">
+                  <Link to={`/details/${a.slug}`} className="animal-link">
+                    {a.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Brak danych o zwierzętach</p>
+          )}
 
-    return (
-      <div>
-        {!loading ? (
-          <div className="index-content">
-            {strayedAnimals && strayedAnimals.length > 0 ? (
-              <ul className="animal-list">
-                {strayedAnimals.map((a) => (
-                  <li key={a.slug} className="animal-item">
-                    <Link to={`/details/${a.slug}`} className="animal-link">
-                      {a.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>Brak danych o zwierzętach</p>
-            )}
-
-            {username != null ? (
-              <div className="new-entry">
-                <Link to="/newAnimal">Dodaj ogłoszenie</Link>
-              </div>
-            ) : (
-              <div>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div>
-            <p>Ładowanie...</p>
-          </div>
-        )}
-      </div>
-    );
-  }
+          {username != null ? (
+            <div className="new-entry">
+              <Link to="/newAnimal">Dodaj ogłoszenie</Link>
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </div>
+      ) : (
+        <div>
+          <p>Ładowanie...</p>
+        </div>
+      )}
+    </div>
+  );
 }
-
-export default App;

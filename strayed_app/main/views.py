@@ -18,6 +18,8 @@ from django.http import JsonResponse
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
@@ -76,7 +78,7 @@ class DetailsView(generic.DetailView):
         return context
 
     '''
-    
+
 def get_csrf(request):
     response = JsonResponse({'detail': 'CSRF cookie set'})
     response['X-CSRFToken'] = get_token(request)
@@ -215,7 +217,7 @@ def userRegister(request):
         return render(request, "main/register.html", {"formReg":registerForm(), "errorReg":error_msg})
         
 
-def logout(request):
+def logout_old(request):
     try:
         del request.session["user"]
         return HttpResponseRedirect(reverse("main:animals"))

@@ -1,26 +1,22 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+function Login({ handleLogin }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorLog, setErrorLog] = useState("");
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-      errorLog: "",
-    };
-  }
+  useEffect(() => {});
 
-  componentDidMount() {
-    console.log(this.props);
-  }
-
-  handleInputChange = (event) => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
   };
 
-  handleFormSubmit = async (event) => {
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleFormSubmit = (event) => {
     /*
     event.preventDefault();
     const { username, password } = this.state;
@@ -37,48 +33,42 @@ class Login extends Component {
     }
     */
     event.preventDefault();
-    const { username, password } = this.state;
-    console.log(this.state);
-    this.props.handleLogin(username, password);
+    handleLogin(username, password);
   };
 
-  render() {
-    const { username, password, errorLog } = this.state;
-
-    return (
-      <div className="registration-form">
-        <h2>Zaloguj się</h2>
-        <form onSubmit={this.handleFormSubmit}>
-          {errorLog && <p className="error-message">{errorLog}</p>}
-          <div className="form-group">
-            <input
-              type="text"
-              name="username"
-              value={username}
-              onChange={this.handleInputChange}
-              placeholder="Nazwa użytkownika"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={this.handleInputChange}
-              placeholder="Hasło"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <button type="submit" className="login-button">
-              Zaloguj
-            </button>
-          </div>
-        </form>
-      </div>
-    );
-  }
+  return (
+    <div className="registration-form">
+      <h2>Zaloguj się</h2>
+      <form onSubmit={handleFormSubmit}>
+        {errorLog && <p className="error-message">{errorLog}</p>}
+        <div className="form-group">
+          <input
+            type="text"
+            name="username"
+            value={username}
+            onChange={handleUsernameChange}
+            placeholder="Nazwa użytkownika"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="password"
+            name="password"
+            value={password}
+            onChange={handlePasswordChange}
+            placeholder="Hasło"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <button type="submit" className="login-button">
+            Zaloguj
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 }
 
 export default Login;
