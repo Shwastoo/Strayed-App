@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
@@ -11,30 +11,28 @@ import Login from "./Login";
 import Register from "./Register";
 import Details from "./Details";
 import NewAnimal from "./NewAnimal";
-import Logout from "./Logout";
 
 const cookies = new Cookies();
 function App() {
   const [csrf, setCsrf] = useState("");
   const [username, setUsername] = useState(null);
   const [error, setError] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState("false");
-  const [loading, setLoading] = useState("true");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [sessionCheck, setSessionCheck] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(username);
-    if (loading) checkIfUserLoggedIn();
+    if (!sessionCheck) checkIfUserLoggedIn();
   });
 
-  const getCSRF = () => {
-    fetch("http://localhost:8000/csrf/", {
+  const getCSRF = async () => {
+    await fetch("http://localhost:8000/csrf/", {
       credentials: "include",
     })
       .then((res) => {
         let csrfToken = res.headers.get("X-CSRFToken");
-        setCsrf(csrfToken);
         setLoading(false);
         console.log(csrfToken);
       })
@@ -44,6 +42,7 @@ function App() {
   };
 
   const isResponseOk = (response) => {
+    console.log(csrf);
     if (response.status >= 200 && response.status <= 299) {
       return response.json();
     } else {
@@ -51,7 +50,7 @@ function App() {
     }
   };
 
-  const checkIfUserLoggedIn = () => {
+  const checkIfUserLoggedIn = async () => {
     /*
     try {
       const response = await axios.get("/userAuth/");
@@ -62,7 +61,8 @@ function App() {
       console.error("Błąd sprawdzania stanu sesji:", error);
     }
     */
-    fetch("http://localhost:8000/session/", {
+    setSessionCheck("true");
+    await fetch("http://localhost:8000/session/", {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -74,14 +74,19 @@ function App() {
           setIsAuthenticated(false);
           getCSRF();
         }
+        setCsrf(cookies.get("csrftoken"));
+        axios.defaults.xsrfCookieName = "csrftoken";
+        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+        axios.defaults.withcredentials = true;
+        console.log(isAuthenticated, error);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const whoami = () => {
-    fetch("http://localhost:8000/whoami/", {
+  const whoami = async () => {
+    await fetch("http://localhost:8000/whoami/", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -93,14 +98,13 @@ function App() {
         setIsAuthenticated(true);
         setUsername(data.username);
         setLoading(false);
-        console.log(this.state);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const handleLogin = (username, password) => {
+  const handleLogin = async (username, password) => {
     /*
     try {
       const response = await axios.post("/userAuth/", {
@@ -116,7 +120,7 @@ function App() {
       console.error("Błąd logowania:", error);
     }
     */
-    fetch("http://localhost:8000/login/", {
+    await fetch("http://localhost:8000/login/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -142,7 +146,7 @@ function App() {
       });
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     /*
     try {
       const response = await axios.post("/logout/");
@@ -152,7 +156,7 @@ function App() {
       console.error("Błąd wylogowania:", error);
     }
     */
-    fetch("http://localhost:8000/logout/", {
+    await fetch("http://localhost:8000/logout/", {
       credentials: "include",
     })
       .then(isResponseOk)
@@ -165,6 +169,37 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const addAnimal = async (data) => {
+    console.log(data);
+    await axios
+      .post("/api/animals/", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {})
+      .catch((error) => {
+        console.error("Błąd dodawania ogłoszenia:", error);
+      });
+    /*
+    await fetch("http://localhost:8000/api/animals/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrf,
+      },
+      credentials: "include",
+      body: data,
+    })
+      .then(isResponseOk)
+      .then((data) => {})
+      .catch((err) => {
+        console.log(err);
+        setError("Couldn't add animal");
+      });
+      */
   };
 
   return (
@@ -199,7 +234,12 @@ function App() {
             />
             <Route path="/register" element={<Register />} />
             <Route path="/details/:slug" element={<Details />} />
-            {username && <Route path="/newanimal" element={<NewAnimal />} />}
+            {username && (
+              <Route
+                path="/newanimal"
+                element={<NewAnimal addAnimal={addAnimal} />}
+              />
+            )}
           </Routes>
 
           <div className="footer">
@@ -222,8 +262,8 @@ function Index({ username }) {
     if (!strayedAnimals) fetchStrayedAnimals();
   });
 
-  const fetchStrayedAnimals = () => {
-    axios
+  const fetchStrayedAnimals = async () => {
+    await axios
       .get("/api/animals")
       .then((response) => {
         setStrayedAnimals(response.data);

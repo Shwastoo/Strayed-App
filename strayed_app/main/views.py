@@ -20,10 +20,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 from django.middleware.csrf import get_token
+from rest_framework.parsers import MultiPartParser, FormParser
 
 # Create your views here.
 
@@ -31,6 +33,12 @@ class AnimalView(viewsets.ModelViewSet):
     serializer_class = AnimalSerializer
     queryset = Animal.objects.all()
     lookup_field = 'slug'
+
+    parser_classes = [MultiPartParser, FormParser]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 class DetailView(viewsets.ModelViewSet):
     serializer_class = AnimalSerializer
@@ -79,6 +87,8 @@ class DetailsView(generic.DetailView):
 
     '''
 
+
+@ensure_csrf_cookie
 def get_csrf(request):
     response = JsonResponse({'detail': 'CSRF cookie set'})
     response['X-CSRFToken'] = get_token(request)
@@ -112,8 +122,6 @@ def logout_view(request):
     logout(request)
     return JsonResponse({'detail': 'Successfully logged out.'})
 
-
-@ensure_csrf_cookie
 def session_view(request):
     if not request.user.is_authenticated:
         return JsonResponse({'isAuthenticated': False})
@@ -131,36 +139,44 @@ def newAnimal(request):
     form = newAnimalForm()
     return render(request, "main/new.html", {"form":form})
 
+@require_POST
 def addAnimal(request, ownerID=None):
+    serializer = AnimalSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return HttpResponseRedirect(reverse("main:animals")) 
+
+    data = json.loads(request.body)
+
     if request.method == 'POST':
         if ownerID == None:
             ownerID = 1
         try:
-            photo2 = request.FILES["photo2"]
+            photo2 = data.get("photo2")
         except:
             photo2 = ""
             pass
         try:
-            photo3 = request.FILES["photo3"]
+            photo3 = data.get("photo3")
         except:
             photo3 = ""
             pass
         an = Animal(
-            title=request.POST["title"],
-            desc=request.POST["desc"],
-            photo=request.FILES["photo"],
+            title= data.get("title"),
+            desc=data.get("desc"),
+            photo=data.get("photo"),
             photo2=photo2,
             photo3=photo3,
-            species=request.POST["species"],
-            breed=request.POST["breed"],
-            colors=request.POST["colors"].split("\n"),
-            location=request.POST["location"],
+            species=data.get("species"),
+            breed=data.get("breed"),
+            colors=data.get("colors").split(","),
+            location=data.get("location"),
             gender=request.POST["gender"],
             owner=User.objects.get(username = request.session.get("user")),
             date_created=timezone.now()
         )
         an.save()
-        an.save(update_fields=["static_urls","slug"])
+        an.save(update_fields=["slug"])
     return HttpResponseRedirect(reverse("main:animals"))   
 
 def login_form(request):

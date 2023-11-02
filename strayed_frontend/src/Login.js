@@ -1,12 +1,14 @@
-import React, { Component, useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+//import axios from "axios";
+//import { useNavigate } from "react-router-dom";
 function Login({ handleLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorLog, setErrorLog] = useState("");
 
-  useEffect(() => {});
+  useEffect(() => {
+    setErrorLog("");
+  });
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);

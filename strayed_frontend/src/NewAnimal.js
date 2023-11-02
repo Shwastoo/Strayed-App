@@ -1,44 +1,48 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+//import axios from "axios";
 
 class NewAnimal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
-      desc: '',
+      title: "",
+      desc: "",
       photo: null,
       photo2: null,
       photo3: null,
-      species: '',
-      breed: '',
-      colors: '',
-      location: '',
+      species: "",
+      breed: "",
+      colors: "",
+      location: "",
       submittedAnimal: null,
     };
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append('title', this.state.title);
-    formData.append('desc', this.state.desc);
-    formData.append('photo', this.state.photo);
-    formData.append('photo2', this.state.photo2);
-    formData.append('photo3', this.state.photo3);
-    formData.append('species', this.state.species);
-    formData.append('breed', this.state.breed);
-    formData.append('colors', this.state.colors);
-    formData.append('location', this.state.location);
+    formData.append("title", this.state.title);
+    formData.append("desc", this.state.desc);
+    formData.append("photo", this.state.photo);
+    formData.append("photo2", this.state.photo2);
+    formData.append("photo3", this.state.photo3);
+    formData.append("species", this.state.species);
+    formData.append("breed", this.state.breed);
+    formData.append("colors", this.state.colors);
+    formData.append("location", this.state.location);
 
-    axios.post('/api/animals/', formData)
-      .then(response => {
+    this.props.addAnimal(formData);
+    /*
+    axios
+      .post("/api/animals/", formData)
+      .then((response) => {
         this.setState({ submittedAnimal: response.data });
       })
-      .catch(error => {
-        console.error('Błąd dodawania ogłoszenia:', error);
+      .catch((error) => {
+        console.error("Błąd dodawania ogłoszenia:", error);
       });
-  }
+      */
+  };
 
   render() {
     return (
@@ -50,7 +54,7 @@ class NewAnimal extends Component {
               type="text"
               name="title"
               value={this.state.title}
-              onChange={e => this.setState({ title: e.target.value })}
+              onChange={(e) => this.setState({ title: e.target.value })}
             />
           </div>
           <div>
@@ -59,7 +63,7 @@ class NewAnimal extends Component {
               type="text"
               name="desc"
               value={this.state.desc}
-              onChange={e => this.setState({ desc: e.target.value })}
+              onChange={(e) => this.setState({ desc: e.target.value })}
             />
           </div>
           <div>
@@ -67,7 +71,7 @@ class NewAnimal extends Component {
             <input
               type="file"
               name="photo"
-              onChange={e => this.setState({ photo: e.target.files[0] })}
+              onChange={(e) => this.setState({ photo: e.target.files[0] })}
             />
           </div>
           <div>
@@ -75,7 +79,7 @@ class NewAnimal extends Component {
             <input
               type="file"
               name="photo2"
-              onChange={e => this.setState({ photo2: e.target.files[0] })}
+              onChange={(e) => this.setState({ photo2: e.target.files[0] })}
             />
           </div>
           <div>
@@ -83,7 +87,7 @@ class NewAnimal extends Component {
             <input
               type="file"
               name="photo3"
-              onChange={e => this.setState({ photo3: e.target.files[0] })}
+              onChange={(e) => this.setState({ photo3: e.target.files[0] })}
             />
           </div>
           <div>
@@ -92,7 +96,7 @@ class NewAnimal extends Component {
               type="text"
               name="species"
               value={this.state.species}
-              onChange={e => this.setState({ species: e.target.value })}
+              onChange={(e) => this.setState({ species: e.target.value })}
             />
           </div>
           <div>
@@ -101,7 +105,7 @@ class NewAnimal extends Component {
               type="text"
               name="breed"
               value={this.state.breed}
-              onChange={e => this.setState({ breed: e.target.value })}
+              onChange={(e) => this.setState({ breed: e.target.value })}
             />
           </div>
           <div>
@@ -110,7 +114,7 @@ class NewAnimal extends Component {
               type="text"
               name="colors"
               value={this.state.colors}
-              onChange={e => this.setState({ colors: e.target.value })}
+              onChange={(e) => this.setState({ colors: e.target.value })}
             />
           </div>
           <div>
@@ -119,7 +123,7 @@ class NewAnimal extends Component {
               type="text"
               name="location"
               value={this.state.location}
-              onChange={e => this.setState({ location: e.target.value })}
+              onChange={(e) => this.setState({ location: e.target.value })}
             />
           </div>
           <div>
