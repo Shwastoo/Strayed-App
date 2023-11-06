@@ -46,9 +46,10 @@ class NewAnimal extends Component {
 
   render() {
     return (
-      <div>
+      <div className="registration-form">
+      <h2>Dodaj nowe zwierzę</h2>
         <form onSubmit={this.handleSubmit} encType="multipart/form-data">
-          <div>
+          <div className="form-group">
             <label>Tytuł ogłoszenia:</label>
             <input
               type="text"
@@ -57,7 +58,7 @@ class NewAnimal extends Component {
               onChange={(e) => this.setState({ title: e.target.value })}
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Opis:</label>
             <input
               type="text"
@@ -66,7 +67,7 @@ class NewAnimal extends Component {
               onChange={(e) => this.setState({ desc: e.target.value })}
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Zdjęcie 1:</label>
             <input
               type="file"
@@ -74,7 +75,7 @@ class NewAnimal extends Component {
               onChange={(e) => this.setState({ photo: e.target.files[0] })}
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Zdjęcie 2:</label>
             <input
               type="file"
@@ -82,7 +83,7 @@ class NewAnimal extends Component {
               onChange={(e) => this.setState({ photo2: e.target.files[0] })}
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Zdjęcie 3:</label>
             <input
               type="file"
@@ -90,7 +91,7 @@ class NewAnimal extends Component {
               onChange={(e) => this.setState({ photo3: e.target.files[0] })}
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Gatunek:</label>
             <input
               type="text"
@@ -99,7 +100,7 @@ class NewAnimal extends Component {
               onChange={(e) => this.setState({ species: e.target.value })}
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Rasa:</label>
             <input
               type="text"
@@ -108,7 +109,7 @@ class NewAnimal extends Component {
               onChange={(e) => this.setState({ breed: e.target.value })}
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Kolory (oddzielone przecinkami):</label>
             <input
               type="text"
@@ -117,7 +118,7 @@ class NewAnimal extends Component {
               onChange={(e) => this.setState({ colors: e.target.value })}
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Miejscowość:</label>
             <input
               type="text"
@@ -126,8 +127,8 @@ class NewAnimal extends Component {
               onChange={(e) => this.setState({ location: e.target.value })}
             />
           </div>
-          <div>
-            <input type="submit" value="Wyślij" />
+          <div className="form-group">
+            <input type="submit" value="Wyślij" className="login-button" />
           </div>
         </form>
         {this.state.submittedAnimal && (
