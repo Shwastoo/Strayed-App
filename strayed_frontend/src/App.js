@@ -28,14 +28,19 @@ function App() {
     if (!sessionCheck) checkIfUserLoggedIn();
   });
 
+  const getState = () => {
+    console.log(csrf, username, error, isAuthenticated, loading, sessionCheck);
+  };
+
   const getCSRF = async () => {
     await fetch("http://localhost:8000/csrf/", {
       credentials: "include",
     })
       .then((res) => {
         let csrfToken = res.headers.get("X-CSRFToken");
-        setLoading(false);
-        console.log(csrfToken);
+        setCsrf(csrfToken);
+        console.log(csrf);
+        console.log(cookies.get("csrftoken"));
       })
       .catch((err) => {
         console.log(err);
@@ -73,13 +78,13 @@ function App() {
           whoami();
         } else {
           setIsAuthenticated(false);
-          getCSRF();
+          setLoading(false);
+          //getCSRF();
         }
-        setCsrf(cookies.get("csrftoken"));
-        axios.defaults.xsrfCookieName = "csrftoken";
+        axios.defaults.xsrfCookieName = "CSRFtoken";
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.withcredentials = true;
-        console.log(isAuthenticated, error);
+        console.log(isAuthenticated, error, csrf);
       })
       .catch((err) => {
         console.log(err);
@@ -96,6 +101,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         console.log("You are logged in as: " + data.username);
+        setCsrf(cookies.get("csrftoken"));
         setIsAuthenticated(true);
         setUsername(data.username);
         setLoading(false);
@@ -125,7 +131,6 @@ function App() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": csrf,
       },
       credentials: "include",
       body: JSON.stringify({
@@ -136,6 +141,7 @@ function App() {
       .then(isResponseOk)
       .then((data) => {
         console.log(data);
+        setCsrf(cookies.get("csrftoken"));
         setIsAuthenticated(true);
         setUsername(username);
         setError("");
@@ -173,6 +179,7 @@ function App() {
   };
 
   const addAnimal = async (data) => {
+    getCSRF();
     await axios
       .post("/api/animals/", data, {
         headers: {
@@ -192,7 +199,7 @@ function App() {
     await fetch("http://localhost:8000/api/animals/", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
         "X-CSRFToken": csrf,
       },
       credentials: "include",
@@ -242,13 +249,16 @@ function App() {
             {username && (
               <Route
                 path="/newanimal"
-                element={<NewAnimal addAnimal={addAnimal} />}
+                element={
+                  <NewAnimal addAnimal={addAnimal} username={username} />
+                }
               />
             )}
           </Routes>
 
           <div className="footer">
             © Strayed_App by Jakub Szwast & Julia Politowska | 2023
+            <button onClick={getState}>state</button>
           </div>
         </div>
       ) : (

@@ -22,7 +22,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
 from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.decorators.http import require_POST
 from django.middleware.csrf import get_token
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -49,14 +49,18 @@ class AnimalView(GenericAPIView):
             return Response(posts_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 '''
 class AnimalView(viewsets.ModelViewSet):
+    serializer_class = AnimalSerializer
+    queryset = Animal.objects.all()
+    lookup_field = 'slug'
+
     def list(self, request):
         queryset = Animal.objects.all()
         serializer = AnimalSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, slug):
         queryset = Animal.objects.all()
-        animal = get_object_or_404(queryset, slug=pk)
+        animal = get_object_or_404(queryset, slug=slug)
         serializer = AnimalSerializer(animal)
         return Response(serializer.data)
     
@@ -84,7 +88,7 @@ class DetailView(viewsets.ModelViewSet):
     queryset = Animal.objects.all()
     lookup_field = 'slug'
 
-
+'''
 class SessionView(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
@@ -101,6 +105,7 @@ class WhoAmIView(APIView):
     @staticmethod
     def get(request, format=None):
         return JsonResponse({'username': request.user.username})
+'''
 
 class IndexView(generic.ListView):
     template_name = "main/index.html"
@@ -127,13 +132,14 @@ class DetailsView(generic.DetailView):
     '''
 
 
-@ensure_csrf_cookie
+#@ensure_csrf_cookie
 def get_csrf(request):
     response = JsonResponse({'detail': 'CSRF cookie set'})
     response['X-CSRFToken'] = get_token(request)
+    response.set_cookie('CSRFtoken', response["X-CSRFToken"])
     return response
 
-
+@csrf_exempt
 @require_POST
 def login_view(request):
     data = json.loads(request.body)
@@ -145,7 +151,9 @@ def login_view(request):
     if username is None or password is None:
         return JsonResponse({'detail': 'Please provide username and password.'}, status=400)
 
+    
     user = authenticate(username=username, password=password)
+    
 
     if user is None:
         return JsonResponse({'detail': 'Invalid credentials.'}, status=400)
@@ -183,7 +191,8 @@ def addAnimal(request, ownerID=None):
     serializer = AnimalSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-    return HttpResponseRedirect(reverse("main:animals")) 
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     data = json.loads(request.body)
 

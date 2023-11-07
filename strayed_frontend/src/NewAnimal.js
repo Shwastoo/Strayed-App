@@ -8,11 +8,13 @@ class NewAnimal extends Component {
     this.state = {
       title: "",
       desc: "",
+      owner: this.props.username,
       photo: null,
       photo2: null,
       photo3: null,
       species: "",
       breed: "",
+      gender: "",
       colors: "",
       location: "",
       submittedAnimal: null,
@@ -24,9 +26,11 @@ class NewAnimal extends Component {
     var formData = new FormData();
     formData.append("title", this.state.title);
     formData.append("desc", this.state.desc);
+    formData.append("owner", this.state.owner);
     formData.append("photo", this.state.photo);
     formData.append("photo2", this.state.photo2);
     formData.append("photo3", this.state.photo3);
+    formData.append("gender", this.state.gender);
     formData.append("species", this.state.species);
     formData.append("breed", this.state.breed);
     formData.append("colors", this.state.colors);
@@ -108,6 +112,24 @@ class NewAnimal extends Component {
               name="breed"
               value={this.state.breed}
               onChange={(e) => this.setState({ breed: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label>Płeć:</label>
+            <br />
+            <label>Samiec</label>
+            <input
+              type="radio"
+              name="gender"
+              value="M"
+              onChange={(e) => this.setState({ gender: e.target.value })}
+            />
+            <label>Samica</label>
+            <input
+              type="radio"
+              name="gender"
+              value="F"
+              onChange={(e) => this.setState({ gender: e.target.value })}
             />
           </div>
           <div className="form-group">
