@@ -26,4 +26,6 @@ urlpatterns = [
     path('whoami/', views.whoami_view, name='api-whoami'),
     path('<slug:slug>/', views.DetailsView.as_view(), name="details"),
     path('api/', include(router.urls)),
+    #path('api/animals/', views.AnimalView.as_view(), name="animal"),
+    #path('api/animals/<slug:slug>/', views.AnimalView.as_view(), name="animal")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

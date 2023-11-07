@@ -13,6 +13,7 @@ import Details from "./Details";
 import NewAnimal from "./NewAnimal";
 
 const cookies = new Cookies();
+
 function App() {
   const [csrf, setCsrf] = useState("");
   const [username, setUsername] = useState(null);
@@ -172,17 +173,21 @@ function App() {
   };
 
   const addAnimal = async (data) => {
-    console.log(data);
     await axios
       .post("/api/animals/", data, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "X-CSRFToken": csrf,
         },
       })
       .then((response) => {})
       .catch((error) => {
         console.error("Błąd dodawania ogłoszenia:", error);
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
       });
+
     /*
     await fetch("http://localhost:8000/api/animals/", {
       method: "POST",

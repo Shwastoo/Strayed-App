@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import CSRFToken from "./CsrfToken";
 //import axios from "axios";
 
 class NewAnimal extends Component {
@@ -20,7 +21,7 @@ class NewAnimal extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
+    var formData = new FormData();
     formData.append("title", this.state.title);
     formData.append("desc", this.state.desc);
     formData.append("photo", this.state.photo);
@@ -30,7 +31,6 @@ class NewAnimal extends Component {
     formData.append("breed", this.state.breed);
     formData.append("colors", this.state.colors);
     formData.append("location", this.state.location);
-
     this.props.addAnimal(formData);
     /*
     axios
@@ -47,8 +47,9 @@ class NewAnimal extends Component {
   render() {
     return (
       <div className="registration-form">
-      <h2>Dodaj nowe zwierzę</h2>
+        <h2>Dodaj nowe zwierzę</h2>
         <form onSubmit={this.handleSubmit} encType="multipart/form-data">
+          <CSRFToken />
           <div className="form-group">
             <label>Tytuł ogłoszenia:</label>
             <input

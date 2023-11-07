@@ -1,7 +1,7 @@
 from typing import Any, Dict
 from django.db import models
 from django.db.models.query import QuerySet
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
@@ -20,16 +20,54 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 from django.middleware.csrf import get_token
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework import status
 
 # Create your views here.
 
+'''
+class AnimalView(GenericAPIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def get(self, request, *args, **kwargs):
+        animals = Animal.objects.all()
+        serializer = AnimalSerializer(animals, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        posts_serializer = AnimalSerializer(data=request.data)
+        if posts_serializer.is_valid():
+            posts_serializer.save()
+            return Response(posts_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print('error', posts_serializer.errors)
+            return Response(posts_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+'''
 class AnimalView(viewsets.ModelViewSet):
+    def list(self, request):
+        queryset = Animal.objects.all()
+        serializer = AnimalSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Animal.objects.all()
+        animal = get_object_or_404(queryset, slug=pk)
+        serializer = AnimalSerializer(animal)
+        return Response(serializer.data)
+    
+    def create(self, request):
+        serializer = AnimalSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    '''
     serializer_class = AnimalSerializer
     queryset = Animal.objects.all()
     lookup_field = 'slug'
@@ -38,6 +76,7 @@ class AnimalView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+    '''
 
 
 class DetailView(viewsets.ModelViewSet):
