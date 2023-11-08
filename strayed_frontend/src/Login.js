@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import CSRFToken from "./CsrfToken";
 //import axios from "axios";
 //import { useNavigate } from "react-router-dom";
 function Login({ handleLogin }) {
@@ -46,7 +45,6 @@ function Login({ handleLogin }) {
       <form onSubmit={handleFormSubmit}>
         {errorLog && <p className="error-message">{errorLog}</p>}
         <div className="form-group">
-          <CSRFToken />
           <input
             type="text"
             name="username"

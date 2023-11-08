@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import CSRFToken from "./CsrfToken";
 //import axios from "axios";
 
 class NewAnimal extends Component {
@@ -53,7 +52,6 @@ class NewAnimal extends Component {
       <div className="registration-form">
         <h2>Dodaj nowe zwierzę</h2>
         <form onSubmit={this.handleSubmit} encType="multipart/form-data">
-          <CSRFToken />
           <div className="form-group">
             <label>Tytuł ogłoszenia:</label>
             <input

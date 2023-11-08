@@ -39,8 +39,10 @@ function App() {
       .then((res) => {
         let csrfToken = res.headers.get("X-CSRFToken");
         setCsrf(csrfToken);
+        console.log("Tokeny:");
         console.log(csrf);
         console.log(cookies.get("csrftoken"));
+        console.log(cookies.get("CSRFtoken"));
       })
       .catch((err) => {
         console.log(err);
@@ -81,9 +83,9 @@ function App() {
           setLoading(false);
           //getCSRF();
         }
-        axios.defaults.xsrfCookieName = "CSRFtoken";
-        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-        axios.defaults.withcredentials = true;
+        //axios.defaults.xsrfCookieName = "CSRFtoken";
+        //axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+        //axios.defaults.withcredentials = true;
         console.log(isAuthenticated, error, csrf);
       })
       .catch((err) => {
@@ -101,7 +103,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         console.log("You are logged in as: " + data.username);
-        setCsrf(cookies.get("csrftoken"));
+        //setCsrf(cookies.get("csrftoken"));
         setIsAuthenticated(true);
         setUsername(data.username);
         setLoading(false);
@@ -141,7 +143,6 @@ function App() {
       .then(isResponseOk)
       .then((data) => {
         console.log(data);
-        setCsrf(cookies.get("csrftoken"));
         setIsAuthenticated(true);
         setUsername(username);
         setError("");
@@ -171,7 +172,7 @@ function App() {
         console.log(data);
         setIsAuthenticated(false);
         setUsername(null);
-        getCSRF();
+        //getCSRF();
       })
       .catch((err) => {
         console.log(err);
@@ -179,7 +180,10 @@ function App() {
   };
 
   const addAnimal = async (data) => {
-    getCSRF();
+    await getCSRF();
+    console.log("Po tokenach:");
+    axios.defaults.headers.post["X-CSRF-Token"] = cookies.get("CSRFtoken");
+    console.log(axios.defaults.headers.post["X-CSRF-Token"]);
     await axios
       .post("/api/animals/", data, {
         headers: {
