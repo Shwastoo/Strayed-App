@@ -302,7 +302,16 @@ function Index({ username }) {
               {strayedAnimals.map((a) => (
                 <li key={a.slug} className="animal-item">
                   <Link to={`/details/${a.slug}`} className="animal-link">
-                    {a.title}
+                    <div className="animal-content">
+                      <span className="animal-title">{a.title}</span>
+                      {a.photo && (
+                        <img
+                          src={a.photo}
+                          alt={`Zdjęcie ${a.title}`}
+                          className="animal-thumbnail"
+                        />
+                      )}
+                    </div>
                   </Link>
                 </li>
               ))}

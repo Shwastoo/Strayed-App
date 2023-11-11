@@ -21,7 +21,7 @@ function Details() {
 
   useEffect(() => {
     if (animal) {
-      const map = L.map("map").setView([51.505, -0.09], 13);
+      const map = L.map("map").setView([50.061, 19.936], 13);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 

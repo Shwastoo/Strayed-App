@@ -95,6 +95,33 @@ body {
 .animal-link {
   text-decoration: none;
   color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.animal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.animal-title {
+  margin-bottom: 10px;
+}
+
+.animal-thumbnail {
+  width: auto; 
+  height: 75px; 
+  margin-top: 10px; 
+}
+
+.new-entry {
+  margin-top: 20px;
 }
 
 /* Styl dla całego formularza */
