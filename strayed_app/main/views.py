@@ -65,8 +65,13 @@ class AnimalView(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def create(self, request):
-        serializer = AnimalSerializer(data=request.data)
+        newData = request.data.copy()
+        queryset = User.objects.all()
+        newData["owner"]=get_object_or_404(queryset, username=newData["owner"]).pk
+        print(newData)
+        serializer = AnimalSerializer(data=newData)
         if serializer.is_valid():
+            serializer.save()
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

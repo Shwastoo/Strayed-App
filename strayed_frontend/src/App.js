@@ -180,7 +180,7 @@ function App() {
   };
 
   const addAnimal = async (data) => {
-    await getCSRF();
+    //await getCSRF();
     console.log("Po tokenach:");
     axios.defaults.headers.post["X-CSRF-Token"] = cookies.get("CSRFtoken");
     console.log(axios.defaults.headers.post["X-CSRF-Token"]);
@@ -188,7 +188,7 @@ function App() {
       .post("/api/animals/", data, {
         headers: {
           "Content-Type": "multipart/form-data",
-          "X-CSRFToken": csrf,
+          "X-CSRFToken": cookies.get("csrftoken"),
         },
       })
       .then((response) => {})
@@ -200,11 +200,12 @@ function App() {
       });
 
     /*
+    console.log(data);
     await fetch("http://localhost:8000/api/animals/", {
       method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",
-        "X-CSRFToken": csrf,
+        "X-CSRFToken": cookies.get("csrftoken"),
       },
       credentials: "include",
       body: data,
@@ -215,7 +216,7 @@ function App() {
         console.log(err);
         setError("Couldn't add animal");
       });
-      */
+  */
   };
 
   return (
