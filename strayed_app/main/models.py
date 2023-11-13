@@ -45,6 +45,7 @@ class Animal(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title+" "+str(self.pk))
         #self.static_url = self.photo.url.removeprefix("/main/static")
+        self.date_created = timezone.now()
         
         static_urls = ["","",""]
         if self.photo != "":
