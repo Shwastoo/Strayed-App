@@ -43,7 +43,7 @@ class Animal(models.Model):
         return reverse("details", kwargs={"slug": self.slug})
     
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title+" "+str(self.pk))
+        self.slug = slugify(self.title+" "+str(self.owner.pk))
         #self.static_url = self.photo.url.removeprefix("/main/static")
         self.date_created = timezone.now()
         

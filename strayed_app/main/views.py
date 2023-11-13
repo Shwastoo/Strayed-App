@@ -68,11 +68,15 @@ class AnimalView(viewsets.ModelViewSet):
         newData = request.data.copy()
         queryset = User.objects.all()
         newData["owner"]=get_object_or_404(queryset, username=newData["owner"]).pk
+        if newData["photo2"]=="null":
+            newData["photo2"]=""
+        if newData["photo3"]=="null":
+            newData["photo3"]=""
         print(newData)
         serializer = AnimalSerializer(data=newData)
         if serializer.is_valid():
             serializer.save()
-            serializer.save()
+            #serializer.save(update_fields=["slug"])
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

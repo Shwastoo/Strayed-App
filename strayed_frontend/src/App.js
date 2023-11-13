@@ -191,7 +191,9 @@ function App() {
           "X-CSRFToken": cookies.get("csrftoken"),
         },
       })
-      .then((response) => {})
+      .then((response) => {
+        navigate("/");
+      })
       .catch((error) => {
         console.error("Błąd dodawania ogłoszenia:", error);
         console.log(error.response.data);
