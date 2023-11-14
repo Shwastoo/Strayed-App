@@ -72,7 +72,8 @@ class AnimalView(viewsets.ModelViewSet):
             newData["photo2"]=""
         if newData["photo3"]=="null":
             newData["photo3"]=""
-        print(newData)
+        #newData["colors"]=newData["colors"].split(",")
+        print(newData["colors"])
         serializer = AnimalSerializer(data=newData)
         if serializer.is_valid():
             serializer.save()

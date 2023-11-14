@@ -23,9 +23,6 @@ class NewAnimal extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     var formData = new FormData();
-    console.log(this.state.colors);
-    this.state.colors = this.state.colors.split(",");
-    console.log(this.state.colors);
     formData.append("title", this.state.title);
     formData.append("desc", this.state.desc);
     formData.append("owner", this.state.owner);
