@@ -11,18 +11,18 @@ body {
   display: flex;
   padding: 20px;
   background-color: #EFDBCE;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   flex-direction: row;
   margin-bottom: 20px;
 }
 
 #title {
-  color: white;
-  font-size: calc(20px + 2vmin);
+  font-size: calc(40px + 2vmin);
   font-weight: bold;
   font-family: 'Century Gothic';
   color: #175C4C;
+  margin: 0;
 }
 
 .user-panel {
@@ -213,4 +213,66 @@ body {
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-top: 20px;
+}
+
+.animal-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; 
+  margin: -10px; 
+}
+
+.animal-item {
+  width: calc(33.33% - 20px);
+  margin: 10px;
+  box-sizing: border-box;
+}
+
+.submit-button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-decoration: none;
+  background-color: rgb(131, 106, 132);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  /* Resetowanie domyślnego stylu linku */
+  outline: none;
+  border-bottom: none;
+}
+
+.submit-button:hover,
+.submit-button:active {
+  background-color: rgb(87, 70, 88);
+  color: #fff; 
+  text-decoration: none;
+}
+
+.submit-button1 {
+  display: inline-block;
+  width: 120px;
+  margin: 0 auto 10px;
+  padding: 10px;
+  font-size: 13px;
+  text-align: center;
+  text-decoration: none;
+  background-color: rgb(131, 106, 132);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  outline: none;
+  border-bottom: none;
+}
+
+.submit-button1:hover,
+.submit-button1:active {
+  background-color: rgb(87, 70, 88);
+  color: #fff;
+  text-decoration: none;
 }

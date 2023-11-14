@@ -230,17 +230,17 @@ function App() {
             {username != null ? (
               <div className="user-section user-panel">
                 <p>Witaj {username}</p>
-                <Link to="" onClick={handleLogout}>
+                <Link to="" onClick={handleLogout} className="submit-button1">
                   Wyloguj się
                 </Link>
               </div>
             ) : (
               <div className="guest-section user-panel">
                 <span>Nie jesteś zalogowany. </span>
-                <Link to="/login">Zaloguj się</Link>
+                <Link to="/login" className="submit-button1">Zaloguj się</Link>
                 <br />
                 <span>Nie masz konta? </span>
-                <Link to="/register">Zarejestruj się</Link>
+                <Link to="/register" className="submit-button1">Zarejestruj się</Link>
               </div>
             )}
           </div>
@@ -325,7 +325,7 @@ function Index({ username }) {
 
           {username != null ? (
             <div className="new-entry">
-              <Link to="/newAnimal">Dodaj ogłoszenie</Link>
+              <Link to="/newAnimal" className="submit-button">Dodaj ogłoszenie</Link>
             </div>
           ) : (
             <div></div>
