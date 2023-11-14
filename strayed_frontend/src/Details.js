@@ -4,6 +4,16 @@ import { useParams } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [25,41], 
+    iconAnchor: [12,41]
+});
+
 function Details() {
   const [animal, setAnimal] = useState(null);
   const { slug } = useParams();
@@ -35,6 +45,15 @@ function Details() {
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
         map
       );
+
+      let lat = 50.061;
+      let lon = 19.936;
+
+      L.Marker.prototype.options.icon = DefaultIcon;
+
+      L.marker([lat, lon]).addTo(map)
+        .bindPopup('Środek Krakowa')
+        //.openPopup();
 
       if (animal.location && animal.location.lat && animal.location.lng) {
         const locationMarker = L.marker([
