@@ -4,6 +4,8 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //import { Heading } from './components/Heading/Heading';
 //import { Footer } from './components/Footer/Footer';
@@ -115,20 +117,6 @@ function App() {
 
   const handleLogin = async (username, password) => {
     /*
-    try {
-      const response = await axios.post("/userAuth/", {
-        un: username,
-        pw: password,
-      });
-      if (response.data.success) {
-        this.setState({ sessionUser: response.data.user });
-      } else {
-        console.log(response.data.error);
-      }
-    } catch (error) {
-      console.error("Błąd logowania:", error);
-    }
-    */
     await fetch("http://localhost:8000/login/", {
       method: "POST",
       headers: {
@@ -152,6 +140,47 @@ function App() {
         console.log(err);
         setError("Wrong username or password.");
       });
+      */
+    var data = { username: username, password: password };
+    const loginStatus = toast.loading("Logowanie...", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    await axios
+      .post("/login/", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setIsAuthenticated(true);
+        setUsername(username);
+        setError("");
+        navigate("/");
+        toast.update(loginStatus, {
+          render: "Zalogowano pomyślnie!",
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.SUCCESS,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        var errorText = "Błąd logowania.";
+        if (error.response.data.detail === "Invalid credentials.")
+          errorText = "Nieprawidłowy login lub hasło.";
+        toast.update(loginStatus, {
+          render: errorText,
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.ERROR,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
+      });
   };
 
   const handleLogout = async () => {
@@ -164,6 +193,9 @@ function App() {
       console.error("Błąd wylogowania:", error);
     }
     */
+    const logoutStatus = toast.loading("Wylogowywanie...", {
+      position: toast.POSITION.TOP_CENTER,
+    });
     await fetch("http://localhost:8000/logout/", {
       credentials: "include",
     })
@@ -172,18 +204,105 @@ function App() {
         console.log(data);
         setIsAuthenticated(false);
         setUsername(null);
-        //getCSRF();
+        toast.update(logoutStatus, {
+          render: "Wylogowano pomyślnie!",
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.SUCCESS,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
       })
       .catch((err) => {
         console.log(err);
+        toast.update(logoutStatus, {
+          render: "Wystąpił nieoczekiwany błąd.",
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.ERROR,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
       });
+  };
+
+  const handleRegister = async (data) => {
+    const { password, confirm_password } = data;
+
+    if (password !== confirm_password) {
+      toast.error("Hasła nie są takie same.", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
+
+    const registerStatus = toast.loading("Rejestrowanie...", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    await axios
+      .post("/register/", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        navigate("/login");
+        toast.update(registerStatus, {
+          render: "Zarejestrowano! Możesz się zalogować.",
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.SUCCESS,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        var errorText = "Nie udało się zarejestrować.";
+        if (error.response.data === "Username unavailable.")
+          errorText = "Ten login jest już zajęty.";
+        else if (error.response.data === "Email already used.")
+          errorText = "Na ten email zostało już założone konto.";
+        toast.update(registerStatus, {
+          render: errorText,
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.ERROR,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
+      });
+    /*
+    try {
+      const response = await axios.post("/userRegister/", {
+        pw: this.state.password,
+        first_name: this.state.firstName,
+        last_name: this.state.lastName,
+        login: this.state.login,
+        email: this.state.email,
+      });
+
+      if (response.data.success) {
+        this.props.navigate("/login");
+      } else {
+        this.setState({ errorReg: response.data.error });
+      }
+    } catch (error) {
+      console.error("Błąd rejestracji:", error);
+    }
+    */
   };
 
   const addAnimal = async (data) => {
     //await getCSRF();
-    console.log("Po tokenach:");
-    axios.defaults.headers.post["X-CSRF-Token"] = cookies.get("CSRFtoken");
-    console.log(axios.defaults.headers.post["X-CSRF-Token"]);
+    //console.log("Po tokenach:");
+    //axios.defaults.headers.post["X-CSRF-Token"] = cookies.get("CSRFtoken");
+    //console.log(axios.defaults.headers.post["X-CSRF-Token"]);
+    const addingStatus = toast.loading("Dodawanie ogłoszenia...", {
+      position: toast.POSITION.TOP_CENTER,
+    });
     await axios
       .post("/api/animals/", data, {
         headers: {
@@ -192,13 +311,30 @@ function App() {
         },
       })
       .then((response) => {
-        navigate("/");
+        console.log(response);
+        navigate("/details/" + response.data.slug);
+        toast.update(addingStatus, {
+          render: "Ogłoszenie zostało dodane!",
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.SUCCESS,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
       })
       .catch((error) => {
-        console.error("Błąd dodawania ogłoszenia:", error);
+        //console.error("Błąd dodawania ogłoszenia:", error);
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
+        toast.update(addingStatus, {
+          render: "Wystąpił błąd podczas dodawania ogłoszenia.",
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.ERROR,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
       });
 
     /*
@@ -226,21 +362,26 @@ function App() {
       {!loading ? (
         <div className="App">
           <div className="header">
+            <ToastContainer />
             <p id="title">STRAYED</p>
             {username != null ? (
               <div className="user-section user-panel">
                 <p>Witaj {username}</p>
-                <Link to="" onClick={handleLogout} className="submit-button1">
+                <Link onClick={handleLogout} className="submit-button1">
                   Wyloguj się
                 </Link>
               </div>
             ) : (
               <div className="guest-section user-panel">
                 <span>Nie jesteś zalogowany. </span>
-                <Link to="/login" className="submit-button1">Zaloguj się</Link>
+                <Link to="/login" className="submit-button1">
+                  Zaloguj się
+                </Link>
                 <br />
                 <span>Nie masz konta? </span>
-                <Link to="/register" className="submit-button1">Zarejestruj się</Link>
+                <Link to="/register" className="submit-button1">
+                  Zarejestruj się
+                </Link>
               </div>
             )}
           </div>
@@ -251,7 +392,10 @@ function App() {
               path="/login"
               element={<Login handleLogin={handleLogin} />}
             />
-            <Route path="/register" element={<Register />} />
+            <Route
+              path="/register"
+              element={<Register handleRegister={handleRegister} />}
+            />
             <Route path="/details/:slug" element={<Details />} />
             {username && (
               <Route
@@ -265,7 +409,6 @@ function App() {
 
           <div className="footer">
             © Strayed_App by Jakub Szwast & Julia Politowska | 2023
-            <button onClick={getState}>state</button>
           </div>
         </div>
       ) : (
@@ -325,7 +468,9 @@ function Index({ username }) {
 
           {username != null ? (
             <div className="new-entry">
-              <Link to="/newAnimal" className="submit-button">Dodaj ogłoszenie</Link>
+              <Link to="/newAnimal" className="submit-button">
+                Dodaj ogłoszenie
+              </Link>
             </div>
           ) : (
             <div></div>

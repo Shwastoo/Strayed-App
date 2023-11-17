@@ -4,14 +4,14 @@ import { useParams } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
 let DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow,
-    iconSize: [25,41], 
-    iconAnchor: [12,41]
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
 });
 
 function Details() {
@@ -26,9 +26,9 @@ function Details() {
         setAnimal(response.data);
         console.log(response.data);
         var phlist = [response.data.photo];
-        if (response.data.photo2 != null && response.data.photo2 != undefined)
+        if (response.data.photo2 !== null && response.data.photo2 !== undefined)
           phlist.push(response.data.photo2);
-        if (response.data.photo3 != null && response.data.photo3 != undefined)
+        if (response.data.photo3 !== null && response.data.photo3 !== undefined)
           phlist.push(response.data.photo3);
         setPhotos(phlist);
         console.log(phlist);
@@ -51,9 +51,8 @@ function Details() {
 
       L.Marker.prototype.options.icon = DefaultIcon;
 
-      L.marker([lat, lon]).addTo(map)
-        .bindPopup('Środek Krakowa')
-        //.openPopup();
+      L.marker([lat, lon]).addTo(map).bindPopup("Środek Krakowa");
+      //.openPopup();
 
       if (animal.location && animal.location.lat && animal.location.lng) {
         const locationMarker = L.marker([

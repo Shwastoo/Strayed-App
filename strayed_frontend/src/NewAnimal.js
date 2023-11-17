@@ -59,6 +59,7 @@ class NewAnimal extends Component {
               name="title"
               value={this.state.title}
               onChange={(e) => this.setState({ title: e.target.value })}
+              required
             />
           </div>
           <div className="form-group">
@@ -68,6 +69,7 @@ class NewAnimal extends Component {
               name="desc"
               value={this.state.desc}
               onChange={(e) => this.setState({ desc: e.target.value })}
+              required
             />
           </div>
           <div className="form-group">
@@ -76,6 +78,7 @@ class NewAnimal extends Component {
               type="file"
               name="photo"
               onChange={(e) => this.setState({ photo: e.target.files[0] })}
+              required
             />
           </div>
           <div className="form-group">
@@ -101,6 +104,7 @@ class NewAnimal extends Component {
               name="species"
               value={this.state.species}
               onChange={(e) => this.setState({ species: e.target.value })}
+              required
             />
           </div>
           <div className="form-group">
@@ -110,6 +114,7 @@ class NewAnimal extends Component {
               name="breed"
               value={this.state.breed}
               onChange={(e) => this.setState({ breed: e.target.value })}
+              required
             />
           </div>
           <div className="form-group">
@@ -121,6 +126,7 @@ class NewAnimal extends Component {
               name="gender"
               value="M"
               onChange={(e) => this.setState({ gender: e.target.value })}
+              required
             />
             <label>Samica</label>
             <input
@@ -128,6 +134,7 @@ class NewAnimal extends Component {
               name="gender"
               value="F"
               onChange={(e) => this.setState({ gender: e.target.value })}
+              required
             />
           </div>
           <div className="form-group">
@@ -137,6 +144,7 @@ class NewAnimal extends Component {
               name="colors"
               value={this.state.colors}
               onChange={(e) => this.setState({ colors: e.target.value })}
+              required
             />
           </div>
           <div className="form-group">
@@ -146,6 +154,7 @@ class NewAnimal extends Component {
               name="location"
               value={this.state.location}
               onChange={(e) => this.setState({ location: e.target.value })}
+              required
             />
           </div>
           <div className="form-group">

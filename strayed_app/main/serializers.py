@@ -28,4 +28,4 @@ class UserSerializer(serializers.ModelSerializer):
     animals = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=Animal.objects.all())
     class Meta:
         model = User
-        fields = ('username','email','first_name','last_name')
+        fields = ('username','password','email','first_name','last_name')

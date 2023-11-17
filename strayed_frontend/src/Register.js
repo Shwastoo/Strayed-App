@@ -7,7 +7,7 @@ class Register extends Component {
     this.state = {
       firstName: "",
       lastName: "",
-      login: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -22,38 +22,22 @@ class Register extends Component {
 
   handleFormSubmit = async (event) => {
     event.preventDefault();
-
-    const { password, confirmPassword } = this.state;
-
-    if (password !== confirmPassword) {
-      this.setState({ errorReg: "Hasła nie pasują do siebie." });
-      return;
-    }
-
-    try {
-      const response = await axios.post("/userRegister/", {
-        pw: this.state.password,
-        first_name: this.state.firstName,
-        last_name: this.state.lastName,
-        login: this.state.login,
-        email: this.state.email,
-      });
-
-      if (response.data.success) {
-        this.props.navigate("/login");
-      } else {
-        this.setState({ errorReg: response.data.error });
-      }
-    } catch (error) {
-      console.error("Błąd rejestracji:", error);
-    }
+    var data = {
+      password: this.state.password,
+      confirm_password: this.state.confirmPassword,
+      first_name: this.state.firstName,
+      last_name: this.state.lastName,
+      username: this.state.username,
+      email: this.state.email,
+    };
+    this.props.handleRegister(data);
   };
 
   render() {
     const {
       firstName,
       lastName,
-      login,
+      username,
       email,
       password,
       confirmPassword,
@@ -88,8 +72,8 @@ class Register extends Component {
           <div className="form-group">
             <input
               type="text"
-              name="login"
-              value={login}
+              name="username"
+              value={username}
               onChange={this.handleInputChange}
               placeholder="Login"
               required
@@ -125,7 +109,9 @@ class Register extends Component {
               required
             />
           </div>
-          <button type="submit" className="login-button">Zarejestruj</button>
+          <button type="submit" className="login-button">
+            Zarejestruj
+          </button>
         </form>
       </div>
     );

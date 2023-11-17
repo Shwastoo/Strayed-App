@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 import os, json
 from rest_framework import viewsets
-from .serializers import AnimalSerializer
+from .serializers import AnimalSerializer, UserSerializer
 from .models import Animal
 from django.http import JsonResponse
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -161,8 +161,10 @@ def login_view(request):
     if username is None or password is None:
         return JsonResponse({'detail': 'Please provide username and password.'}, status=400)
 
-    
-    user = authenticate(username=username, password=password)
+    try:
+        user = authenticate(username=username, password=password)
+    except:
+        print("auth attempt")
     
 
     if user is None:
@@ -171,6 +173,45 @@ def login_view(request):
     login(request, user)
     return JsonResponse({'detail': 'Successfully logged in.'})
 
+@csrf_exempt
+@require_POST
+def register_view(request):
+    '''
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    '''
+    data = json.loads(request.body)
+    uname = data.get('username')
+    password = data.get('password')
+    pass_conf = data.get('confirm_password')
+    fname = data.get('first_name')
+    lname = data.get('last_name')
+    email = data.get("email")
+    error_msg = ""
+    user = User.objects.filter(username=uname)
+    if not user:
+        user = User.objects.filter(email=email)
+        if not user:
+            if password == pass_conf:
+                newUser = User(
+                    username=uname,
+                    email=email,
+                    first_name=fname,
+                    last_name=lname,
+                )
+                newUser.set_password(password)
+                newUser.save()
+                return HttpResponse("Account created.")
+            else:
+                return HttpResponse("Passwords don't match.", status=400)
+        else:
+            return HttpResponse("Email already used.", status=400)
+    else:
+        return HttpResponse("Username unavailable.", status=400)
+    
 
 def logout_view(request):
     if not request.user.is_authenticated:
