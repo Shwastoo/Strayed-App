@@ -18,6 +18,7 @@ function Details() {
   const [animal, setAnimal] = useState(null);
   const { slug } = useParams();
   const [photos, setPhotos] = useState([]);
+  const [map, setMap] = useState(null);
 
   useEffect(() => {
     axios
@@ -40,26 +41,23 @@ function Details() {
 
   useEffect(() => {
     if (animal) {
-      const map = L.map("map").setView([50.061, 19.936], 13);
+      const [latitude, longitude] = animal.location.split(", ").map(parseFloat);
+
+      const newMap = L.map("map").setView(
+        isNaN(latitude) || isNaN(longitude) ? [50.061, 19.936] : [latitude, longitude],
+        13
+      );
+      setMap(newMap);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-        map
+        newMap
       );
-
-      let lat = 50.061;
-      let lon = 19.936;
 
       L.Marker.prototype.options.icon = DefaultIcon;
 
-      L.marker([lat, lon]).addTo(map).bindPopup("Środek Krakowa");
-      //.openPopup();
-
-      if (animal.location && animal.location.lat && animal.location.lng) {
-        const locationMarker = L.marker([
-          animal.location.lat,
-          animal.location.lng,
-        ]).addTo(map);
-        locationMarker.bindPopup("Miejsce zaginięcia").openPopup();
+      if (!isNaN(latitude) && !isNaN(longitude)) {
+        const locationMarker = L.marker([latitude, longitude]).addTo(newMap);
+        locationMarker.bindPopup("Miejsce zaginięcia", { offset: L.point(0, -30) });
       }
     }
   }, [animal]);

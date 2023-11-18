@@ -1,5 +1,18 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 //import axios from "axios";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
+
 
 class NewAnimal extends Component {
   constructor(props) {
@@ -17,8 +30,17 @@ class NewAnimal extends Component {
       colors: "",
       location: "",
       submittedAnimal: null,
+      latitude: 0,
+      longitude: 0,
     };
   }
+
+  handleLocationChange = (lat, lng) => {
+    this.setState({
+      latitude: lat,
+      longitude: lng,
+    });
+  };
 
   handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,7 +55,7 @@ class NewAnimal extends Component {
     formData.append("species", this.state.species);
     formData.append("breed", this.state.breed);
     formData.append("colors", this.state.colors);
-    formData.append("location", this.state.location);
+    formData.append("location", `${this.state.latitude}, ${this.state.longitude}`);
     this.props.addAnimal(formData);
     /*
     axios
@@ -46,6 +68,30 @@ class NewAnimal extends Component {
       });
       */
   };
+
+  componentDidMount() {
+    this.initMap();
+  }
+
+  initMap() {
+    const map = L.map("map").setView([50.061, 19.936], 13);
+
+    L.Marker.prototype.options.icon = DefaultIcon;
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+    let marker;
+    map.on("click", (e) => {
+      const { lat, lng } = e.latlng;
+      if (marker) {
+        marker.setLatLng(e.latlng);
+      } else {
+        marker = L.marker(e.latlng).addTo(map);
+      }
+
+      this.handleLocationChange(lat, lng);
+    });
+  }
 
   render() {
     return (
@@ -148,14 +194,8 @@ class NewAnimal extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Miejscowość:</label>
-            <input
-              type="text"
-              name="location"
-              value={this.state.location}
-              onChange={(e) => this.setState({ location: e.target.value })}
-              required
-            />
+            <label>Wybierz lokalizację na mapie:</label>
+            <div id="map" style={{ width: "100%", height: "500px" }}></div>
           </div>
           <div className="form-group">
             <input type="submit" value="Wyślij" className="login-button" />
