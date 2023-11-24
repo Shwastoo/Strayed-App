@@ -2,6 +2,7 @@ import React, { Component, useEffect } from "react";
 //import axios from "axios";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { SearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
@@ -32,6 +33,7 @@ class NewAnimal extends Component {
       submittedAnimal: null,
       latitude: 0,
       longitude: 0,
+      marker: null,
     };
   }
 
@@ -75,24 +77,47 @@ class NewAnimal extends Component {
 
   initMap() {
     const map = L.map("map").setView([50.061, 19.936], 13);
-
+    this.map = map;
+  
     L.Marker.prototype.options.icon = DefaultIcon;
-
+  
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-
-    let marker;
-    map.on("click", (e) => {
+  
+    const searchControl = new SearchControl({
+      style: "button",
+      provider: new OpenStreetMapProvider(),
+      marker: DefaultIcon,
+      notFoundMessage: "Przepraszamy, nie udało się znaleźć tego adresu.",
+    });
+  
+    map.addControl(searchControl);
+  
+    let marker = null;
+  
+    const handleMapClick = (e) => {
       const { lat, lng } = e.latlng;
+  
       if (marker) {
-        marker.setLatLng(e.latlng);
-      } else {
-        marker = L.marker(e.latlng).addTo(map);
+        this.map.removeLayer(marker);
       }
 
+      marker = L.marker(e.latlng).addTo(this.map);
+
       this.handleLocationChange(lat, lng);
+    };
+  
+    this.mapClickHandler = handleMapClick;
+    this.map.on("click", handleMapClick);
+  
+    const searchInput = document.querySelector(".leaflet-control-geosearch input");
+    searchInput.addEventListener("change", () => {
+      if (marker) {
+        this.map.removeLayer(marker);
+        marker = null;
+      }
     });
   }
-
+  
   render() {
     return (
       <div className="registration-form">
