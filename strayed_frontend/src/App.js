@@ -422,10 +422,16 @@ export default App;
 function Index({ username }) {
   const [strayedAnimals, setStrayedAnimals] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [filterKeyword, setFilterKeyword] = useState("");
+  const [filteredAnimals, setFilteredAnimals] = useState(null);
 
   useEffect(() => {
-    if (!strayedAnimals) fetchStrayedAnimals();
-  });
+    if (!strayedAnimals) {
+      fetchStrayedAnimals();
+    } else {
+      applyFilter();
+    }
+  }, [filterKeyword, strayedAnimals]);
 
   const fetchStrayedAnimals = async () => {
     await axios
@@ -439,13 +445,45 @@ function Index({ username }) {
       });
   };
 
+  const applyFilter = () => {
+    if (filterKeyword.trim() === "") {
+      setFilteredAnimals(null);
+    } else {
+      const filtered = strayedAnimals.filter(
+        (animal) =>
+          animal.title.toLowerCase().includes(filterKeyword.toLowerCase()) ||
+          (animal.details &&
+            animal.details.toLowerCase().includes(filterKeyword.toLowerCase()))
+      );
+      setFilteredAnimals(filtered);
+    }
+  };
+
+  const clearFilter = () => {
+    setFilterKeyword("");
+    setFilteredAnimals(null);
+  };
+
+  const displayedAnimals = filteredAnimals || strayedAnimals;
+
   return (
     <div>
       {!loading ? (
         <div className="index-content">
-          {strayedAnimals && strayedAnimals.length > 0 ? (
+          <div className="filter-container">
+            <label className="filter-label" htmlFor="filterKeyword">Filtruj ogłoszenia: </label>
+            <input
+              className="filter-input"
+              type="text"
+              id="filterKeyword"
+              value={filterKeyword}
+              onChange={(e) => setFilterKeyword(e.target.value)}
+            />
+            <button className="clear-button" onClick={clearFilter}>Wyczyść</button>
+          </div>
+          {displayedAnimals && displayedAnimals.length > 0 ? (
             <ul className="animal-list">
-              {strayedAnimals.map((a) => (
+              {displayedAnimals.map((a) => (
                 <li key={a.slug} className="animal-item">
                   <Link to={`/details/${a.slug}`} className="animal-link">
                     <div className="animal-content">

@@ -468,3 +468,41 @@ body {
   border-left: inherit;
   border-right: none;
 }
+
+/* Styl dla kontenera z filtrem */
+.filter-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Styl dla etykiety filtrowania */
+.filter-label {
+  margin-right: 10px;
+}
+
+/* Styl dla pola tekstowego filtru */
+.filter-input {
+  width: 200px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  margin-right: 10px;
+}
+
+/* Styl dla przycisku Wyczyść */
+.clear-button {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px;
+  transition: background-color 0.3s;
+}
+
+.clear-button:hover {
+  background-color: #c0392b;
+}
