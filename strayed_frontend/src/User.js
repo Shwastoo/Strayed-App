@@ -27,8 +27,8 @@ function User() {
             Imię i nazwisko: {user.first_name} {user.last_name}
           </p>
           <Link to="/chat">Otwórz czat</Link>
-          <div>
-            <p>Ogłoszenia:</p>
+          <p>Ogłoszenia:</p>
+          <div className="animal-list">
             {user.animals.map((a, index) => (
               <li key={a.slug} className="animal-item">
                 <Link to={`/details/${a.slug}`} className="animal-link">
