@@ -26,7 +26,11 @@ function User() {
           <p>
             Imię i nazwisko: {user.first_name} {user.last_name}
           </p>
-          <Link to="/chat">Otwórz czat</Link>
+          <Link to="/chat" className="submit-button">
+            Otwórz czat
+          </Link>
+          <br />
+          <br />
           <p>Ogłoszenia:</p>
           <div className="animal-list">
             {user.animals.map((a, index) => (
