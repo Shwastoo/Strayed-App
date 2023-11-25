@@ -62,7 +62,12 @@ class AnimalView(viewsets.ModelViewSet):
         queryset = Animal.objects.all()
         animal = get_object_or_404(queryset, slug=slug)
         serializer = AnimalSerializer(animal)
-        return Response(serializer.data)
+        print(serializer.data)
+        querysetUser = User.objects.all()
+        newData = serializer.data.copy()
+        newData["owner"] = get_object_or_404(querysetUser, pk=newData["owner"]).username
+        #print(newData)
+        return Response(newData)
     
     def create(self, request):
         newData = request.data.copy()
@@ -91,7 +96,10 @@ class AnimalView(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
     '''
-
+class UserView(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    lookup_field = 'username'
 
 class DetailView(viewsets.ModelViewSet):
     serializer_class = AnimalSerializer

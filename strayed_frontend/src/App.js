@@ -14,6 +14,7 @@ import Register from "./Register";
 import Details from "./Details";
 import NewAnimal from "./NewAnimal";
 import Chat from "./Chat";
+import User from "./User";
 
 const cookies = new Cookies();
 
@@ -407,6 +408,7 @@ function App() {
               />
             )}
             <Route path="/chat" element={<Chat username={username} />} />
+            <Route path="/user/:id" element={<User />} />
           </Routes>
 
           <div className="footer">

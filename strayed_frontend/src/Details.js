@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -44,7 +45,9 @@ function Details() {
       const [latitude, longitude] = animal.location.split(", ").map(parseFloat);
 
       const newMap = L.map("map").setView(
-        isNaN(latitude) || isNaN(longitude) ? [50.061, 19.936] : [latitude, longitude],
+        isNaN(latitude) || isNaN(longitude)
+          ? [50.061, 19.936]
+          : [latitude, longitude],
         13
       );
       setMap(newMap);
@@ -57,7 +60,9 @@ function Details() {
 
       if (!isNaN(latitude) && !isNaN(longitude)) {
         const locationMarker = L.marker([latitude, longitude]).addTo(newMap);
-        locationMarker.bindPopup("Miejsce zaginięcia", { offset: L.point(0, -30) });
+        locationMarker.bindPopup("Miejsce zaginięcia", {
+          offset: L.point(0, -30),
+        });
       }
     }
   }, [animal]);
@@ -73,7 +78,7 @@ function Details() {
           <p>Kolory: {animal.colors.join(", ")}</p>
           <p>Płeć: {animal.gender}</p>
           <p>
-            Właściciel: {animal.owner.first_name} {animal.owner.last_name}
+            Właściciel: <Link to={`/user/${animal.owner}`}>{animal.owner}</Link>
           </p>
           <p>Data dodania: {animal.date_created}</p>
           <div>

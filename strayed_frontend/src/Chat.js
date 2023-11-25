@@ -55,15 +55,13 @@ class Chat extends Component {
     return (
       <div>
         <h2>Czat "{this.state.room}"</h2>
-        {this.state.messages.map((message) => (
-          <>
-            <div>
-              <p>
-                {message.username}: {message.msg}
-              </p>
-            </div>
-          </>
-        ))}
+        <div>
+          {this.state.messages.map((message, i) => (
+            <p key={i}>
+              {message.username}: {message.msg}
+            </p>
+          ))}
+        </div>
         <form onSubmit={this.handleFormSubmit}>
           <div className="form-group">
             <input
