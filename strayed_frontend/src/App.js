@@ -13,6 +13,8 @@ import Login from "./Login";
 import Register from "./Register";
 import Details from "./Details";
 import NewAnimal from "./NewAnimal";
+import Chat from "./Chat";
+import User from "./User";
 
 const cookies = new Cookies();
 
@@ -363,10 +365,14 @@ function App() {
         <div className="App">
           <div className="header">
             <ToastContainer />
-            <p id="title">STRAYED</p>
+            <p id="title">
+              <Link to="/">STRAYED</Link>
+            </p>
             {username != null ? (
               <div className="user-section user-panel">
-                <p>Witaj {username}</p>
+                <p>
+                  Witaj <Link to={`/user/${username}`}>{username}</Link>
+                </p>
                 <Link onClick={handleLogout} className="submit-button1">
                   Wyloguj się
                 </Link>
@@ -405,6 +411,8 @@ function App() {
                 }
               />
             )}
+            <Route path="/chat" element={<Chat username={username} />} />
+            <Route path="/user/:id" element={<User />} />
           </Routes>
 
           <div className="footer">

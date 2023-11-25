@@ -7,6 +7,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'animals', views.AnimalView, 'animal')
+router.register(r'users', views.UserView, 'user')
 #router.register(r'animals/{slug}', views.DetailView, 'details')
 
 app_name="main"

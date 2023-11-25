@@ -8,8 +8,6 @@ from django.utils import timezone
 
 # Create your models here.
 
-
-
 class Animal(models.Model):
     class Genders(models.TextChoices):
         FEMALE = "F", "Samica",
@@ -22,7 +20,7 @@ class Animal(models.Model):
 
     title = models.CharField(max_length=50)
     desc = models.CharField(max_length=1000)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="animals")
     photo = models.ImageField(upload_to="images/uploads")
     photo2 = models.ImageField(upload_to="images/uploads", blank=True)
     photo3 = models.ImageField(upload_to="images/uploads", blank=True)
@@ -58,3 +56,8 @@ class Animal(models.Model):
         self.static_urls = static_urls
         super(Animal, self).save(*args, **kwargs)
     
+
+class Chat(models.Model):
+    userA = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_userA')
+    userB = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_userB')
+    messages = models.JSONField(null=True)
