@@ -28,4 +28,4 @@ class UserSerializer(serializers.ModelSerializer):
     animals = AnimalSerializer(many=True)
     class Meta:
         model = User
-        fields = ('username','password','email','first_name','last_name', 'animals')
+        fields = ('pk','username','password','email','first_name','last_name', 'animals')

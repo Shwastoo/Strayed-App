@@ -26,7 +26,7 @@ function User() {
           <p>
             Imię i nazwisko: {user.first_name} {user.last_name}
           </p>
-          <Link to="/chat" className="submit-button">
+          <Link to={`/chat/${user.username}`} className="submit-button">
             Otwórz czat
           </Link>
           <br />

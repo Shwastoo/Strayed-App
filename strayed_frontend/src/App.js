@@ -411,7 +411,7 @@ function App() {
                 }
               />
             )}
-            <Route path="/chat" element={<Chat username={username} />} />
+            <Route path="/chat/:user" element={<Chat username={username} />} />
             <Route path="/user/:id" element={<User />} />
           </Routes>
 
@@ -479,7 +479,9 @@ function Index({ username }) {
       {!loading ? (
         <div className="index-content">
           <div className="filter-container">
-            <label className="filter-label" htmlFor="filterKeyword">Filtruj ogłoszenia: </label>
+            <label className="filter-label" htmlFor="filterKeyword">
+              Filtruj ogłoszenia:{" "}
+            </label>
             <input
               className="filter-input"
               type="text"
@@ -487,7 +489,9 @@ function Index({ username }) {
               value={filterKeyword}
               onChange={(e) => setFilterKeyword(e.target.value)}
             />
-            <button className="clear-button" onClick={clearFilter}>Wyczyść</button>
+            <button className="clear-button" onClick={clearFilter}>
+              Wyczyść
+            </button>
           </div>
           {displayedAnimals && displayedAnimals.length > 0 ? (
             <ul className="animal-list">
