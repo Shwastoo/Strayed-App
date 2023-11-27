@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Animal
+from .models import Animal, Chat
 from django.contrib.auth.models import User
 
 class ListFieldCharField(serializers.Field):
@@ -17,7 +17,7 @@ class AnimalSerializer(serializers.ModelSerializer):
     colors = ListFieldCharField()
     class Meta:
         model = Animal
-        fields = ('id', 'title', 'desc', 'owner', 'photo', 'photo2', 'photo3', 'static_urls',
+        fields = ('id', 'title', 'desc', 'owner', 'photo', 'photo2', 'photo3',
                   'species', 'breed', 'colors', 'location', 'gender', 'slug', 'date_created')
         lookup_field = 'slug'
         extra_kwargs = {
@@ -29,3 +29,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('pk','username','password','email','first_name','last_name', 'animals')
+
+class ChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chat
+        fields = ('chatID', 'messages')

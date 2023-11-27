@@ -36,9 +36,19 @@ function Chat({ username }) {
             idB = response.data.pk;
             console.log(idA, idB);
             var chatRoom;
-            if (idA < idB) chatRoom = "A_" + idA + "-B_" + idB;
-            else chatRoom = "A_" + idB + "-B_" + idA;
+            if (idA < idB) chatRoom = name + "-" + user;
+            else chatRoom = user + "-" + name;
             setRoom(chatRoom);
+            axios
+              .get(`/api/chats/${chatRoom}`)
+              .then((response) => {
+                console.log(response);
+                setMessages(response.data.messages);
+                setConnecting(false);
+              })
+              .catch((error) => {
+                console.error("Błąd pobierania usera:", error);
+              });
             setClient(
               new W3CWebSocket("ws://127.0.0.1:8000/ws/" + chatRoom + "/")
             );
@@ -54,7 +64,6 @@ function Chat({ username }) {
 
   const initChatRoom = async () => {
     console.log(client);
-    setConnecting(false);
     client.onopen = () => {
       console.log("WebSocket Client Connected");
     };
@@ -62,21 +71,12 @@ function Chat({ username }) {
       const dataFromServer = JSON.parse(message.data);
       if (dataFromServer) {
         console.log(dataFromServer);
-        var newmessages = {
-          messages: [
-            ...messages,
-            {
-              msg: dataFromServer.text,
-              username: dataFromServer.sender,
-            },
-          ],
-        };
-        console.log(newmessages);
         setMessages([
           ...messages,
           {
-            msg: dataFromServer.text,
-            username: dataFromServer.sender,
+            msg: dataFromServer.msg,
+            sender: dataFromServer.sender,
+            msgtype: dataFromServer.msgtype,
           },
         ]);
         console.log(messages);
@@ -92,8 +92,8 @@ function Chat({ username }) {
     event.preventDefault();
     client.send(
       JSON.stringify({
-        type: "message",
-        text: value,
+        msgtype: "text",
+        msg: value,
         sender: name,
       })
     );
@@ -110,7 +110,7 @@ function Chat({ username }) {
           <div>
             {messages.map((message, i) => (
               <p key={i}>
-                {message.username}: {message.msg}
+                {message.sender}: {message.msg}
               </p>
             ))}
           </div>

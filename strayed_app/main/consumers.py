@@ -1,7 +1,9 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-
+from .models import Chat
+from django.shortcuts import get_object_or_404
+from .serializers import ChatSerializer
 class TextRoomConsumer(WebsocketConsumer):
     def connect(self):
 
@@ -23,24 +25,45 @@ class TextRoomConsumer(WebsocketConsumer):
     def receive(self, text_data):
         # Receive message from WebSocket
         text_data_json = json.loads(text_data)
-        text = text_data_json['text']
+        msg = text_data_json['msg']
         sender = text_data_json['sender']
+        msgtype = text_data_json['msgtype']
+
+        queryset = Chat.objects.all()
+        chat = get_object_or_404(queryset, chatID=self.room_name)
+        chat.messages.append(text_data_json)
+        chat.save()
+        serializer = ChatSerializer(data=chat)
+
+        if serializer.is_valid():
+            serializer.save()
+            
+        print(chat.messages)
+
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': text,
-                'sender': sender
+                'msg': msg,
+                'sender': sender,
+                'msgtype': msgtype
             }
         )
 
     def chat_message(self, event):
         # Receive message from room group
-        text = event['message']
+        msg = event['msg']
         sender = event['sender']
+        msgtype = event['msgtype']
+        print(event)
+
+        newMSG = {
+            'msg': msg,
+            'sender': sender,
+            'msgtype': msgtype
+        }
+
+
         # Send message to WebSocket
-        self.send(text_data=json.dumps({
-            'text': text,
-            'sender': sender
-        }))
+        self.send(text_data=json.dumps(newMSG))

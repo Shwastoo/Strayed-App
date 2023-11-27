@@ -5,14 +5,14 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
-from .models import Animal
+from .models import Animal, Chat
 from django.conf import settings
 from .forms import newAnimalForm, loginForm, registerForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 import os, json
 from rest_framework import viewsets
-from .serializers import AnimalSerializer, UserSerializer
+from .serializers import AnimalSerializer, UserSerializer, ChatSerializer
 from .models import Animal
 from django.http import JsonResponse
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -27,6 +27,7 @@ from django.views.decorators.http import require_POST
 from django.middleware.csrf import get_token
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
+import json
 
 # Create your views here.
 
@@ -96,15 +97,40 @@ class AnimalView(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
     '''
-class UserView(viewsets.ModelViewSet):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-    lookup_field = 'username'
 
 class DetailView(viewsets.ModelViewSet):
     serializer_class = AnimalSerializer
     queryset = Animal.objects.all()
     lookup_field = 'slug'
+
+class UserView(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    lookup_field = 'username'
+
+class ChatView(viewsets.ModelViewSet):
+    serializer_class = ChatSerializer
+    queryset = Chat.objects.all()
+    lookup_field = 'chatID'
+    
+    def retrieve(self, request, chatID):
+        try:
+            queryset = Chat.objects.all()
+            chat = get_object_or_404(queryset, chatID=chatID)
+            serializer = ChatSerializer(chat)
+            print(chat)
+            return Response(serializer.data)
+        except:
+            newChat = {}
+            newChat["chatID"] = chatID
+            newChat["messages"] = []
+            serializer = ChatSerializer(data=newChat)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                
+
 
 '''
 class SessionView(APIView):

@@ -24,8 +24,6 @@ class Animal(models.Model):
     photo = models.ImageField(upload_to="images/uploads")
     photo2 = models.ImageField(upload_to="images/uploads", blank=True)
     photo3 = models.ImageField(upload_to="images/uploads", blank=True)
-    #static_url = models.CharField(max_length=500, blank=True)
-    static_urls = ArrayField(models.CharField(max_length=500, blank=True), default=list, blank=True)
     species = models.CharField(max_length=50)
     breed = models.CharField(max_length=50)
     colors = ArrayField(models.CharField(max_length=50), default=list)
@@ -42,22 +40,14 @@ class Animal(models.Model):
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title+" "+str(self.owner.pk))
-        #self.static_url = self.photo.url.removeprefix("/main/static")
         self.date_created = timezone.now()
-        
-        static_urls = ["","",""]
-        if self.photo != "":
-            static_urls[0] = self.photo.url.removeprefix("/main/static")
-            if self.photo2 != "":
-                static_urls[1] = self.photo2.url.removeprefix("/main/static")
-                if self.photo3 != "":
-                    static_urls[2] = self.photo3.url.removeprefix("/main/static")
 
-        self.static_urls = static_urls
         super(Animal, self).save(*args, **kwargs)
     
 
 class Chat(models.Model):
-    userA = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_userA')
-    userB = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_userB')
+    chatID = models.CharField(unique=True)
     messages = models.JSONField(null=True)
+
+    def __str__(self):
+        return self.chatID
