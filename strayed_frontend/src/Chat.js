@@ -77,6 +77,7 @@ function Chat({ username }) {
             msg: dataFromServer.msg,
             sender: dataFromServer.sender,
             msgtype: dataFromServer.msgtype,
+            timestamp: dataFromServer.timestamp,
           },
         ]);
         console.log(messages);
@@ -95,6 +96,7 @@ function Chat({ username }) {
         msgtype: "text",
         msg: value,
         sender: name,
+        timestamp: Date.now(),
       })
     );
     setValue("");
@@ -107,11 +109,35 @@ function Chat({ username }) {
       ) : (
         <div>
           <h2>Czat "{room}"</h2>
-          <div>
+          <div className="chat-container">
             {messages.map((message, i) => (
-              <p key={i}>
-                {message.sender}: {message.msg}
-              </p>
+              <div
+                className={
+                  message.sender == name ? "logged-user-row" : "other-user-row"
+                }
+                key={i}
+              >
+                <div
+                  className={
+                    message.sender == name
+                      ? "logged-user-msg"
+                      : "other-user-msg"
+                  }
+                >
+                  <p className="sender-name">{message.sender}</p>
+                  <p className="user-message">{message.msg}</p>
+                  <p className="msg-timestamp">
+                    {new Intl.DateTimeFormat("pl-PL", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    }).format(message.timestamp)}
+                  </p>
+                </div>
+              </div>
             ))}
           </div>
           <form onSubmit={handleFormSubmit}>

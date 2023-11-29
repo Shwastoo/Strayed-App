@@ -28,6 +28,7 @@ class TextRoomConsumer(WebsocketConsumer):
         msg = text_data_json['msg']
         sender = text_data_json['sender']
         msgtype = text_data_json['msgtype']
+        timestamp = text_data_json['timestamp']
 
         queryset = Chat.objects.all()
         chat = get_object_or_404(queryset, chatID=self.room_name)
@@ -47,7 +48,8 @@ class TextRoomConsumer(WebsocketConsumer):
                 'type': 'chat_message',
                 'msg': msg,
                 'sender': sender,
-                'msgtype': msgtype
+                'msgtype': msgtype,
+                'timestamp': timestamp
             }
         )
 
@@ -56,12 +58,14 @@ class TextRoomConsumer(WebsocketConsumer):
         msg = event['msg']
         sender = event['sender']
         msgtype = event['msgtype']
+        timestamp = event['timestamp']
         print(event)
 
         newMSG = {
             'msg': msg,
             'sender': sender,
-            'msgtype': msgtype
+            'msgtype': msgtype,
+            'timestamp': timestamp
         }
 
 
