@@ -1,12 +1,14 @@
 //import React, { Component } from "react";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
 function Chat({ username }) {
   const [messages, setMessages] = useState([]);
   const [value, setValue] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [photoName, setPhotoName] = useState("");
   const [name, setName] = useState(username); // logged user
   const [room, setRoom] = useState(null);
   const [connecting, setConnecting] = useState(true);
@@ -14,12 +16,20 @@ function Chat({ username }) {
   const { user } = useParams(); // user we want to chat with
   const [client, setClient] = useState(null);
 
+  const chatEnd = useRef(null);
+
   useEffect(() => {
     if (!haveRun) {
       getUsers();
     }
     if (client != null) initChatRoom();
   }, [client, messages]);
+
+  useEffect(() => {
+    if (chatEnd.current != null) {
+      chatEnd.current.scrollIntoView({ behavior: "auto" });
+    }
+  }, [messages]);
 
   const getUsers = async () => {
     setHaveRun(true);
@@ -88,6 +98,13 @@ function Chat({ username }) {
   const handleInputChange = (event) => {
     setValue(event.target.value);
   };
+  const handlePhotoChange = (event) => {
+    setPhoto(event.target.value);
+    setPhotoName(event.target.files[0].name);
+  };
+  const clearPhoto = (event) => {
+    setPhoto("");
+  };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -139,16 +156,45 @@ function Chat({ username }) {
                 </div>
               </div>
             ))}
+            <div ref={chatEnd}></div>
           </div>
           <form onSubmit={handleFormSubmit}>
-            <div className="form-group">
+            <div className="form-group msg-inputs">
+              <button
+                className={photo == "" ? "btn-photo no-photo" : "btn-photo"}
+                type="button"
+              >
+                {photo == ""
+                  ? "Prześlij zdjęcie"
+                  : "Przesłano plik: " + photoName}
+                <label htmlFor="btn-photo-label">
+                  <input
+                    id="btn-photo-label"
+                    type="file"
+                    name="photo"
+                    accept="image/*"
+                    value={photo}
+                    onChange={handlePhotoChange}
+                  />
+                </label>
+              </button>
+
+              <button
+                type="reset"
+                onClick={clearPhoto}
+                className={photo == "" ? "btn-reset hide-input" : "btn-reset"}
+              >
+                Wyczyść
+              </button>
+
               <input
+                className={photo == "" ? "btn-msg" : "btn-msg hide-input"}
                 type="text"
                 name="message"
                 value={value}
                 onChange={handleInputChange}
                 placeholder="Wiadomość"
-                required
+                disabled={photo == "" ? false : true}
               />
             </div>
             <div className="form-group">

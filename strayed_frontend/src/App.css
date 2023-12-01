@@ -514,6 +514,10 @@ body {
 .chat-container {
   display: flex;
   flex-direction: column;
+  height: 50vh;
+  overflow: auto;
+  padding: 15px;
+  margin-bottom: 15px;
 }
 
 .logged-user-row {
@@ -576,4 +580,68 @@ body {
 
 .other-user-msg:hover > .msg-timestamp {
   opacity: 1;
+}
+
+.msg-inputs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.btn-photo > label {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.btn-photo {
+  width: 85% !important;
+  height: 52px;
+  position: relative;
+  overflow: hidden;
+  background-color: #4d9dff !important;
+}
+
+.btn-photo:hover {
+  background-color: #2482f5 !important;
+}
+
+.no-photo {
+  width: 20% !important;
+  background-color: #b2be9d !important;
+}
+
+.no-photo:hover {
+  background-color: #848e73 !important;
+}
+
+.btn-photo-label {
+  width: 100%;
+  height: 100%;
+}
+
+.btn-reset {
+  width: 10% !important;
+  background-color: #e74c3c !important;
+  height: 52px;
+}
+
+.btn-reset:hover {
+  background-color: #c0392b !important;
+}
+
+.hide-input {
+  display: none;
+}
+
+.btn-msg {
+  width: 75% !important;
+  height: 52px;
+}
+
+#btn-photo-label {
+  display: none;
 }
