@@ -90,32 +90,70 @@ class NewAnimal extends Component {
       notFoundMessage: "Przepraszamy, nie udało się znaleźć tego adresu.",
     });
   
-    map.addControl(searchControl);
+    this.map.addControl(searchControl);
   
-    let marker = null;
+    this.map.addEventListener('geosearch/showlocation', (e) => {
+      console.log('Show location event:', e);
+    
+      if (e.location && e.location.raw) {
+        const locationData = e.location.raw;
+    
+        console.log('Location data:', locationData);
+    
+        // Konwersja lat i lon na liczby zmiennoprzecinkowe
+        const latitude = parseFloat(locationData.lat);
+        const longitude = parseFloat(locationData.lon);
+    
+        if (!isNaN(latitude) && !isNaN(longitude)) {
+          if (this.state.marker) {
+            this.map.removeLayer(this.state.marker);
+          }
+    
+          const latLng = L.latLng(latitude, longitude);
+          const marker = L.marker(latLng).addTo(this.map);
+    
+          this.handleLocationChange(latitude, longitude);
+    
+          this.setState({
+            marker: marker,
+          });
+        } else {
+          console.error('Invalid latitude or longitude:', locationData);
+        }
+      } else {
+        console.error('Invalid location:', e.location);
+      }
+    });
+  
+    this.map.addEventListener("geosearch/removelocation", () => {
+      if (this.state.marker) {
+        this.map.removeLayer(this.state.marker);
+        this.setState({
+          marker: null,
+        });
+      }
+    });
+
+    map.addControl(searchControl);
   
     const handleMapClick = (e) => {
       const { lat, lng } = e.latlng;
   
-      if (marker) {
-        this.map.removeLayer(marker);
+      if (this.state.marker) {
+        this.map.removeLayer(this.state.marker);
       }
-
-      marker = L.marker(e.latlng).addTo(this.map);
-
+  
+      const marker = L.marker(e.latlng).addTo(this.map);
+  
       this.handleLocationChange(lat, lng);
+  
+      this.setState({
+        marker: marker,
+      });
     };
   
     this.mapClickHandler = handleMapClick;
     this.map.on("click", handleMapClick);
-  
-    const searchInput = document.querySelector(".leaflet-control-geosearch input");
-    searchInput.addEventListener("change", () => {
-      if (marker) {
-        this.map.removeLayer(marker);
-        marker = null;
-      }
-    });
   }
   
   render() {
