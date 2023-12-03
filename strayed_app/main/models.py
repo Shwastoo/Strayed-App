@@ -51,3 +51,9 @@ class Chat(models.Model):
 
     def __str__(self):
         return self.chatID
+    
+class ChatImage(models.Model):
+    photo = models.ImageField(upload_to="images/chat")
+    
+    def __str__(self):
+        return self.photo

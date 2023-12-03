@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-function Chat({ username }) {
+function Chat({ username, sendChatImage }) {
   const [messages, setMessages] = useState([]);
   const [value, setValue] = useState("");
   const [photo, setPhoto] = useState("");
@@ -99,8 +99,9 @@ function Chat({ username }) {
     setValue(event.target.value);
   };
   const handlePhotoChange = (event) => {
-    setPhoto(event.target.value);
+    setPhoto(event.target.files[0]);
     setPhotoName(event.target.files[0].name);
+    console.log(event.target.files[0]);
   };
   const clearPhoto = (event) => {
     setPhoto("");
@@ -108,15 +109,34 @@ function Chat({ username }) {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    client.send(
-      JSON.stringify({
-        msgtype: "text",
-        msg: value,
-        sender: name,
-        timestamp: Date.now(),
-      })
-    );
+    if (photo == "") {
+      client.send(
+        JSON.stringify({
+          msgtype: "text",
+          msg: value,
+          sender: name,
+          timestamp: Date.now(),
+        })
+      );
+    } else {
+      var formData = new FormData();
+      formData.append("photo", photo);
+      console.log(sendChatImage);
+      sendChatImage(formData);
+      console.log("ZDJ WRZUCONE");
+
+      client.send(
+        JSON.stringify({
+          msgtype: "image",
+          msg: photoName,
+          sender: name,
+          timestamp: Date.now(),
+        })
+      );
+    }
     setValue("");
+    setPhoto("");
+    setPhotoName("");
   };
 
   return (
@@ -142,7 +162,17 @@ function Chat({ username }) {
                   }
                 >
                   <p className="sender-name">{message.sender}</p>
-                  <p className="user-message">{message.msg}</p>
+                  {message.msgtype == "text" ? (
+                    <p className="user-message">{message.msg}</p>
+                  ) : (
+                    <p className="user-message">
+                      <img
+                        src={"/media/images/chat/" + message.msg}
+                        alt={"Zdjęcie"}
+                        className="animal-image"
+                      />
+                    </p>
+                  )}
                   <p className="msg-timestamp">
                     {new Intl.DateTimeFormat("pl-PL", {
                       year: "numeric",
@@ -173,7 +203,6 @@ function Chat({ username }) {
                     type="file"
                     name="photo"
                     accept="image/*"
-                    value={photo}
                     onChange={handlePhotoChange}
                   />
                 </label>

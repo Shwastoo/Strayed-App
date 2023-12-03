@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Animal, Chat
+from .models import Animal, Chat, ChatImage
 from django.contrib.auth.models import User
 
 class ListFieldCharField(serializers.Field):
@@ -34,3 +34,8 @@ class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         fields = ('chatID', 'messages')
+
+class ChatImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatImage
+        fields = ("photo",)

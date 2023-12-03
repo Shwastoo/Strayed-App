@@ -359,6 +359,25 @@ function App() {
   */
   };
 
+  const sendChatImage = async (data) => {
+    await axios
+      .post("/api/chatImages/", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "X-CSRFToken": cookies.get("csrftoken"),
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        //console.error("Błąd dodawania ogłoszenia:", error);
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      });
+  };
+
   return (
     <div>
       {!loading ? (
@@ -411,7 +430,12 @@ function App() {
                 }
               />
             )}
-            <Route path="/chat/:user" element={<Chat username={username} />} />
+            <Route
+              path="/chat/:user"
+              element={
+                <Chat username={username} sendChatImage={sendChatImage} />
+              }
+            />
             <Route path="/user/:id" element={<User />} />
           </Routes>
 

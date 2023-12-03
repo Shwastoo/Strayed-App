@@ -5,14 +5,14 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
-from .models import Animal, Chat
+from .models import Animal, Chat, ChatImage
 from django.conf import settings
 from .forms import newAnimalForm, loginForm, registerForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 import os, json
 from rest_framework import viewsets
-from .serializers import AnimalSerializer, UserSerializer, ChatSerializer
+from .serializers import AnimalSerializer, UserSerializer, ChatSerializer, ChatImageSerializer
 from .models import Animal
 from django.http import JsonResponse
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -130,7 +130,9 @@ class ChatView(viewsets.ModelViewSet):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                 
-
+class ChatImagesView(viewsets.ModelViewSet):
+    serializer_class = ChatImageSerializer
+    queryset = ChatImage.objects.all()
 
 '''
 class SessionView(APIView):
