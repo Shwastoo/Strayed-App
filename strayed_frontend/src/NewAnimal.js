@@ -2,7 +2,7 @@ import React, { Component, useEffect } from "react";
 //import axios from "axios";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { SearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
@@ -81,9 +81,11 @@ class NewAnimal extends Component {
   
     L.Marker.prototype.options.icon = DefaultIcon;
   
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
   
-    const searchControl = new SearchControl({
+    const searchControl = new GeoSearchControl({
       style: "button",
       provider: new OpenStreetMapProvider(),
       marker: DefaultIcon,
@@ -92,28 +94,29 @@ class NewAnimal extends Component {
   
     this.map.addControl(searchControl);
   
+    const removeMarkers = () => {
+      this.map.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          this.map.removeLayer(layer);
+        }
+      });
+    };
+  
     this.map.addEventListener('geosearch/showlocation', (e) => {
-      console.log('Show location event:', e);
-    
+      removeMarkers();
+  
       if (e.location && e.location.raw) {
         const locationData = e.location.raw;
-    
-        console.log('Location data:', locationData);
-    
-        // Konwersja lat i lon na liczby zmiennoprzecinkowe
+  
         const latitude = parseFloat(locationData.lat);
         const longitude = parseFloat(locationData.lon);
-    
+  
         if (!isNaN(latitude) && !isNaN(longitude)) {
-          if (this.state.marker) {
-            this.map.removeLayer(this.state.marker);
-          }
-    
           const latLng = L.latLng(latitude, longitude);
           const marker = L.marker(latLng).addTo(this.map);
-    
+  
           this.handleLocationChange(latitude, longitude);
-    
+  
           this.setState({
             marker: marker,
           });
@@ -125,24 +128,10 @@ class NewAnimal extends Component {
       }
     });
   
-    this.map.addEventListener("geosearch/removelocation", () => {
-      if (this.state.marker) {
-        this.map.removeLayer(this.state.marker);
-        this.setState({
-          marker: null,
-        });
-      }
-    });
-
-    map.addControl(searchControl);
+    this.mapClickHandler = (e) => {
+      removeMarkers();
   
-    const handleMapClick = (e) => {
       const { lat, lng } = e.latlng;
-  
-      if (this.state.marker) {
-        this.map.removeLayer(this.state.marker);
-      }
-  
       const marker = L.marker(e.latlng).addTo(this.map);
   
       this.handleLocationChange(lat, lng);
@@ -152,8 +141,7 @@ class NewAnimal extends Component {
       });
     };
   
-    this.mapClickHandler = handleMapClick;
-    this.map.on("click", handleMapClick);
+    this.map.on("click", this.mapClickHandler);
   }
   
   render() {
