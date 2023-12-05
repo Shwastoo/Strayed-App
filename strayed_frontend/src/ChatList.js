@@ -8,6 +8,7 @@ function ChatList({ username }) {
   const [chats, setChats] = useState(null);
   const [chatmates, setChatmates] = useState([]);
   const [lastMessages, setLastMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getChatsData();
@@ -34,6 +35,7 @@ function ChatList({ username }) {
         console.log(lastMSGs);
         setChatmates(chatmateList);
         setLastMessages(lastMSGs);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Błąd pobierania danych:", error);
@@ -42,7 +44,7 @@ function ChatList({ username }) {
 
   return (
     <div>
-      {chats ? (
+      {!loading ? (
         <div>
           <ul className="chat-list">
             {chats.map((chat, i) => (
