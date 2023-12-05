@@ -292,27 +292,52 @@ body {
   border-bottom: none;
 }
 
+/* Clear button styling */
+.leaflet-control-geosearch button.reset {
+  color: black;
+  font-weight: bold;
+  position: absolute;
+  line-height: 26px;
+  padding: 0 8px;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  background-color: #fff;
+  border-radius: 0 4px 4px 0;
+}
+
+.leaflet-touch .leaflet-control-geosearch button.reset {
+  line-height: 30px;
+  width: min-content;
+}
+
+.leaflet-control-geosearch button.reset:hover {
+  background: #f5f5f5;
+}
+
 .leaflet-control-geosearch a.leaflet-bar-part:before,
 .leaflet-control-geosearch a.leaflet-bar-part:after {
   position: absolute;
   display: block;
-  content: "";
+  content: '';
 }
 
 /* magnifying glass */
 .leaflet-control-geosearch a.leaflet-bar-part:before {
-  top: 19px;
-  left: 16px;
-  width: 8px;
+  top: 17px;
+  left: 15px;
+  width: 6px;
   border-top: 2px solid #555;
   transform: rotateZ(45deg);
 }
 
 .leaflet-control-geosearch a.leaflet-bar-part:after {
-  top: 6px;
-  left: 6px;
-  height: 14px;
-  width: 14px;
+  top: 10px;
+  left: 10px;
+  height: 8px;
+  width: 8px;
   border-radius: 50%;
   border: 2px solid #555;
 }
@@ -335,7 +360,7 @@ body {
 
 /* pending icon */
 .leaflet-control-geosearch.pending a.leaflet-bar-part:after {
-  content: "";
+  content: '';
   border: 2px solid #555;
   border-top: 2px solid #f3f3f3;
   animation: spin 1s linear infinite;
@@ -343,7 +368,7 @@ body {
 
 /* error icon */
 .leaflet-control-geosearch.error a.leaflet-bar-part:after {
-  content: "!";
+  content: '!';
   line-height: initial;
   font-weight: 600;
   font-size: 18px;
@@ -354,17 +379,16 @@ body {
 .leaflet-control-geosearch form {
   display: none;
   position: absolute;
-  top: -2px;
-  left: 28px;
+  top: 0;
+  left: 30px;
   border-radius: 0 4px 4px 0;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-left: none;
   background-color: #fff;
   background-clip: padding-box;
   z-index: -1;
   height: auto;
   margin: 0;
   padding: 0 8px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
 }
 
 .leaflet-control-geosearch.active form {
@@ -374,14 +398,24 @@ body {
 .leaflet-control-geosearch form input {
   min-width: 200px;
   width: 100%;
-  border: none;
   outline: none;
+  border: none;
   margin: 0;
   padding: 0;
   font-size: 12px;
   height: 30px;
+  border: none;
   border-radius: 0 4px 4px 0;
   text-indent: 8px;
+}
+
+.leaflet-touch .leaflet-geosearch-bar form {
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  box-shadow: none;
+}
+
+.leaflet-touch .leaflet-geosearch-bar form input {
+  height: 30px;
 }
 
 .leaflet-control-geosearch .results {
@@ -396,6 +430,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 550px;
 }
 
 .leaflet-control-geosearch .results.active {
@@ -412,14 +447,17 @@ body {
 
 /* add missing border to form */
 .leaflet-control-geosearch .results.active:after {
-  content: "";
+  content: '';
   display: block;
   width: 0;
-  border-left: 2px solid rgba(0, 0, 0, 0.2);
   position: absolute;
   left: -2px;
   bottom: -2px;
   top: 30px;
+}
+
+.leaflet-touch .leaflet-control-geosearch .results.active:after {
+  border-left: 2px solid rgba(0, 0, 0, .2);
 }
 
 /* animations */
@@ -432,37 +470,37 @@ body {
   }
 }
 
-.leaflet-top .leaflet-control-geosearch.bar,
-.leaflet-bottom .leaflet-control-geosearch.bar {
+.leaflet-top .leaflet-geosearch-bar,
+.leaflet-bottom .leaflet-geosearch-bar {
   display: none;
 }
 
-.leaflet-control-geosearch.bar {
+.leaflet-geosearch-bar {
   position: relative;
   display: block;
   height: auto;
   width: 400px;
+  max-width: calc(100% - 120px);
   margin: 10px auto 0;
   cursor: auto;
   z-index: 1000;
 }
 
-.leaflet-control-geosearch.bar form {
+.leaflet-geosearch-bar form {
   position: relative;
   top: 0;
   left: 0;
   display: block;
-  border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
 
-.leaflet-control-geosearch.bar form input {
+.leaflet-geosearch-bar form input {
   min-width: 100%;
   width: 100%;
 }
 
-.leaflet-control-geosearch.bar .results.active:after {
-  opacity: 0.2;
+.leaflet-geosearch-bar .results.active:after {
+  opacity: .2;
 }
 
 .leaflet-right .leaflet-control-geosearch form {
@@ -471,6 +509,10 @@ body {
   border-radius: 4px 0 0 4px;
   border-left: inherit;
   border-right: none;
+}
+
+.leaflet-bar-notfound {
+  font-style: italic;
 }
 
 /* Styl dla kontenera z filtrem */
