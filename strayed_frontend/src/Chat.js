@@ -46,8 +46,8 @@ function Chat({ username, sendChatImage }) {
             idB = response.data.pk;
             console.log(idA, idB);
             var chatRoom;
-            if (idA < idB) chatRoom = name + "-" + user;
-            else chatRoom = user + "-" + name;
+            if (idA < idB) chatRoom = name + "~" + user;
+            else chatRoom = user + "~" + name;
             setRoom(chatRoom);
             axios
               .get(`/api/chats/${chatRoom}`)
@@ -60,7 +60,9 @@ function Chat({ username, sendChatImage }) {
                 console.error("Błąd pobierania usera:", error);
               });
             setClient(
-              new W3CWebSocket("ws://127.0.0.1:8000/ws/" + chatRoom + "/")
+              new W3CWebSocket(
+                "ws://127.0.0.1:8000/ws/" + chatRoom.replace("~", "-") + "/"
+              )
             );
           })
           .catch((error) => {
