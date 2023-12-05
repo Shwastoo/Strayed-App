@@ -10,8 +10,12 @@ function ChatList({ username }) {
   const [lastMessages, setLastMessages] = useState([]);
 
   useEffect(() => {
+    getChatsData();
+  }, []);
+
+  const getChatsData = async () => {
     console.log(user);
-    axios
+    await axios
       .get(`/api/chats/${user}`)
       .then((response) => {
         console.log(response.data);
@@ -34,7 +38,7 @@ function ChatList({ username }) {
       .catch((error) => {
         console.error("Błąd pobierania danych:", error);
       });
-  }, []);
+  };
 
   return (
     <div>
