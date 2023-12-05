@@ -2,7 +2,7 @@ import React, { Component, useEffect } from "react";
 //import axios from "axios";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
@@ -13,7 +13,6 @@ let DefaultIcon = L.icon({
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
-
 
 class NewAnimal extends Component {
   constructor(props) {
@@ -57,7 +56,10 @@ class NewAnimal extends Component {
     formData.append("species", this.state.species);
     formData.append("breed", this.state.breed);
     formData.append("colors", this.state.colors);
-    formData.append("location", `${this.state.latitude}, ${this.state.longitude}`);
+    formData.append(
+      "location",
+      `${this.state.latitude}, ${this.state.longitude}`
+    );
     this.props.addAnimal(formData);
     /*
     axios
@@ -72,28 +74,30 @@ class NewAnimal extends Component {
   };
 
   componentDidMount() {
+    window.scrollTo(0, 0);
     this.initMap();
   }
 
   initMap() {
     const map = L.map("map").setView([50.061, 19.936], 13);
     this.map = map;
-  
+
     L.Marker.prototype.options.icon = DefaultIcon;
-  
+
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+      attribution:
+        '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
-  
+
     const searchControl = new GeoSearchControl({
       style: "button",
       provider: new OpenStreetMapProvider(),
       marker: DefaultIcon,
       notFoundMessage: "Przepraszamy, nie udało się znaleźć tego adresu.",
     });
-  
+
     this.map.addControl(searchControl);
-  
+
     const removeMarkers = () => {
       this.map.eachLayer((layer) => {
         if (layer instanceof L.Marker) {
@@ -101,49 +105,49 @@ class NewAnimal extends Component {
         }
       });
     };
-  
-    this.map.addEventListener('geosearch/showlocation', (e) => {
+
+    this.map.addEventListener("geosearch/showlocation", (e) => {
       removeMarkers();
-  
+
       if (e.location && e.location.raw) {
         const locationData = e.location.raw;
-  
+
         const latitude = parseFloat(locationData.lat);
         const longitude = parseFloat(locationData.lon);
-  
+
         if (!isNaN(latitude) && !isNaN(longitude)) {
           const latLng = L.latLng(latitude, longitude);
           const marker = L.marker(latLng).addTo(this.map);
-  
+
           this.handleLocationChange(latitude, longitude);
-  
+
           this.setState({
             marker: marker,
           });
         } else {
-          console.error('Invalid latitude or longitude:', locationData);
+          console.error("Invalid latitude or longitude:", locationData);
         }
       } else {
-        console.error('Invalid location:', e.location);
+        console.error("Invalid location:", e.location);
       }
     });
-  
+
     this.mapClickHandler = (e) => {
       removeMarkers();
-  
+
       const { lat, lng } = e.latlng;
       const marker = L.marker(e.latlng).addTo(this.map);
-  
+
       this.handleLocationChange(lat, lng);
-  
+
       this.setState({
         marker: marker,
       });
     };
-  
+
     this.map.on("click", this.mapClickHandler);
   }
-  
+
   render() {
     return (
       <div className="registration-form">

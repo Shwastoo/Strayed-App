@@ -645,3 +645,18 @@ body {
 #btn-photo-label {
   display: none;
 }
+
+.chat-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chat-item {
+  margin-bottom: 10px;
+  background-color: #b2be9db4;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

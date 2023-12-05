@@ -1,7 +1,7 @@
 from typing import Any, Dict
 from django.db import models
 from django.db.models.query import QuerySet
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, get_list_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
@@ -114,22 +114,31 @@ class ChatView(viewsets.ModelViewSet):
     lookup_field = 'chatID'
     
     def retrieve(self, request, chatID):
-        try:
-            queryset = Chat.objects.all()
-            chat = get_object_or_404(queryset, chatID=chatID)
-            serializer = ChatSerializer(chat)
-            print(chat)
+
+        if "~" in chatID:
+            try:
+                queryset = Chat.objects.all()
+                chat = get_object_or_404(queryset, chatID=chatID)
+                serializer = ChatSerializer(chat)
+                print(chat)
+                return Response(serializer.data)
+            except:
+                newChat = {}
+                newChat["chatID"] = chatID
+                newChat["messages"] = []
+                serializer = ChatSerializer(data=newChat)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            #queryset = Chat.objects.filter()
+            print("^{}~.+$||^.+~{}$".format(chatID, chatID))
+            chats = get_list_or_404(Chat, chatID__contains=("~"+chatID or chatID+"~"))
+            print(chats)
+            serializer = ChatSerializer(chats, many=True)
+            #print(chat)
             return Response(serializer.data)
-        except:
-            newChat = {}
-            newChat["chatID"] = chatID
-            newChat["messages"] = []
-            serializer = ChatSerializer(data=newChat)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                
 class ChatImagesView(viewsets.ModelViewSet):
     serializer_class = ChatImageSerializer
     queryset = ChatImage.objects.all()

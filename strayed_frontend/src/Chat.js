@@ -118,6 +118,7 @@ function Chat({ username, sendChatImage }) {
           msg: value,
           sender: name,
           timestamp: Date.now(),
+          chatroom: room,
         })
       );
     } else {
@@ -133,6 +134,7 @@ function Chat({ username, sendChatImage }) {
           msg: photoName,
           sender: name,
           timestamp: Date.now(),
+          chatroom: room,
         })
       );
     }
@@ -229,7 +231,11 @@ function Chat({ username, sendChatImage }) {
               />
             </div>
             <div className="form-group">
-              <button type="submit" className="send-button">
+              <button
+                type="submit"
+                className="send-button"
+                disabled={value == "" && photo == "" ? true : false}
+              >
                 Wyślij
               </button>
             </div>

@@ -29,9 +29,11 @@ class TextRoomConsumer(WebsocketConsumer):
         sender = text_data_json['sender']
         msgtype = text_data_json['msgtype']
         timestamp = text_data_json['timestamp']
+        chatroom = text_data_json['chatroom']
 
         queryset = Chat.objects.all()
-        chat = get_object_or_404(queryset, chatID=self.room_name)
+        chat = get_object_or_404(queryset, chatID=chatroom)
+        del text_data_json['chatroom']
         chat.messages.append(text_data_json)
         chat.save()
         serializer = ChatSerializer(data=chat)

@@ -15,6 +15,7 @@ import Details from "./Details";
 import NewAnimal from "./NewAnimal";
 import Chat from "./Chat";
 import User from "./User";
+import ChatList from "./ChatList";
 
 const cookies = new Cookies();
 
@@ -229,7 +230,14 @@ function App() {
   };
 
   const handleRegister = async (data) => {
-    const { password, confirm_password } = data;
+    const { username, password, confirm_password } = data;
+    console.log(username);
+    if (username.includes("~")) {
+      toast.error('Znak "~" jest niedozwolony w nazwie użytkownika.', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
 
     if (password !== confirm_password) {
       toast.error("Hasła nie są takie same.", {
@@ -392,6 +400,10 @@ function App() {
                 <p>
                   Witaj <Link to={`/user/${username}`}>{username}</Link>
                 </p>
+                <Link to="/chatlist" className="submit-button1">
+                  Wiadomości
+                </Link>
+                <br />
                 <Link onClick={handleLogout} className="submit-button1">
                   Wyloguj się
                 </Link>
@@ -430,12 +442,20 @@ function App() {
                 }
               />
             )}
-            <Route
-              path="/chat/:user"
-              element={
-                <Chat username={username} sendChatImage={sendChatImage} />
-              }
-            />
+            {username && (
+              <Route
+                path="/chat/:user"
+                element={
+                  <Chat username={username} sendChatImage={sendChatImage} />
+                }
+              />
+            )}
+            {username && (
+              <Route
+                path="/chatlist"
+                element={<ChatList username={username} />}
+              />
+            )}
             <Route path="/user/:id" element={<User />} />
           </Routes>
 

@@ -24,11 +24,6 @@ class AnimalSerializer(serializers.ModelSerializer):
             'url': {'lookup_field': 'slug'}
         }
 
-class UserSerializer(serializers.ModelSerializer):
-    animals = AnimalSerializer(many=True)
-    class Meta:
-        model = User
-        fields = ('pk','username','password','email','first_name','last_name', 'animals')
 
 class ChatSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,3 +34,9 @@ class ChatImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatImage
         fields = ("photo",)
+
+class UserSerializer(serializers.ModelSerializer):
+    animals = AnimalSerializer(many=True)
+    class Meta:
+        model = User
+        fields = ('pk','username','password','email','first_name','last_name', 'animals')
