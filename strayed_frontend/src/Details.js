@@ -52,9 +52,9 @@ function Details() {
       );
       setMap(newMap);
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-        newMap
-      );
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(newMap);
 
       L.Marker.prototype.options.icon = DefaultIcon;
 
