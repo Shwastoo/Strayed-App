@@ -12,7 +12,6 @@ body {
   padding: 20px;
   background-color: #efdbce;
   align-items: center;
-  justify-content: space-between;
   flex-direction: row;
   margin-bottom: 20px;
 }
@@ -27,6 +26,46 @@ body {
 
 .user-panel {
   text-align: right;
+  margin-left: auto; 
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #175c4c;
+  transition: color 0.3s ease;
+  margin-left: 50px;
+}
+
+.logo-link:hover {
+  color: rgba(17, 65, 53, 0.671);
+  text-decoration: none;
+}
+
+.logo-img:hover + .logo-text,
+.logo-text:hover {
+  color: rgba(17, 65, 53, 0.671);
+  text-decoration: none;
+}
+
+.logo-img {
+  width: 100px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.logo-text {
+  font-size: calc(40px + 2vmin);
+  font-weight: bold;
+  font-family: "Century Gothic";
+  color: #175c4c;
+  margin: 0;
 }
 
 /* Stopka */
@@ -629,6 +668,7 @@ body {
   flex-direction: row;
   justify-content: space-between;
 }
+
 .btn-photo > label {
   width: 100%;
   height: 100%;

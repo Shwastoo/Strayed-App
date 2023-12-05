@@ -384,9 +384,17 @@ function App() {
         <div className="App">
           <div className="header">
             <ToastContainer />
-            <p id="title">
-              <Link to="/">STRAYED</Link>
-            </p>
+            <div id="title" className="logo-container">
+              <Link to="/" className="logo-link">
+                <img 
+                  src="media/images/app_logo.png" 
+                  alt="Logo" 
+                  style={{ width: '80px', height: 'auto' }}
+                  className="logo-img"
+                />
+                <span className="logo-text">STRAYED</span>
+              </Link>
+            </div>
             {username != null ? (
               <div className="user-section user-panel">
                 <p>
