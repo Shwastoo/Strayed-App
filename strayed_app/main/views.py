@@ -133,8 +133,12 @@ class ChatView(viewsets.ModelViewSet):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             #queryset = Chat.objects.filter()
-            print("^{}~.+$||^.+~{}$".format(chatID, chatID))
-            chats = get_list_or_404(Chat, chatID__contains=("~"+chatID or chatID+"~"))
+            chatsA = get_list_or_404(Chat, chatID__contains=("~"+chatID))
+            chatsB = get_list_or_404(Chat, chatID__contains=(chatID+"~"))
+            chats = list(set(chatsA + chatsB))
+            for c in chats:
+                if len(c.messages) == 0:
+                    chats.remove(c)
             print(chats)
             serializer = ChatSerializer(chats, many=True)
             #print(chat)
