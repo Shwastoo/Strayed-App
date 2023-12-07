@@ -509,12 +509,25 @@ function Index({ username }) {
     if (filterKeyword.trim() === "") {
       setFilteredAnimals(null);
     } else {
-      const filtered = strayedAnimals.filter(
-        (animal) =>
-          animal.title.toLowerCase().includes(filterKeyword.toLowerCase()) ||
-          (animal.details &&
-            animal.details.toLowerCase().includes(filterKeyword.toLowerCase()))
-      );
+      const filtered = strayedAnimals.filter((animal) => {
+        const titleMatch = animal.title.toLowerCase().includes(filterKeyword.toLowerCase());
+        const descriptionMatch = animal.desc.toLowerCase().includes(filterKeyword.toLowerCase());
+        const speciesMatch = animal.species.toLowerCase().includes(filterKeyword.toLowerCase());
+        const breedMatch = animal.breed.toLowerCase().includes(filterKeyword.toLowerCase());
+        const colorsMatch = animal.colors.some((color) => color.toLowerCase().includes(filterKeyword.toLowerCase()));
+        const genderMatch = animal.gender.toLowerCase().includes(filterKeyword.toLowerCase());
+        const dateMatch = animal.date_created.toLowerCase().includes(filterKeyword.toLowerCase());
+  
+        return (
+          titleMatch ||
+          descriptionMatch ||
+          speciesMatch ||
+          breedMatch ||
+          colorsMatch ||
+          genderMatch ||
+          dateMatch
+        );
+      });
       setFilteredAnimals(filtered);
     }
   };
