@@ -22,10 +22,13 @@ function ChatList({ username }) {
       .get(`/api/chats/${user}`)
       .then((response) => {
         console.log(response.data);
-        setChats(response.data);
+        var chatList = [];
         var chatmateList = [];
         var lastMSGs = [];
         for (var i = 0; i < response.data.length; i++) {
+          console.log(response.data[i].messages.length);
+          if (response.data[i].messages.length == 0) continue;
+          chatList.push(response.data[i]);
           var users = response.data[i].chatID.split("~");
           if (users[0] == user) chatmateList.push(users[1]);
           else chatmateList.push(users[0]);
@@ -35,6 +38,7 @@ function ChatList({ username }) {
         }
         console.log(chatmateList);
         console.log(lastMSGs);
+        setChats(chatList);
         setChatmates(chatmateList);
         setLastMessages(lastMSGs);
         setLoading(false);
