@@ -16,6 +16,7 @@ import NewAnimal from "./NewAnimal";
 import Chat from "./Chat";
 import User from "./User";
 import ChatList from "./ChatList";
+import PageNotFound from "./PageNotFound";
 
 const cookies = new Cookies();
 
@@ -463,6 +464,7 @@ function App() {
               element={<ChatList username={username} />}
             />
             <Route path="/user/:id" element={<User username={username} />} />
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
 
           <div className="footer">
