@@ -43,7 +43,7 @@ function Login({ user, handleLogin }) {
 
   return (
     <div>
-      {loggedUser ? (
+      {!loggedUser ? (
         <div className="registration-form">
           <h2>Zaloguj się</h2>
           <form onSubmit={handleFormSubmit}>

@@ -49,7 +49,7 @@ class Register extends Component {
 
     return (
       <div>
-        {loggedUser ? (
+        {!loggedUser ? (
           <div className="registration-form">
             <h2>Rejestracja</h2>
             <form onSubmit={this.handleFormSubmit}>
