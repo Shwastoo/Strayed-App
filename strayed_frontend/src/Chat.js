@@ -3,6 +3,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function Chat({ username, sendChatImage }) {
   const [messages, setMessages] = useState([]);
@@ -19,7 +20,7 @@ function Chat({ username, sendChatImage }) {
   const chatEnd = useRef(null);
 
   useEffect(() => {
-    if (!haveRun) {
+    if (!haveRun && name) {
       getUsers();
     }
     if (client != null) initChatRoom();
@@ -145,101 +146,116 @@ function Chat({ username, sendChatImage }) {
 
   return (
     <div>
-      {connecting ? (
-        <p>Wczytywanie...</p>
+      {name ? (
+        <div>
+          {connecting ? (
+            <p>Wczytywanie...</p>
+          ) : (
+            <div>
+              <h2>Czat "{room}"</h2>
+              <div className="chat-container">
+                {messages.map((message, i) => (
+                  <div
+                    className={
+                      message.sender == name
+                        ? "logged-user-row"
+                        : "other-user-row"
+                    }
+                    key={i}
+                  >
+                    <div
+                      className={
+                        message.sender == name
+                          ? "logged-user-msg"
+                          : "other-user-msg"
+                      }
+                    >
+                      <p className="sender-name">{message.sender}</p>
+                      {message.msgtype == "text" ? (
+                        <p className="user-message">{message.msg}</p>
+                      ) : (
+                        <p className="user-message">
+                          <img
+                            src={"/media/images/chat/" + message.msg}
+                            alt={"Zdjęcie"}
+                            className="animal-image"
+                          />
+                        </p>
+                      )}
+                      <p className="msg-timestamp">
+                        {new Intl.DateTimeFormat("pl-PL", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        }).format(message.timestamp)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                <div ref={chatEnd}></div>
+              </div>
+              <form onSubmit={handleFormSubmit}>
+                <div className="form-group msg-inputs">
+                  <button
+                    className={photo == "" ? "btn-photo no-photo" : "btn-photo"}
+                    type="button"
+                  >
+                    {photo == ""
+                      ? "Prześlij zdjęcie"
+                      : "Przesłano plik: " + photoName}
+                    <label htmlFor="btn-photo-label">
+                      <input
+                        id="btn-photo-label"
+                        type="file"
+                        name="photo"
+                        accept="image/*"
+                        onChange={handlePhotoChange}
+                      />
+                    </label>
+                  </button>
+
+                  <button
+                    type="reset"
+                    onClick={clearPhoto}
+                    className={
+                      photo == "" ? "btn-reset hide-input" : "btn-reset"
+                    }
+                  >
+                    Wyczyść
+                  </button>
+
+                  <input
+                    className={photo == "" ? "btn-msg" : "btn-msg hide-input"}
+                    type="text"
+                    name="message"
+                    value={value}
+                    onChange={handleInputChange}
+                    placeholder="Wiadomość"
+                    disabled={photo == "" ? false : true}
+                  />
+                </div>
+                <div className="form-group">
+                  <button
+                    type="submit"
+                    className="send-button"
+                    disabled={value == "" && photo == "" ? true : false}
+                  >
+                    Wyślij
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
       ) : (
         <div>
-          <h2>Czat "{room}"</h2>
-          <div className="chat-container">
-            {messages.map((message, i) => (
-              <div
-                className={
-                  message.sender == name ? "logged-user-row" : "other-user-row"
-                }
-                key={i}
-              >
-                <div
-                  className={
-                    message.sender == name
-                      ? "logged-user-msg"
-                      : "other-user-msg"
-                  }
-                >
-                  <p className="sender-name">{message.sender}</p>
-                  {message.msgtype == "text" ? (
-                    <p className="user-message">{message.msg}</p>
-                  ) : (
-                    <p className="user-message">
-                      <img
-                        src={"/media/images/chat/" + message.msg}
-                        alt={"Zdjęcie"}
-                        className="animal-image"
-                      />
-                    </p>
-                  )}
-                  <p className="msg-timestamp">
-                    {new Intl.DateTimeFormat("pl-PL", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                    }).format(message.timestamp)}
-                  </p>
-                </div>
-              </div>
-            ))}
-            <div ref={chatEnd}></div>
-          </div>
-          <form onSubmit={handleFormSubmit}>
-            <div className="form-group msg-inputs">
-              <button
-                className={photo == "" ? "btn-photo no-photo" : "btn-photo"}
-                type="button"
-              >
-                {photo == ""
-                  ? "Prześlij zdjęcie"
-                  : "Przesłano plik: " + photoName}
-                <label htmlFor="btn-photo-label">
-                  <input
-                    id="btn-photo-label"
-                    type="file"
-                    name="photo"
-                    accept="image/*"
-                    onChange={handlePhotoChange}
-                  />
-                </label>
-              </button>
-
-              <button
-                type="reset"
-                onClick={clearPhoto}
-                className={photo == "" ? "btn-reset hide-input" : "btn-reset"}
-              >
-                Wyczyść
-              </button>
-
-              <input
-                className={photo == "" ? "btn-msg" : "btn-msg hide-input"}
-                type="text"
-                name="message"
-                value={value}
-                onChange={handleInputChange}
-                placeholder="Wiadomość"
-                disabled={photo == "" ? false : true}
-              />
-            </div>
-            <div className="form-group">
-              <button
-                type="submit"
-                className="send-button"
-                disabled={value == "" && photo == "" ? true : false}
-              >
-                Wyślij
-              </button>
-            </div>
-          </form>
+          <p>Aby skontaktować się z użytkownikiem musisz się zalogować.</p>
+          <Link to="/login" className="submit-button1">
+            Zaloguj się
+          </Link>
         </div>
       )}
     </div>

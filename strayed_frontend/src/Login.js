@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 //import axios from "axios";
 //import { useNavigate } from "react-router-dom";
-function Login({ handleLogin }) {
+function Login({ user, handleLogin }) {
+  const [loggedUser, setLoggedUser] = useState(user);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorLog, setErrorLog] = useState("");
@@ -40,36 +42,47 @@ function Login({ handleLogin }) {
   };
 
   return (
-    <div className="registration-form">
-      <h2>Zaloguj się</h2>
-      <form onSubmit={handleFormSubmit}>
-        {errorLog && <p className="error-message">{errorLog}</p>}
-        <div className="form-group">
-          <input
-            type="text"
-            name="username"
-            value={username}
-            onChange={handleUsernameChange}
-            placeholder="Nazwa użytkownika"
-            required
-          />
+    <div>
+      {loggedUser ? (
+        <div className="registration-form">
+          <h2>Zaloguj się</h2>
+          <form onSubmit={handleFormSubmit}>
+            {errorLog && <p className="error-message">{errorLog}</p>}
+            <div className="form-group">
+              <input
+                type="text"
+                name="username"
+                value={username}
+                onChange={handleUsernameChange}
+                placeholder="Nazwa użytkownika"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                name="password"
+                value={password}
+                onChange={handlePasswordChange}
+                placeholder="Hasło"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <button type="submit" className="login-button">
+                Zaloguj
+              </button>
+            </div>
+          </form>
         </div>
-        <div className="form-group">
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={handlePasswordChange}
-            placeholder="Hasło"
-            required
-          />
+      ) : (
+        <div>
+          <p>Jesteś już zalogowany.</p>
+          <Link to="/" className="submit-button1">
+            Przejdź do strony głównej
+          </Link>
         </div>
-        <div className="form-group">
-          <button type="submit" className="login-button">
-            Zaloguj
-          </button>
-        </div>
-      </form>
+      )}
     </div>
   );
 }

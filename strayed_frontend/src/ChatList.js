@@ -11,7 +11,9 @@ function ChatList({ username }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getChatsData();
+    if (user) {
+      getChatsData();
+    }
   }, []);
 
   const getChatsData = async () => {
@@ -44,40 +46,55 @@ function ChatList({ username }) {
 
   return (
     <div>
-      {!loading ? (
+      {user ? (
         <div>
-          <ul className="chat-list">
-            {chats.map((chat, i) => (
-              <li key={i} className="chat-item">
-                <Link to={`/chat/${chatmates[i]}`}>
-                  <b>{chatmates[i]}</b>
-                  <br />
-                  {lastMessages[i]["sender"] == user ? <span>Ty: </span> : ""}
-                  {lastMessages[i]["msgtype"] == "text" ? (
-                    <span>{lastMessages[i]["msg"]}</span>
-                  ) : (
-                    <span>
-                      <i>Przesłano zdjęcie</i>
-                    </span>
-                  )}
-                  <br />
-                  <span>
-                    {new Intl.DateTimeFormat("pl-PL", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                    }).format(lastMessages[i]["timestamp"])}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {!loading ? (
+            <div>
+              <ul className="chat-list">
+                {chats.map((chat, i) => (
+                  <li key={i} className="chat-item">
+                    <Link to={`/chat/${chatmates[i]}`}>
+                      <b>{chatmates[i]}</b>
+                      <br />
+                      {lastMessages[i]["sender"] == user ? (
+                        <span>Ty: </span>
+                      ) : (
+                        ""
+                      )}
+                      {lastMessages[i]["msgtype"] == "text" ? (
+                        <span>{lastMessages[i]["msg"]}</span>
+                      ) : (
+                        <span>
+                          <i>Przesłano zdjęcie</i>
+                        </span>
+                      )}
+                      <br />
+                      <span>
+                        {new Intl.DateTimeFormat("pl-PL", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        }).format(lastMessages[i]["timestamp"])}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p>Ładowanie danych...</p>
+          )}
         </div>
       ) : (
-        <p>Ładowanie danych...</p>
+        <div>
+          <p>Aby przeglądać swoje wiadomości musisz się zalogować.</p>
+          <Link to="/login" className="submit-button1">
+            Zaloguj się
+          </Link>
+        </div>
       )}
     </div>
   );

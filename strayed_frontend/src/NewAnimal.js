@@ -3,6 +3,7 @@ import React, { Component, useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
@@ -74,8 +75,10 @@ class NewAnimal extends Component {
   };
 
   componentDidMount() {
-    window.scrollTo(0, 0);
-    this.initMap();
+    if (this.state.owner) {
+      window.scrollTo(0, 0);
+      this.initMap();
+    }
   }
 
   initMap() {
@@ -150,121 +153,132 @@ class NewAnimal extends Component {
 
   render() {
     return (
-      <div className="registration-form">
-        <h2>Dodaj nowe zwierzę</h2>
-        <form onSubmit={this.handleSubmit} encType="multipart/form-data">
-          <div className="form-group">
-            <label>Tytuł ogłoszenia:</label>
-            <input
-              type="text"
-              name="title"
-              value={this.state.title}
-              onChange={(e) => this.setState({ title: e.target.value })}
-              required
-            />
+      <div>
+        {this.state.owner ? (
+          <div className="registration-form">
+            <h2>Dodaj nowe zwierzę</h2>
+            <form onSubmit={this.handleSubmit} encType="multipart/form-data">
+              <div className="form-group">
+                <label>Tytuł ogłoszenia:</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={this.state.title}
+                  onChange={(e) => this.setState({ title: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Opis:</label>
+                <input
+                  type="text"
+                  name="desc"
+                  value={this.state.desc}
+                  onChange={(e) => this.setState({ desc: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Zdjęcie 1:</label>
+                <input
+                  type="file"
+                  name="photo"
+                  onChange={(e) => this.setState({ photo: e.target.files[0] })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Zdjęcie 2:</label>
+                <input
+                  type="file"
+                  name="photo2"
+                  onChange={(e) => this.setState({ photo2: e.target.files[0] })}
+                />
+              </div>
+              <div className="form-group">
+                <label>Zdjęcie 3:</label>
+                <input
+                  type="file"
+                  name="photo3"
+                  onChange={(e) => this.setState({ photo3: e.target.files[0] })}
+                />
+              </div>
+              <div className="form-group">
+                <label>Gatunek:</label>
+                <input
+                  type="text"
+                  name="species"
+                  value={this.state.species}
+                  onChange={(e) => this.setState({ species: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Rasa:</label>
+                <input
+                  type="text"
+                  name="breed"
+                  value={this.state.breed}
+                  onChange={(e) => this.setState({ breed: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Płeć:</label>
+                <br />
+                <label>Samiec</label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="M"
+                  onChange={(e) => this.setState({ gender: e.target.value })}
+                  required
+                />
+                <label>Samica</label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="F"
+                  onChange={(e) => this.setState({ gender: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Kolory (oddzielone przecinkami):</label>
+                <input
+                  type="text"
+                  name="colors"
+                  value={this.state.colors}
+                  onChange={(e) => this.setState({ colors: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Wybierz lokalizację na mapie:</label>
+                <div id="map" style={{ width: "100%", height: "500px" }}></div>
+              </div>
+              <div className="form-group">
+                <input type="submit" value="Wyślij" className="login-button" />
+              </div>
+            </form>
+            {this.state.submittedAnimal && (
+              <div>
+                <h2>Nowe ogłoszenie:</h2>
+                <p>Tytuł: {this.state.submittedAnimal.title}</p>
+                <p>Opis: {this.state.submittedAnimal.desc}</p>
+                <p>Gatunek: {this.state.submittedAnimal.species}</p>
+                <p>Rasa: {this.state.submittedAnimal.breed}</p>
+                <p>Kolory: {this.state.submittedAnimal.colors}</p>
+                <p>Wiek: {this.state.submittedAnimal.age}</p>
+              </div>
+            )}
           </div>
-          <div className="form-group">
-            <label>Opis:</label>
-            <input
-              type="text"
-              name="desc"
-              value={this.state.desc}
-              onChange={(e) => this.setState({ desc: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Zdjęcie 1:</label>
-            <input
-              type="file"
-              name="photo"
-              onChange={(e) => this.setState({ photo: e.target.files[0] })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Zdjęcie 2:</label>
-            <input
-              type="file"
-              name="photo2"
-              onChange={(e) => this.setState({ photo2: e.target.files[0] })}
-            />
-          </div>
-          <div className="form-group">
-            <label>Zdjęcie 3:</label>
-            <input
-              type="file"
-              name="photo3"
-              onChange={(e) => this.setState({ photo3: e.target.files[0] })}
-            />
-          </div>
-          <div className="form-group">
-            <label>Gatunek:</label>
-            <input
-              type="text"
-              name="species"
-              value={this.state.species}
-              onChange={(e) => this.setState({ species: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Rasa:</label>
-            <input
-              type="text"
-              name="breed"
-              value={this.state.breed}
-              onChange={(e) => this.setState({ breed: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Płeć:</label>
-            <br />
-            <label>Samiec</label>
-            <input
-              type="radio"
-              name="gender"
-              value="M"
-              onChange={(e) => this.setState({ gender: e.target.value })}
-              required
-            />
-            <label>Samica</label>
-            <input
-              type="radio"
-              name="gender"
-              value="F"
-              onChange={(e) => this.setState({ gender: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Kolory (oddzielone przecinkami):</label>
-            <input
-              type="text"
-              name="colors"
-              value={this.state.colors}
-              onChange={(e) => this.setState({ colors: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Wybierz lokalizację na mapie:</label>
-            <div id="map" style={{ width: "100%", height: "500px" }}></div>
-          </div>
-          <div className="form-group">
-            <input type="submit" value="Wyślij" className="login-button" />
-          </div>
-        </form>
-        {this.state.submittedAnimal && (
+        ) : (
           <div>
-            <h2>Nowe ogłoszenie:</h2>
-            <p>Tytuł: {this.state.submittedAnimal.title}</p>
-            <p>Opis: {this.state.submittedAnimal.desc}</p>
-            <p>Gatunek: {this.state.submittedAnimal.species}</p>
-            <p>Rasa: {this.state.submittedAnimal.breed}</p>
-            <p>Kolory: {this.state.submittedAnimal.colors}</p>
-            <p>Wiek: {this.state.submittedAnimal.age}</p>
+            <p>Aby dodać ogłoszenie musisz się zalogować.</p>
+            <Link to="/login" className="submit-button1">
+              Zaloguj się
+            </Link>
           </div>
         )}
       </div>

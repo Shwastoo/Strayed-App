@@ -215,6 +215,7 @@ function App() {
           closeButton: true,
           isLoading: false,
         });
+        navigate("/");
       })
       .catch((err) => {
         console.log(err);
@@ -394,10 +395,10 @@ function App() {
             <ToastContainer />
             <div id="title" className="logo-container">
               <Link to="/" className="logo-link">
-                <img 
-                  src="media/images/app_logo.png" 
-                  alt="Logo" 
-                  style={{ width: '80px', height: 'auto' }}
+                <img
+                  src="/media/images/app_logo.png"
+                  alt="Logo"
+                  style={{ width: "80px", height: "auto" }}
                   className="logo-img"
                 />
                 <span className="logo-text">STRAYED</span>
@@ -435,36 +436,33 @@ function App() {
             <Route path="/" element={<Index username={username} />} />
             <Route
               path="/login"
-              element={<Login handleLogin={handleLogin} />}
+              element={<Login username={username} handleLogin={handleLogin} />}
             />
             <Route
               path="/register"
-              element={<Register handleRegister={handleRegister} />}
+              element={
+                <Register username={username} handleRegister={handleRegister} />
+              }
             />
-            <Route path="/details/:slug" element={<Details />} />
-            {username && (
-              <Route
-                path="/newanimal"
-                element={
-                  <NewAnimal addAnimal={addAnimal} username={username} />
-                }
-              />
-            )}
-            {username && (
-              <Route
-                path="/chat/:user"
-                element={
-                  <Chat username={username} sendChatImage={sendChatImage} />
-                }
-              />
-            )}
-            {username && (
-              <Route
-                path="/chatlist"
-                element={<ChatList username={username} />}
-              />
-            )}
-            <Route path="/user/:id" element={<User />} />
+            <Route
+              path="/details/:slug"
+              element={<Details username={username} />}
+            />
+            <Route
+              path="/newanimal"
+              element={<NewAnimal addAnimal={addAnimal} username={username} />}
+            />
+            <Route
+              path="/chat/:user"
+              element={
+                <Chat username={username} sendChatImage={sendChatImage} />
+              }
+            />
+            <Route
+              path="/chatlist"
+              element={<ChatList username={username} />}
+            />
+            <Route path="/user/:id" element={<User username={username} />} />
           </Routes>
 
           <div className="footer">
@@ -510,14 +508,28 @@ function Index({ username }) {
       setFilteredAnimals(null);
     } else {
       const filtered = strayedAnimals.filter((animal) => {
-        const titleMatch = animal.title.toLowerCase().includes(filterKeyword.toLowerCase());
-        const descriptionMatch = animal.desc.toLowerCase().includes(filterKeyword.toLowerCase());
-        const speciesMatch = animal.species.toLowerCase().includes(filterKeyword.toLowerCase());
-        const breedMatch = animal.breed.toLowerCase().includes(filterKeyword.toLowerCase());
-        const colorsMatch = animal.colors.some((color) => color.toLowerCase().includes(filterKeyword.toLowerCase()));
-        const genderMatch = animal.gender.toLowerCase().includes(filterKeyword.toLowerCase());
-        const dateMatch = animal.date_created.toLowerCase().includes(filterKeyword.toLowerCase());
-  
+        const titleMatch = animal.title
+          .toLowerCase()
+          .includes(filterKeyword.toLowerCase());
+        const descriptionMatch = animal.desc
+          .toLowerCase()
+          .includes(filterKeyword.toLowerCase());
+        const speciesMatch = animal.species
+          .toLowerCase()
+          .includes(filterKeyword.toLowerCase());
+        const breedMatch = animal.breed
+          .toLowerCase()
+          .includes(filterKeyword.toLowerCase());
+        const colorsMatch = animal.colors.some((color) =>
+          color.toLowerCase().includes(filterKeyword.toLowerCase())
+        );
+        const genderMatch = animal.gender
+          .toLowerCase()
+          .includes(filterKeyword.toLowerCase());
+        const dateMatch = animal.date_created
+          .toLowerCase()
+          .includes(filterKeyword.toLowerCase());
+
         return (
           titleMatch ||
           descriptionMatch ||
