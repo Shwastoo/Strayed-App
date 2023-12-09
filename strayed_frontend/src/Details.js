@@ -53,8 +53,8 @@ function Details() {
       setMap(newMap);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(newMap);
+        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(newMap);
 
       L.Marker.prototype.options.icon = DefaultIcon;
 
@@ -63,6 +63,23 @@ function Details() {
         locationMarker.bindPopup("Miejsce zaginięcia", {
           offset: L.point(0, -30),
         });
+
+        fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            const address = data.display_name;
+            console.log('Reverse Geocode Address:', address);
+  
+            // Dodaj popup z adresem
+            locationMarker.bindPopup(`Miejsce zaginięcia: ${address}`, {
+              offset: L.point(0, -30),
+            }).openPopup();
+          })
+          .catch((error) => {
+            console.error('Błąd podczas uzyskiwania adresu:', error);
+          });
       }
     }
   }, [animal]);

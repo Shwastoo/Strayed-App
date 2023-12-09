@@ -127,6 +127,8 @@ class NewAnimal extends Component {
           this.setState({
             marker: marker,
           });
+
+          this.reverseGeocodeAndAddPopup(latLng);
         } else {
           console.error("Invalid latitude or longitude:", locationData);
         }
@@ -146,9 +148,37 @@ class NewAnimal extends Component {
       this.setState({
         marker: marker,
       });
+
+      this.reverseGeocodeAndAddPopup(e.latlng);
     };
 
     this.map.on("click", this.mapClickHandler);
+  }
+
+  reverseGeocodeAndAddPopup(latlng) {
+    const { lat, lng } = latlng;
+
+    fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+    )
+        .then((response) => response.json())
+        .then((data) => {
+            const address = data.display_name;
+            console.log('Reverse Geocode Address:', address);
+
+            const marker = L.marker(latlng).addTo(this.map);
+            marker.bindPopup(address, {
+              offset: L.point(0, -30),
+            }).openPopup();
+            this.handleLocationChange(lat, lng);
+
+            this.setState({
+                marker: marker,
+            });
+        })
+        .catch((error) => {
+            console.error('Błąd podczas uzyskiwania adresu:', error);
+        });
   }
 
   render() {
