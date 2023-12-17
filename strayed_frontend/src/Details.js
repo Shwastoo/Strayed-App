@@ -100,7 +100,7 @@ function Details() {
           <p>
             Właściciel: <Link to={`/user/${animal.owner}`}>{animal.owner}</Link>
           </p>
-          <p>Data dodania: {animal.date_created}</p>
+          <p>Data ostatniej aktualizacji: {animal.date_created}</p>
           <div>
             <p>Zdjęcia:</p>
             {photos.map((photo, index) => (

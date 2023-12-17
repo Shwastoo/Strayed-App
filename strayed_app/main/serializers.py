@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Animal, Chat, ChatImage
 from django.contrib.auth.models import User
 
+'''
 class ListFieldCharField(serializers.Field):
     def to_internal_value(self, data):
         print(data)
@@ -11,6 +12,7 @@ class ListFieldCharField(serializers.Field):
     def to_representation(self, value):
         #value = ",".join([str(element) for element in value])
         return value
+'''
     
 class AnimalSerializer(serializers.ModelSerializer):
     #colors = serializers.ListField(child=serializers.CharField())

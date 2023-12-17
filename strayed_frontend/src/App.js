@@ -34,9 +34,11 @@ function App() {
     if (!sessionCheck) checkIfUserLoggedIn();
   });
 
+  /*
   const getState = () => {
     console.log(csrf, username, error, isAuthenticated, loading, sessionCheck);
   };
+  */
 
   const getCSRF = async () => {
     await fetch("http://localhost:8000/csrf/", {
@@ -81,7 +83,7 @@ function App() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         if (data.isAuthenticated) {
           whoami();
         } else {
@@ -92,7 +94,7 @@ function App() {
         //axios.defaults.xsrfCookieName = "CSRFtoken";
         //axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         //axios.defaults.withcredentials = true;
-        console.log(isAuthenticated, error, csrf);
+        //console.log(isAuthenticated, error, csrf);
       })
       .catch((err) => {
         console.log(err);
@@ -108,7 +110,7 @@ function App() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("You are logged in as: " + data.username);
+        //console.log("You are logged in as: " + data.username);
         //setCsrf(cookies.get("csrftoken"));
         setIsAuthenticated(true);
         setUsername(data.username);
@@ -205,7 +207,7 @@ function App() {
     })
       .then(isResponseOk)
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         setIsAuthenticated(false);
         setUsername(null);
         toast.update(logoutStatus, {
@@ -233,7 +235,7 @@ function App() {
 
   const handleRegister = async (data) => {
     const { username, password, confirm_password } = data;
-    console.log(username);
+    //console.log(username);
     if (username.includes("~")) {
       toast.error('Znak "~" jest niedozwolony w nazwie użytkownika.', {
         position: toast.POSITION.TOP_CENTER,
@@ -323,7 +325,7 @@ function App() {
         },
       })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
         navigate("/details/" + response.data.slug);
         toast.update(addingStatus, {
           render: "Ogłoszenie zostało dodane!",
@@ -378,7 +380,7 @@ function App() {
         },
       })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
       })
       .catch((error) => {
         //console.error("Błąd dodawania ogłoszenia:", error);

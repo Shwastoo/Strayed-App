@@ -63,7 +63,7 @@ class AnimalView(viewsets.ModelViewSet):
         queryset = Animal.objects.all()
         animal = get_object_or_404(queryset, slug=slug)
         serializer = AnimalSerializer(animal)
-        print(serializer.data)
+        #print(serializer.data)
         querysetUser = User.objects.all()
         newData = serializer.data.copy()
         newData["owner"] = get_object_or_404(querysetUser, pk=newData["owner"]).username
@@ -79,7 +79,7 @@ class AnimalView(viewsets.ModelViewSet):
         if newData["photo3"]=="null":
             newData["photo3"]=""
         #newData["colors"]=newData["colors"].split(",")
-        print(newData["colors"])
+        #print(newData["colors"])
         serializer = AnimalSerializer(data=newData)
         if serializer.is_valid():
             serializer.save()
@@ -98,10 +98,12 @@ class AnimalView(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
     '''
 
+'''
 class DetailView(viewsets.ModelViewSet):
     serializer_class = AnimalSerializer
     queryset = Animal.objects.all()
     lookup_field = 'slug'
+'''
 
 class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
@@ -150,9 +152,11 @@ class ChatView(viewsets.ModelViewSet):
             serializer = ChatSerializer(chats, many=True)
             #print(chat)
             return Response(serializer.data)
+'''
 class ChatImagesView(viewsets.ModelViewSet):
     serializer_class = ChatImageSerializer
     queryset = ChatImage.objects.all()
+'''
 
 '''
 class SessionView(APIView):
@@ -172,7 +176,7 @@ class WhoAmIView(APIView):
     def get(request, format=None):
         return JsonResponse({'username': request.user.username})
 '''
-
+'''
 class IndexView(generic.ListView):
     template_name = "main/index.html"
     context_object_name = "strayed_animals"
@@ -189,13 +193,13 @@ class DetailsView(generic.DetailView):
 
     def get_queryset(self):
         return Animal.objects.all()
-    '''
-    def get_context_data(self, **kwargs):
-        context = super(DetailsView, self).get_context_data(**kwargs)
-        context.update(self.extra_context)
-        return context
 
-    '''
+    #def get_context_data(self, **kwargs):
+    #    context = super(DetailsView, self).get_context_data(**kwargs)
+    #    context.update(self.extra_context)
+    #    return context
+
+'''
 
 
 #@ensure_csrf_cookie
@@ -289,10 +293,13 @@ def whoami_view(request):
 
     return JsonResponse({'username': request.user.username})
 
+'''
 def newAnimal(request):
     form = newAnimalForm()
     return render(request, "main/new.html", {"form":form})
+'''
 
+'''
 @require_POST
 def addAnimal(request, ownerID=None):
     serializer = AnimalSerializer(data=request.data)
@@ -396,3 +403,4 @@ def logout_old(request):
         pass
         return HttpResponseRedirect(reverse("main:animals"))
         
+'''
