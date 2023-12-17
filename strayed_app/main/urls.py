@@ -9,7 +9,7 @@ router = routers.DefaultRouter()
 router.register(r'animals', views.AnimalView, 'animal')
 router.register(r'users', views.UserView, 'user')
 router.register(r'chats', views.ChatView, 'chat')
-router.register(r'chatImages', views.ChatImagesView, 'chat')
+router.register(r'chatImages', views.ChatImagesView, 'chatImage')
 #router.register(r'animals/{slug}', views.DetailView, 'details')
 
 app_name="main"

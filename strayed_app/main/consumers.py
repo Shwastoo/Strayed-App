@@ -8,7 +8,7 @@ class TextRoomConsumer(WebsocketConsumer):
     def connect(self):
 
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'chat_%s' % self.room_name
+        self.room_group_name = 'chat_%s' % self.room_name.replace("~","-")
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
@@ -29,11 +29,13 @@ class TextRoomConsumer(WebsocketConsumer):
         sender = text_data_json['sender']
         msgtype = text_data_json['msgtype']
         timestamp = text_data_json['timestamp']
-        chatroom = text_data_json['chatroom']
+        #chatroom2 = text_data_json['chatroom'] # to samo co self.room_name???
+        #chatroom = self.room_name
+        #print(chatroom, chatroom2)
 
         queryset = Chat.objects.all()
-        chat = get_object_or_404(queryset, chatID=chatroom)
-        del text_data_json['chatroom']
+        chat = get_object_or_404(queryset, chatID=self.room_name)
+        #del text_data_json['chatroom']
         chat.messages.append(text_data_json)
         chat.save()
         serializer = ChatSerializer(data=chat)
@@ -41,7 +43,7 @@ class TextRoomConsumer(WebsocketConsumer):
         if serializer.is_valid():
             serializer.save()
             
-        print(chat.messages)
+        #print(chat.messages)
 
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
@@ -61,7 +63,7 @@ class TextRoomConsumer(WebsocketConsumer):
         sender = event['sender']
         msgtype = event['msgtype']
         timestamp = event['timestamp']
-        print(event)
+        #print(event)
 
         newMSG = {
             'msg': msg,

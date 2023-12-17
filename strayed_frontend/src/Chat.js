@@ -61,9 +61,7 @@ function Chat({ username, sendChatImage }) {
                 console.error("Błąd pobierania usera:", error);
               });
             setClient(
-              new W3CWebSocket(
-                "ws://127.0.0.1:8000/ws/" + chatRoom.replace("~", "-") + "/"
-              )
+              new W3CWebSocket("ws://127.0.0.1:8000/ws/" + chatRoom + "/")
             );
           })
           .catch((error) => {
@@ -119,7 +117,7 @@ function Chat({ username, sendChatImage }) {
           msg: value,
           sender: name,
           timestamp: Date.now(),
-          chatroom: room,
+          //chatroom: room,
         })
       );
     } else {
@@ -135,7 +133,7 @@ function Chat({ username, sendChatImage }) {
           msg: photoName,
           sender: name,
           timestamp: Date.now(),
-          chatroom: room,
+          //chatroom: room,
         })
       );
     }
