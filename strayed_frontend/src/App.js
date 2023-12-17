@@ -419,6 +419,11 @@ function App() {
                 <Link onClick={handleLogout} className="submit-button1">
                   Wyloguj się
                 </Link>
+                <br />
+                <p className="report-link">
+                  Coś nie działa? Chcesz coś zgłosić?{" "}
+                  <Link to="/chat/unstrayer">Napisz do nas!</Link>
+                </p>
               </div>
             ) : (
               <div className="guest-section user-panel">
