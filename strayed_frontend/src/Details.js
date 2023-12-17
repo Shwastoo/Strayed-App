@@ -91,6 +91,16 @@ function Details() {
     <div>
       {animal ? (
         <div>
+          <h1 className="animal-status">
+            Zwierzę&nbsp;
+            <span
+              className={
+                animal.status == "Zaginione" ? "animal-lost" : "animal-found"
+              }
+            >
+              {animal.status == "Zaginione" ? "zaginione" : "znalezione"}
+            </span>
+          </h1>
           <h1>{animal.title}</h1>
           <p>{animal.desc}</p>
           <p>Gatunek: {animal.species}</p>

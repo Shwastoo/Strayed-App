@@ -486,6 +486,8 @@ function Index({ username }) {
   const [loading, setLoading] = useState(true);
   const [filterKeyword, setFilterKeyword] = useState("");
   const [filteredAnimals, setFilteredAnimals] = useState(null);
+  const [showLost, setShowLost] = useState(true);
+  const [showFound, setShowFound] = useState(true);
 
   useEffect(() => {
     if (!strayedAnimals) {
@@ -493,7 +495,7 @@ function Index({ username }) {
     } else {
       applyFilter();
     }
-  }, [filterKeyword, strayedAnimals]);
+  }, [filterKeyword, strayedAnimals, showLost, showFound]);
 
   const fetchStrayedAnimals = async () => {
     await axios
@@ -508,44 +510,44 @@ function Index({ username }) {
   };
 
   const applyFilter = () => {
-    if (filterKeyword.trim() === "") {
-      setFilteredAnimals(null);
-    } else {
-      const filtered = strayedAnimals.filter((animal) => {
-        const titleMatch = animal.title
-          .toLowerCase()
-          .includes(filterKeyword.toLowerCase());
-        const descriptionMatch = animal.desc
-          .toLowerCase()
-          .includes(filterKeyword.toLowerCase());
-        const speciesMatch = animal.species
-          .toLowerCase()
-          .includes(filterKeyword.toLowerCase());
-        const breedMatch = animal.breed
-          .toLowerCase()
-          .includes(filterKeyword.toLowerCase());
-        const colorsMatch = animal.colors
-          .toLowerCase()
-          .includes(filterKeyword.toLowerCase());
-        const genderMatch = animal.gender
-          .toLowerCase()
-          .includes(filterKeyword.toLowerCase());
-        const dateMatch = animal.date_created
-          .toLowerCase()
-          .includes(filterKeyword.toLowerCase());
+    const filtered = strayedAnimals.filter((animal) => {
+      const titleMatch = animal.title
+        .toLowerCase()
+        .includes(filterKeyword.toLowerCase());
+      const descriptionMatch = animal.desc
+        .toLowerCase()
+        .includes(filterKeyword.toLowerCase());
+      const speciesMatch = animal.species
+        .toLowerCase()
+        .includes(filterKeyword.toLowerCase());
+      const breedMatch = animal.breed
+        .toLowerCase()
+        .includes(filterKeyword.toLowerCase());
+      const colorsMatch = animal.colors
+        .toLowerCase()
+        .includes(filterKeyword.toLowerCase());
+      const genderMatch = animal.gender
+        .toLowerCase()
+        .includes(filterKeyword.toLowerCase());
+      const dateMatch = animal.date_created
+        .toLowerCase()
+        .includes(filterKeyword.toLowerCase());
+      const statusMatch =
+        (animal.status == "Zaginione" && showLost) ||
+        (animal.status == "Znalezione" && showFound);
 
-        return (
-          titleMatch ||
+      return (
+        (titleMatch ||
           descriptionMatch ||
           speciesMatch ||
           breedMatch ||
           colorsMatch ||
           genderMatch ||
-          dateMatch
-        );
-      });
-      setFilteredAnimals(filtered);
-    }
+          dateMatch) &&
+        statusMatch
+      );
+    });
+    setFilteredAnimals(filtered);
   };
 
   const clearFilter = () => {
@@ -573,6 +575,29 @@ function Index({ username }) {
             <button className="clear-button" onClick={clearFilter}>
               Wyczyść
             </button>
+            <label>Pokaż: </label>
+            <label>Zaginione </label>
+            <input
+              type="checkbox"
+              name="statusL"
+              value="Zaginione"
+              className="status-cb"
+              onChange={(e) => {
+                setShowLost(e.target.checked);
+              }}
+              checked={showLost}
+            ></input>
+            <label>Znalezione </label>
+            <input
+              type="checkbox"
+              name="statusF"
+              value="Znalezione"
+              className="status-cb"
+              onChange={(e) => {
+                setShowFound(e.target.checked);
+              }}
+              checked={showFound}
+            ></input>
           </div>
           {displayedAnimals && displayedAnimals.length > 0 ? (
             <ul className="animal-list">

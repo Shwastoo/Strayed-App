@@ -26,7 +26,7 @@ body {
 
 .user-panel {
   text-align: right;
-  margin-left: auto; 
+  margin-left: auto;
 }
 
 .logo-container {
@@ -360,7 +360,7 @@ body {
 .leaflet-control-geosearch a.leaflet-bar-part:after {
   position: absolute;
   display: block;
-  content: '';
+  content: "";
 }
 
 /* magnifying glass */
@@ -399,7 +399,7 @@ body {
 
 /* pending icon */
 .leaflet-control-geosearch.pending a.leaflet-bar-part:after {
-  content: '';
+  content: "";
   border: 2px solid #555;
   border-top: 2px solid #f3f3f3;
   animation: spin 1s linear infinite;
@@ -407,7 +407,7 @@ body {
 
 /* error icon */
 .leaflet-control-geosearch.error a.leaflet-bar-part:after {
-  content: '!';
+  content: "!";
   line-height: initial;
   font-weight: 600;
   font-size: 18px;
@@ -486,7 +486,7 @@ body {
 
 /* add missing border to form */
 .leaflet-control-geosearch .results.active:after {
-  content: '';
+  content: "";
   display: block;
   width: 0;
   position: absolute;
@@ -496,7 +496,7 @@ body {
 }
 
 .leaflet-touch .leaflet-control-geosearch .results.active:after {
-  border-left: 2px solid rgba(0, 0, 0, .2);
+  border-left: 2px solid rgba(0, 0, 0, 0.2);
 }
 
 /* animations */
@@ -539,7 +539,7 @@ body {
 }
 
 .leaflet-geosearch-bar .results.active:after {
-  opacity: .2;
+  opacity: 0.2;
 }
 
 .leaflet-right .leaflet-control-geosearch form {
@@ -559,6 +559,14 @@ body {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  justify-content: space-between;
+}
+.filter-container > * {
+  margin: 0;
+}
+.status-cb {
+  width: 20px;
+  height: 20px;
 }
 
 /* Styl dla etykiety filtrowania */
@@ -741,4 +749,15 @@ body {
   border-radius: 5px;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.animal-lost {
+  color: red;
+}
+.animal-found {
+  color: green;
+}
+.animal-status {
+  margin: 25px;
+  font-weight: bold;
 }

@@ -19,7 +19,7 @@ class AnimalSerializer(serializers.ModelSerializer):
     #colors = ListFieldCharField()
     class Meta:
         model = Animal
-        fields = ('id', 'title', 'desc', 'owner', 'photo', 'photo2', 'photo3',
+        fields = ('id', 'title', 'desc', 'status', 'owner', 'photo', 'photo2', 'photo3',
                   'species', 'breed', 'colors', 'location', 'gender', 'slug', 'date_created')
         lookup_field = 'slug'
         extra_kwargs = {

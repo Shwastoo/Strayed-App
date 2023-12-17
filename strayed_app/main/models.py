@@ -9,17 +9,21 @@ from django.utils import timezone
 # Create your models here.
 
 class Animal(models.Model):
-    class Genders(models.TextChoices):
-        FEMALE = "F", "Samica",
-        MALE = "M", "Samiec",
+    
     
     GENDER = {
-        ("F","Samica"),
-        ("M","Samiec")
+        ("Samica","F"),
+        ("Samiec","M")
+    }
+    
+    STATUS = {
+        ("Zaginione", "L"),
+        ("Znalezione", "F")
     }
 
     title = models.CharField(max_length=50)
     desc = models.CharField(max_length=1000)
+    status = models.CharField(max_length=20, choices=STATUS)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="animals")
     photo = models.ImageField(upload_to="images/uploads")
     photo2 = models.ImageField(upload_to="images/uploads", blank=True)

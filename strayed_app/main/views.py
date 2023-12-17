@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views import generic
 from .models import Animal, Chat, ChatImage
 from django.conf import settings
-from .forms import newAnimalForm, loginForm, registerForm
+#from .forms import newAnimalForm, loginForm, registerForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 import os, json

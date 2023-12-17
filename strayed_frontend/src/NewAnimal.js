@@ -21,6 +21,7 @@ class NewAnimal extends Component {
     this.state = {
       title: "",
       desc: "",
+      status: "",
       owner: this.props.username,
       photo: null,
       photo2: null,
@@ -49,6 +50,7 @@ class NewAnimal extends Component {
     var formData = new FormData();
     formData.append("title", this.state.title);
     formData.append("desc", this.state.desc);
+    formData.append("status", this.state.status);
     formData.append("owner", this.state.owner);
     formData.append("photo", this.state.photo);
     formData.append("photo2", this.state.photo2);
@@ -211,6 +213,26 @@ class NewAnimal extends Component {
                 />
               </div>
               <div className="form-group">
+                <label>Status:</label>
+                <br />
+                <label>Zaginione</label>
+                <input
+                  type="radio"
+                  name="status"
+                  value="Zaginione"
+                  onChange={(e) => this.setState({ status: e.target.value })}
+                  required
+                />
+                <label>Znalezione</label>
+                <input
+                  type="radio"
+                  name="status"
+                  value="Znalezione"
+                  onChange={(e) => this.setState({ status: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
                 <label>Zdjęcie 1:</label>
                 <input
                   type="file"
@@ -262,7 +284,7 @@ class NewAnimal extends Component {
                 <input
                   type="radio"
                   name="gender"
-                  value="M"
+                  value="Samiec"
                   onChange={(e) => this.setState({ gender: e.target.value })}
                   required
                 />
@@ -270,7 +292,7 @@ class NewAnimal extends Component {
                 <input
                   type="radio"
                   name="gender"
-                  value="F"
+                  value="Samica"
                   onChange={(e) => this.setState({ gender: e.target.value })}
                   required
                 />
@@ -286,7 +308,11 @@ class NewAnimal extends Component {
                 />
               </div>
               <div className="form-group">
-                <label>Wybierz lokalizację na mapie:</label>
+                <label>
+                  Wybierz lokalizację{" "}
+                  {this.state.status == "L" ? "zaginięcia" : "znalezienia"} na
+                  mapie:
+                </label>
                 <div id="map" style={{ width: "100%", height: "500px" }}></div>
               </div>
               <div className="form-group">

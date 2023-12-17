@@ -1,6 +1,6 @@
 from django import forms
 from .models import Animal
-
+'''
 class newAnimalForm(forms.Form):
     title = forms.CharField(label="Tytuł", max_length=50, widget=forms.Textarea)
     desc = forms.CharField(label="Opis", max_length=1000, widget=forms.Textarea)
@@ -27,3 +27,4 @@ class registerForm(forms.Form):
     un = forms.CharField(label="Login")
     pw = forms.CharField(label="Hasło", widget=forms.PasswordInput)
     pw_conf = forms.CharField(label="Powtórz hasło", widget=forms.PasswordInput)
+'''
