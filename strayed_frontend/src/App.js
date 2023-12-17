@@ -522,9 +522,9 @@ function Index({ username }) {
         const breedMatch = animal.breed
           .toLowerCase()
           .includes(filterKeyword.toLowerCase());
-        const colorsMatch = animal.colors.some((color) =>
-          color.toLowerCase().includes(filterKeyword.toLowerCase())
-        );
+        const colorsMatch = animal.colors
+          .toLowerCase()
+          .includes(filterKeyword.toLowerCase());
         const genderMatch = animal.gender
           .toLowerCase()
           .includes(filterKeyword.toLowerCase());

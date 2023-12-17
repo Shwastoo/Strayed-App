@@ -159,26 +159,28 @@ class NewAnimal extends Component {
     const { lat, lng } = latlng;
 
     fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
     )
-        .then((response) => response.json())
-        .then((data) => {
-            const address = data.display_name;
-            console.log('Reverse Geocode Address:', address);
+      .then((response) => response.json())
+      .then((data) => {
+        const address = data.display_name;
+        console.log("Reverse Geocode Address:", address);
 
-            const marker = L.marker(latlng).addTo(this.map);
-            marker.bindPopup(address, {
-              offset: L.point(0, -30),
-            }).openPopup();
-            this.handleLocationChange(lat, lng);
+        const marker = L.marker(latlng).addTo(this.map);
+        marker
+          .bindPopup(address, {
+            offset: L.point(0, -30),
+          })
+          .openPopup();
+        this.handleLocationChange(lat, lng);
 
-            this.setState({
-                marker: marker,
-            });
-        })
-        .catch((error) => {
-            console.error('Błąd podczas uzyskiwania adresu:', error);
+        this.setState({
+          marker: marker,
         });
+      })
+      .catch((error) => {
+        console.error("Błąd podczas uzyskiwania adresu:", error);
+      });
   }
 
   render() {
@@ -274,7 +276,7 @@ class NewAnimal extends Component {
                 />
               </div>
               <div className="form-group">
-                <label>Kolory (oddzielone przecinkami):</label>
+                <label>Umaszczenie (kolory):</label>
                 <input
                   type="text"
                   name="colors"

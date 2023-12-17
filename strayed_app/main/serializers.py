@@ -14,7 +14,7 @@ class ListFieldCharField(serializers.Field):
     
 class AnimalSerializer(serializers.ModelSerializer):
     #colors = serializers.ListField(child=serializers.CharField())
-    colors = ListFieldCharField()
+    #colors = ListFieldCharField()
     class Meta:
         model = Animal
         fields = ('id', 'title', 'desc', 'owner', 'photo', 'photo2', 'photo3',

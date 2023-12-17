@@ -53,7 +53,8 @@ function Details() {
       setMap(newMap);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+        attribution:
+          '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(newMap);
 
       L.Marker.prototype.options.icon = DefaultIcon;
@@ -70,15 +71,17 @@ function Details() {
           .then((response) => response.json())
           .then((data) => {
             const address = data.display_name;
-            console.log('Reverse Geocode Address:', address);
-  
+            console.log("Reverse Geocode Address:", address);
+
             // Dodaj popup z adresem
-            locationMarker.bindPopup(`Miejsce zaginięcia: ${address}`, {
-              offset: L.point(0, -30),
-            }).openPopup();
+            locationMarker
+              .bindPopup(`Miejsce zaginięcia: ${address}`, {
+                offset: L.point(0, -30),
+              })
+              .openPopup();
           })
           .catch((error) => {
-            console.error('Błąd podczas uzyskiwania adresu:', error);
+            console.error("Błąd podczas uzyskiwania adresu:", error);
           });
       }
     }
@@ -92,7 +95,7 @@ function Details() {
           <p>{animal.desc}</p>
           <p>Gatunek: {animal.species}</p>
           <p>Rasa: {animal.breed}</p>
-          <p>Kolory: {animal.colors.join(", ")}</p>
+          <p>Umaszczenie (kolory): {animal.colors}</p>
           <p>Płeć: {animal.gender}</p>
           <p>
             Właściciel: <Link to={`/user/${animal.owner}`}>{animal.owner}</Link>
