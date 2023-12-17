@@ -150,7 +150,7 @@ function Chat({ username, sendChatImage }) {
             <p>Wczytywanie...</p>
           ) : (
             <div>
-              <h2>Czat "{room}"</h2>
+              <h2>Czat z użytkownikiem {user}</h2>
               <div className="chat-container">
                 {messages.map((message, i) => (
                   <div

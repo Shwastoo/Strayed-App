@@ -620,6 +620,7 @@ body {
   flex-direction: column;
   align-items: flex-end;
   width: fit-content;
+  max-width: 50%;
 }
 
 .other-user-row {
@@ -633,6 +634,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   width: fit-content;
+  max-width: 50%;
 }
 
 .user-message {
