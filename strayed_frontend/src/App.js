@@ -13,6 +13,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Details from "./Details";
 import NewAnimal from "./NewAnimal";
+import EditAnimal from "./EditAnimal";
 import Chat from "./Chat";
 import User from "./User";
 import ChatList from "./ChatList";
@@ -459,6 +460,10 @@ function App() {
             <Route
               path="/newanimal"
               element={<NewAnimal addAnimal={addAnimal} username={username} />}
+            />
+            <Route
+              path="/editanimal/:slug"
+              element={<EditAnimal username={username} />}
             />
             <Route
               path="/chat/:user"

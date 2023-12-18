@@ -311,11 +311,24 @@ body {
   border-bottom: none;
 }
 
+.delete {
+  background-color: #e74c3c;
+}
+
 .submit-button1:hover,
 .submit-button1:active {
   background-color: rgb(87, 70, 88);
   color: #fff;
   text-decoration: none;
+}
+
+.delete:hover,
+.delete.active {
+  background-color: #c0392b;
+}
+
+.animal-controls > a {
+  margin: 5px;
 }
 
 /* global styling */
@@ -766,4 +779,8 @@ body {
 
 .report-link {
   margin: 0;
+}
+
+.edit-photo {
+  max-width: 200px;
 }

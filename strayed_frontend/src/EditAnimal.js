@@ -15,26 +15,27 @@ let DefaultIcon = L.icon({
   iconAnchor: [12, 41],
 });
 
-class NewAnimal extends Component {
+class EditAnimal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "",
-      desc: "",
-      status: "",
-      owner: this.props.username,
-      photo: null,
-      photo2: null,
-      photo3: null,
-      species: "",
-      breed: "",
-      gender: "",
-      colors: "",
-      location: "",
+      title: this.props.animal.title,
+      desc: this.props.animal.desc,
+      status: this.props.animal.status,
+      owner: this.props.animal.owner,
+      photo: this.props.animal.photo,
+      photo2: this.props.animal.photo2,
+      photo3: this.props.animal.photo3,
+      species: this.props.animal.species,
+      breed: this.props.animal.breed,
+      gender: this.props.animal.gender,
+      colors: this.props.animal.colors,
+      location: this.props.animal.location,
       submittedAnimal: null,
-      latitude: 0,
-      longitude: 0,
+      latitude: this.props.animal.location.split(", ")[0],
+      longitude: this.props.animal.location.split(", ")[1],
       marker: null,
+      username: this.props.username,
     };
   }
 
@@ -110,6 +111,18 @@ class NewAnimal extends Component {
         }
       });
     };
+
+    const marker = L.marker([this.state.latitude, this.state.longitude]).addTo(
+      this.map
+    );
+
+    this.handleLocationChange(this.state.latitude, this.state.longitude);
+
+    this.setState({
+      marker: marker,
+    });
+
+    this.reverseGeocodeAndAddPopup([this.state.latitude, this.state.longitude]);
 
     this.map.addEventListener("geosearch/showlocation", (e) => {
       removeMarkers();
@@ -188,7 +201,7 @@ class NewAnimal extends Component {
   render() {
     return (
       <div>
-        {this.state.owner ? (
+        {this.state.owner == this.state.username ? (
           <div className="registration-form">
             <h2>Dodaj nowe zwierzę</h2>
             <form onSubmit={this.handleSubmit} encType="multipart/form-data">
@@ -247,7 +260,6 @@ class NewAnimal extends Component {
                   type="file"
                   name="photo2"
                   onChange={(e) => this.setState({ photo2: e.target.files[0] })}
-                  disabled={this.state.photo == null}
                 />
               </div>
               <div className="form-group">
@@ -256,9 +268,6 @@ class NewAnimal extends Component {
                   type="file"
                   name="photo3"
                   onChange={(e) => this.setState({ photo3: e.target.files[0] })}
-                  disabled={
-                    this.state.photo2 == null || this.state.photo == null
-                  }
                 />
               </div>
               <div className="form-group">
@@ -337,9 +346,9 @@ class NewAnimal extends Component {
           </div>
         ) : (
           <div>
-            <p>Aby dodać ogłoszenie musisz się zalogować.</p>
-            <Link to="/login" className="submit-button1">
-              Zaloguj się
+            <p>Odmowa dostępu.</p>
+            <Link to="/" className="submit-button1">
+              Wróć na stronę główną
             </Link>
           </div>
         )}
@@ -348,4 +357,4 @@ class NewAnimal extends Component {
   }
 }
 
-export default NewAnimal;
+export default EditAnimal;
