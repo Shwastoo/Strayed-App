@@ -247,6 +247,7 @@ class NewAnimal extends Component {
                   type="file"
                   name="photo2"
                   onChange={(e) => this.setState({ photo2: e.target.files[0] })}
+                  disabled={this.state.photo == null}
                 />
               </div>
               <div className="form-group">
@@ -255,6 +256,9 @@ class NewAnimal extends Component {
                   type="file"
                   name="photo3"
                   onChange={(e) => this.setState({ photo3: e.target.files[0] })}
+                  disabled={
+                    this.state.photo2 == null || this.state.photo == null
+                  }
                 />
               </div>
               <div className="form-group">

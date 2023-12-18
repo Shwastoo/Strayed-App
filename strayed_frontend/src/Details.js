@@ -92,7 +92,7 @@ function Details() {
       {animal ? (
         <div>
           <h1 className="animal-status">
-            Zwierzę&nbsp;
+            Zwierzę{" "}
             <span
               className={
                 animal.status == "Zaginione" ? "animal-lost" : "animal-found"
@@ -110,7 +110,17 @@ function Details() {
           <p>
             Właściciel: <Link to={`/user/${animal.owner}`}>{animal.owner}</Link>
           </p>
-          <p>Data ostatniej aktualizacji: {animal.date_created}</p>
+          <p>
+            Data dodania:{" "}
+            {new Date(animal.date_created).toLocaleDateString([], {
+              year: "numeric",
+              month: "long",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            })}
+          </p>
           <div>
             <p>Zdjęcia:</p>
             {photos.map((photo, index) => (
@@ -124,7 +134,10 @@ function Details() {
           </div>
 
           <div style={{ height: "20px" }}></div>
-          <p>Miejsce zaginięcia:</p>
+          <p>
+            Miejsce{" "}
+            {animal.status == "Zaginione" ? "zaginięcia" : "znalezienia"}:
+          </p>
           <div id="map"></div>
         </div>
       ) : (
