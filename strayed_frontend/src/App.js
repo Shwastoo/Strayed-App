@@ -390,6 +390,44 @@ function App() {
       });
   };
 
+  const removeAnimal = async (data) => {
+    console.log("will remove animal with slug: " + data);
+    const deletionStatus = toast.loading("Usuwanie ogłoszenia...", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    await axios
+      .delete("/api/animals/" + data, {
+        headers: {
+          "X-CSRFToken": cookies.get("csrftoken"),
+        },
+      })
+      .then((response) => {
+        navigate("/");
+        toast.update(deletionStatus, {
+          render: "Ogłoszenie zostało usunięte!",
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.SUCCESS,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
+      })
+      .catch((error) => {
+        //console.error("Błąd dodawania ogłoszenia:", error);
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        toast.update(deletionStatus, {
+          render: "Wystąpił błąd podczas usuwania ogłoszenia.",
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.ERROR,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
+      });
+  };
+
   return (
     <div>
       {!loading ? (
@@ -454,7 +492,9 @@ function App() {
             />
             <Route
               path="/details/:slug"
-              element={<Details username={username} />}
+              element={
+                <Details username={username} removeAnimal={removeAnimal} />
+              }
             />
             <Route
               path="/newanimal"

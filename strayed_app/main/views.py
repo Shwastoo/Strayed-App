@@ -122,7 +122,7 @@ class ChatView(viewsets.ModelViewSet):
                 queryset = Chat.objects.all()
                 chat = get_object_or_404(queryset, chatID=chatID)
                 serializer = ChatSerializer(chat)
-                print(chat)
+                #print(chat)
                 return Response(serializer.data)
             except:
                 newChat = {}
@@ -135,10 +135,10 @@ class ChatView(viewsets.ModelViewSet):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             #queryset = Chat.objects.filter()
-            print("TEST")
+            #print("TEST")
             chatsA = Chat.objects.filter(chatID__contains=("~"+chatID)).values()
             chatsB = Chat.objects.filter(chatID__contains=(chatID+"~")).values()
-            print(chatsA, chatsB)
+            #print(chatsA, chatsB)
             #chatsA = get_list_or_404(Chat, chatID__contains=("~"+chatID))
             #chatsB = get_list_or_404(Chat, chatID__contains=(chatID+"~"))
             chats = chatsA.union(chatsB)
@@ -148,15 +148,15 @@ class ChatView(viewsets.ModelViewSet):
                     #chats.remove(c)
                     chats.exclude(c)
             '''
-            print(chats)
+            #print(chats)
             serializer = ChatSerializer(chats, many=True)
             #print(chat)
             return Response(serializer.data)
-'''
+
 class ChatImagesView(viewsets.ModelViewSet):
     serializer_class = ChatImageSerializer
     queryset = ChatImage.objects.all()
-'''
+
 
 '''
 class SessionView(APIView):

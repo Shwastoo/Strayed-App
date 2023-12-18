@@ -15,11 +15,13 @@ let DefaultIcon = L.icon({
   iconAnchor: [12, 41],
 });
 
-function Details() {
+function Details({ username, removeAnimal }) {
   const [animal, setAnimal] = useState(null);
   const { slug } = useParams();
   const [photos, setPhotos] = useState([]);
   const [map, setMap] = useState(null);
+  const [user, setUser] = useState(username);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     axios
@@ -37,6 +39,7 @@ function Details() {
       })
       .catch((error) => {
         console.error("Błąd pobierania danych zwierzęcia:", error);
+        setNotFound(true);
       });
   }, [slug]);
 
@@ -87,61 +90,90 @@ function Details() {
     }
   }, [animal]);
 
+  const deleteAnimal = () => {
+    if (window.confirm("Czy na pewno chcesz usunąć ogłoszenie?")) {
+      removeAnimal(slug);
+    }
+  };
+
   return (
     <div>
-      {animal ? (
+      {!notFound ? (
         <div>
-          <h1 className="animal-status">
-            Zwierzę{" "}
-            <span
-              className={
-                animal.status == "Zaginione" ? "animal-lost" : "animal-found"
-              }
-            >
-              {animal.status == "Zaginione" ? "zaginione" : "znalezione"}
-            </span>
-          </h1>
-          <h1>{animal.title}</h1>
-          <p>{animal.desc}</p>
-          <p>Gatunek: {animal.species}</p>
-          <p>Rasa: {animal.breed}</p>
-          <p>Umaszczenie (kolory): {animal.colors}</p>
-          <p>Płeć: {animal.gender}</p>
-          <p>
-            Właściciel: <Link to={`/user/${animal.owner}`}>{animal.owner}</Link>
-          </p>
-          <p>
-            Data dodania:{" "}
-            {new Date(animal.date_created).toLocaleDateString([], {
-              year: "numeric",
-              month: "long",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-            })}
-          </p>
-          <div>
-            <p>Zdjęcia:</p>
-            {photos.map((photo, index) => (
-              <img
-                key={index}
-                src={photo}
-                alt={"Zdjęcie " + { index }}
-                className="animal-image"
-              />
-            ))}
-          </div>
+          {animal ? (
+            <div>
+              {animal.owner == user ? (
+                <div className="animal-controls">
+                  <Link onClick={deleteAnimal} className="clear-button">
+                    Usuń ogłoszenie
+                  </Link>
+                </div>
+              ) : (
+                <div></div>
+              )}
+              <h1 className="animal-status">
+                Zwierzę{" "}
+                <span
+                  className={
+                    animal.status == "Zaginione"
+                      ? "animal-lost"
+                      : "animal-found"
+                  }
+                >
+                  {animal.status == "Zaginione" ? "zaginione" : "znalezione"}
+                </span>
+              </h1>
+              <h1>{animal.title}</h1>
+              <p>{animal.desc}</p>
+              <p>Gatunek: {animal.species}</p>
+              <p>Rasa: {animal.breed}</p>
+              <p>Umaszczenie (kolory): {animal.colors}</p>
+              <p>Płeć: {animal.gender}</p>
+              <p>
+                Właściciel:{" "}
+                <Link to={`/user/${animal.owner}`}>{animal.owner}</Link>
+              </p>
+              <p>
+                Data dodania:{" "}
+                {new Date(animal.date_created).toLocaleDateString([], {
+                  year: "numeric",
+                  month: "long",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                })}
+              </p>
+              <div>
+                <p>Zdjęcia:</p>
+                {photos.map((photo, index) => (
+                  <img
+                    key={index}
+                    src={photo}
+                    alt={"Zdjęcie " + { index }}
+                    className="animal-image"
+                  />
+                ))}
+              </div>
 
-          <div style={{ height: "20px" }}></div>
-          <p>
-            Miejsce{" "}
-            {animal.status == "Zaginione" ? "zaginięcia" : "znalezienia"}:
-          </p>
-          <div id="map"></div>
+              <div style={{ height: "20px" }}></div>
+              <p>
+                Miejsce{" "}
+                {animal.status == "Zaginione" ? "zaginięcia" : "znalezienia"}:
+              </p>
+              <div id="map"></div>
+            </div>
+          ) : (
+            <p>Ładowanie danych...</p>
+          )}
         </div>
       ) : (
-        <p>Ładowanie danych...</p>
+        <div>
+          <p>Nie znaleziono ogłoszenia.</p>
+          <Link to="/" className="submit-button1">
+            Przejdź do strony głównej
+          </Link>
+        </div>
       )}
     </div>
   );
