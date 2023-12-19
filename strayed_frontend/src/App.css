@@ -607,10 +607,15 @@ body {
   cursor: pointer;
   padding: 10px;
   transition: background-color 0.3s;
+
+  outline: none;
+  border-bottom: none;
 }
 
 .clear-button:hover {
   background-color: #c0392b;
+  color: #fff;
+  text-decoration: none;
 }
 
 .chat-container {

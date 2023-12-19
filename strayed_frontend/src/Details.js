@@ -78,7 +78,7 @@ function Details({ username, removeAnimal }) {
 
             // Dodaj popup z adresem
             locationMarker
-              .bindPopup(`Miejsce zaginięcia: ${address}`, {
+              .bindPopup(`Lokalizacja: ${address}`, {
                 offset: L.point(0, -30),
               })
               .openPopup();
