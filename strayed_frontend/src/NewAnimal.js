@@ -35,6 +35,7 @@ class NewAnimal extends Component {
       latitude: 0,
       longitude: 0,
       marker: null,
+      address: "",
     };
   }
 
@@ -63,6 +64,7 @@ class NewAnimal extends Component {
       "location",
       `${this.state.latitude}, ${this.state.longitude}`
     );
+    formData.append("address", this.state.address);
     this.props.addAnimal(formData);
     /*
     axios
@@ -178,6 +180,7 @@ class NewAnimal extends Component {
 
         this.setState({
           marker: marker,
+          address: address,
         });
       })
       .catch((error) => {

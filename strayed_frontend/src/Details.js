@@ -46,7 +46,7 @@ function Details({ username, removeAnimal }) {
   useEffect(() => {
     if (animal) {
       const [latitude, longitude] = animal.location.split(", ").map(parseFloat);
-
+      console.log(latitude, longitude);
       const newMap = L.map("map").setView(
         isNaN(latitude) || isNaN(longitude)
           ? [50.061, 19.936]

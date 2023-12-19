@@ -646,7 +646,10 @@ function Index({ username }) {
       const statusMatch =
         (animal.status == "Zaginione" && showLost) ||
         (animal.status == "Znalezione" && showFound);
-
+      console.log(animal);
+      const locationMatch = animal.location_name
+        .toLowerCase()
+        .includes(filterKeyword.toLowerCase());
       return (
         (titleMatch ||
           descriptionMatch ||
@@ -654,7 +657,8 @@ function Index({ username }) {
           breedMatch ||
           colorsMatch ||
           genderMatch ||
-          dateMatch) &&
+          dateMatch ||
+          locationMatch) &&
         statusMatch
       );
     });

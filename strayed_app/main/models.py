@@ -33,9 +33,11 @@ class Animal(models.Model):
     #colors = ArrayField(models.CharField(max_length=50), default=list)
     colors = models.CharField(max_length=50)
     location = models.CharField(max_length=50)
+    location_name = models.CharField(max_length=300, blank=True)
     gender = models.CharField(max_length=20, choices=GENDER)
     slug = models.SlugField(unique=True, blank=True)
     date_created = models.DateTimeField(blank=True)
+    
 
     def __str__(self):
         return self.title
