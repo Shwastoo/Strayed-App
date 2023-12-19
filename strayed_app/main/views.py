@@ -274,7 +274,7 @@ def register_view(request):
         return HttpResponse("Username unavailable.", status=400)
     
 @require_POST
-def change_pass(request):
+def change_pass_view(request):
     data = json.loads(request.body)
     uname = data.get('username')
     old_pass = data.get('oldPass')
