@@ -433,6 +433,7 @@ function App() {
       })
       .then((response) => {
         //console.log(response);
+        return;
       })
       .catch((error) => {
         //console.error("Błąd dodawania ogłoszenia:", error);
@@ -605,7 +606,13 @@ function Index({ username }) {
     await axios
       .get("/api/animals")
       .then((response) => {
-        setStrayedAnimals(response.data);
+        setStrayedAnimals(
+          response.data.sort(
+            (a, b) =>
+              new Date(b.date_created).getTime() -
+              new Date(a.date_created).getTime()
+          )
+        );
         setLoading(false);
       })
       .catch((error) => {

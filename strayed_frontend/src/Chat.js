@@ -134,7 +134,7 @@ function Chat({ username, sendChatImage }) {
       client.send(
         JSON.stringify({
           msgtype: "image",
-          msg: photoName,
+          msg: photoName.replace(" ", "_"),
           sender: name,
           timestamp: Date.now(),
           //chatroom: room,

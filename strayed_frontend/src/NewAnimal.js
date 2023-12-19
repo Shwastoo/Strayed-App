@@ -314,8 +314,10 @@ class NewAnimal extends Component {
               <div className="form-group">
                 <label>
                   Wybierz lokalizację{" "}
-                  {this.state.status == "L" ? "zaginięcia" : "znalezienia"} na
-                  mapie:
+                  {this.state.status == "Zaginione"
+                    ? "zaginięcia"
+                    : "znalezienia"}{" "}
+                  na mapie:
                 </label>
                 <div id="map" style={{ width: "100%", height: "500px" }}></div>
               </div>

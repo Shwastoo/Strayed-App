@@ -59,6 +59,7 @@ function User({ username, handlePassChange }) {
                 <div className="registration-form">
                   <form onSubmit={changePassword}>
                     <div className="form-group">
+                      <label>Stare hasło</label>
                       <input
                         type="password"
                         name="oldpassword"
@@ -69,6 +70,7 @@ function User({ username, handlePassChange }) {
                       />
                     </div>
                     <div className="form-group">
+                      <label>Nowe hasło</label>
                       <input
                         type="password"
                         name="newpassword"
@@ -79,6 +81,7 @@ function User({ username, handlePassChange }) {
                       />
                     </div>
                     <div className="form-group">
+                      <label>Powtórz nowe hasło</label>
                       <input
                         type="password"
                         name="confirmPassword"
