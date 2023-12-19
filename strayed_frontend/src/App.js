@@ -518,11 +518,13 @@ function App() {
             ) : (
               <div className="guest-section user-panel">
                 <span>Nie jesteś zalogowany. </span>
+                <br />
                 <Link to="/login" className="submit-button1">
                   Zaloguj się
                 </Link>
                 <br />
                 <span>Nie masz konta? </span>
+                <br />
                 <Link to="/register" className="submit-button1">
                   Zarejestruj się
                 </Link>
@@ -663,43 +665,60 @@ function Index({ username }) {
     <div>
       {!loading ? (
         <div className="index-content">
+          {username != null ? (
+            <div className="new-entry">
+              <Link to="/newAnimal" className="submit-button">
+                Dodaj ogłoszenie
+              </Link>
+            </div>
+          ) : (
+            <div></div>
+          )}
           <div className="filter-container">
-            <label className="filter-label" htmlFor="filterKeyword">
-              Filtruj ogłoszenia:{" "}
-            </label>
-            <input
-              className="filter-input"
-              type="text"
-              id="filterKeyword"
-              value={filterKeyword}
-              onChange={(e) => setFilterKeyword(e.target.value)}
-            />
-            <button className="clear-button" onClick={clearFilter}>
-              Wyczyść
-            </button>
-            <label>Pokaż: </label>
-            <label>Zaginione </label>
-            <input
-              type="checkbox"
-              name="statusL"
-              value="Zaginione"
-              className="status-cb"
-              onChange={(e) => {
-                setShowLost(e.target.checked);
-              }}
-              checked={showLost}
-            ></input>
-            <label>Znalezione </label>
-            <input
-              type="checkbox"
-              name="statusF"
-              value="Znalezione"
-              className="status-cb"
-              onChange={(e) => {
-                setShowFound(e.target.checked);
-              }}
-              checked={showFound}
-            ></input>
+            <div className="search-bar">
+              <label className="filter-label" htmlFor="filterKeyword">
+                Filtruj ogłoszenia:{" "}
+              </label>
+              <input
+                className="filter-input"
+                type="text"
+                id="filterKeyword"
+                value={filterKeyword}
+                onChange={(e) => setFilterKeyword(e.target.value)}
+              />
+              <button className="clear-button" onClick={clearFilter}>
+                Wyczyść
+              </button>
+            </div>
+            <div className="checkboxes">
+              <label>Pokaż: </label>
+              <div>
+                <label>Zaginione </label>
+                <input
+                  type="checkbox"
+                  name="statusL"
+                  value="Zaginione"
+                  className="status-cb"
+                  onChange={(e) => {
+                    setShowLost(e.target.checked);
+                  }}
+                  checked={showLost}
+                ></input>
+              </div>
+              <div>
+                <label>Znalezione </label>
+                <input
+                  type="checkbox"
+                  name="statusF"
+                  value="Znalezione"
+                  className="status-cb"
+                  onChange={(e) => {
+                    setShowFound(e.target.checked);
+                  }}
+                  checked={showFound}
+                ></input>
+              </div>
+            </div>
           </div>
           {displayedAnimals && displayedAnimals.length > 0 ? (
             <ul className="animal-list">
@@ -722,16 +741,6 @@ function Index({ username }) {
             </ul>
           ) : (
             <p>Brak danych o zwierzętach</p>
-          )}
-
-          {username != null ? (
-            <div className="new-entry">
-              <Link to="/newAnimal" className="submit-button">
-                Dodaj ogłoszenie
-              </Link>
-            </div>
-          ) : (
-            <div></div>
           )}
         </div>
       ) : (

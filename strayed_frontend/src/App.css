@@ -130,6 +130,7 @@ body {
   border-radius: 5px;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 145px;
 }
 
 .animal-link {
@@ -162,7 +163,7 @@ body {
 }
 
 .new-entry {
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 /* Styl dla całego formularza */
@@ -259,7 +260,7 @@ body {
 .animal-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
   margin: -10px;
 }
 
@@ -562,6 +563,17 @@ body {
   margin-bottom: 20px;
   justify-content: space-between;
 }
+
+.checkboxes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.checkboxes * {
+  margin: 0 5px;
+}
+
 .filter-container > * {
   margin: 0;
 }
@@ -767,4 +779,69 @@ body {
 
 .report-link {
   margin: 0;
+}
+
+@media screen and (max-width: 850px) {
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .user-panel {
+    text-align: center;
+    margin: 0;
+  }
+
+  .search-bar {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+
+  .filter-input {
+    width: auto;
+  }
+
+  .search-bar > * {
+    margin: 5px 0;
+  }
+
+  .checkboxes {
+    flex-direction: column;
+    width: 50%;
+  }
+
+  .animal-item {
+    width: calc(50% - 20px);
+  }
+
+  .btn-photo {
+    width: 75% !important;
+  }
+  .btn-reset {
+    width: 20% !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .animal-item {
+    width: calc(100% - 20px);
+  }
+  .filter-container {
+    flex-direction: column;
+  }
+  .search-bar {
+    width: 100%;
+  }
+  .checkboxes {
+    width: 100%;
+  }
+  .btn-photo {
+    font-size: 0.8em;
+    width: 65% !important;
+  }
+  .btn-reset {
+    width: 30% !important;
+  }
 }
