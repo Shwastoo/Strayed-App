@@ -168,7 +168,7 @@ body {
 /* Styl dla całego formularza */
 .registration-form {
   max-width: 700px;
-  margin: 0 auto;
+  margin: 10px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -272,6 +272,7 @@ body {
 .submit-button {
   display: inline-block;
   padding: 10px 20px;
+  margin: 10px;
   font-size: 16px;
   text-decoration: none;
   background-color: rgb(131, 106, 132);

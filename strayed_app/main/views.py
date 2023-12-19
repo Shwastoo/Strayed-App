@@ -22,6 +22,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import check_password
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.decorators.http import require_POST
 from django.middleware.csrf import get_token
@@ -272,6 +273,29 @@ def register_view(request):
     else:
         return HttpResponse("Username unavailable.", status=400)
     
+@require_POST
+def change_pass(request):
+    data = json.loads(request.body)
+    uname = data.get('username')
+    old_pass = data.get('oldPass')
+    password = data.get('newPass')
+    pass_conf = data.get('confirmPass')
+    user = User.objects.get(username=uname)
+    print(uname, user)
+    if user:
+        passMatch = user.check_password(old_pass)
+        if passMatch:
+            if old_pass!=password:
+                user.set_password(password)
+                user.save()
+                return HttpResponse("Account created.")
+            else:
+                return HttpResponse("Same password.", status=400)
+        else:
+            return HttpResponse("Wrong password.", status=400)
+    else:
+        return HttpResponse("Username unavailable.", status=400)
+
 
 def logout_view(request):
     if not request.user.is_authenticated:

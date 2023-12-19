@@ -87,6 +87,7 @@ function App() {
         if (data.isAuthenticated) {
           whoami();
         } else {
+          setUsername(null);
           setIsAuthenticated(false);
           setLoading(false);
           //getCSRF();
@@ -309,6 +310,57 @@ function App() {
     */
   };
 
+  const handlePassChange = async (data) => {
+    const { username, oldPass, newPass, confPass } = data;
+    if (newPass != confPass) {
+      toast.error("Hasła nie są takie same.", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
+    const registerStatus = toast.loading("Zmienianie hasła...", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    await axios
+      .post("/changePass/", data, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": cookies.get("csrftoken"),
+        },
+      })
+      .then((response) => {
+        setUsername(null);
+        setIsAuthenticated(false);
+        navigate("/login");
+        toast.update(registerStatus, {
+          render: "Hasło zostało zmienione! Musisz ponownie się zalogować",
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.SUCCESS,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        var errorText = "Nie udało się zmienić hasła.";
+        if (error.response.data === "Wrong password.")
+          errorText = "Stare hasło jest nieprawidłowe.";
+        else if (error.response.data === "Same password.")
+          errorText = "Nowe hasło musi różnić się od starego.";
+        toast.update(registerStatus, {
+          render: errorText,
+          position: toast.POSITION.TOP_CENTER,
+          type: toast.TYPE.ERROR,
+          autoClose: 3000,
+          closeButton: true,
+          isLoading: false,
+        });
+      });
+  };
+
   const addAnimal = async (data) => {
     //await getCSRF();
     //console.log("Po tokenach:");
@@ -510,7 +562,12 @@ function App() {
               path="/chatlist"
               element={<ChatList username={username} />}
             />
-            <Route path="/user/:id" element={<User username={username} />} />
+            <Route
+              path="/user/:id"
+              element={
+                <User username={username} handlePassChange={handlePassChange} />
+              }
+            />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
 
